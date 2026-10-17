@@ -185,6 +185,21 @@ Every level ends with a boss that plays out a real kind of attack (`ability` in
 Bosses are announced, get a health bar in the HUD and cost more CPU when they get through
 (`cpu_damage`). Only Kernel Panic can be sent in versus.
 
+Each boss also has a short arrival vignette inside the board, without pausing play:
+Trojan's fake download, Keylogger's typed login, Man-in-the-Middle's tapped network,
+DDoS's overflowing traffic chart, Rootkit's disappearing processes, Ransomware's countdown
+note, Worm's cascading fork windows and Kernel Panic's countdown with screen tears and a
+brief blue-screen preview. Built-in level order increases duration from 1.93 to 4.24
+seconds, panel size, particles, shake and glitch. Advanced bosses keep small process
+brackets and echoes after the introduction.
+
+Arrival windows draw below creatures and shots, clear of the interface columns, boss bar,
+warning banner and build controls. Each boss id starts one introduction; removing it
+clears its window and decoration. Existing intrusion warnings, process labels, ability
+effects and the real Kernel Panic blue screen remain. The new board-only glitch follows
+the screen-effects setting and clears when leaving the game. Terminal text uses uppercase
+English in `MicroFont` on the same 3× pixel grid.
+
 Saves: `user://save.json` (campaign), `user://settings.cfg`, `user://levels/` (custom levels).
 Campaign save version 3 stores `balance`, `best_remaining_money`, `unlocked_turrets`,
 `upgrades`, `stars` and unlocked levels. Version 2 points become money at 20 per point;

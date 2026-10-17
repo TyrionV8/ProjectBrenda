@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using HardwareDefence.Autoload;
 using HardwareDefence.Data;
 using HardwareDefence.Sim;
 using Godot;
@@ -30,9 +31,13 @@ public partial class BossFx : Node2D
 	readonly List<Vector2> _turrets = new();
 	readonly List<Letter> _letters = new();
 	readonly List<Ring> _rings = new();
+	internal readonly BossIntroSequence Introductions = new();
+	Node2D _introLayer;
 	Node2D _screen;
 	float _t;
 	float _bsod;
+	int _bsodBossId;
+	internal float BlueScreenRemaining => _bsod;
 	float _letterTimer;
 	readonly RandomNumberGenerator _rng = new();
 
@@ -55,11 +60,18 @@ public partial class BossFx : Node2D
 	{
 		Material = FxUtil.Unshaded;
 		ZIndex = 3;
+		// A boss walking through its terminal window must remain visible. The board
+		// is at 0, creatures/projectiles at 2, and the original process tags at 3.
+		_introLayer = new Node2D { Name = "ArrivalVignettes", Material = FxUtil.Unshaded, ZIndex = -2 };
+		_introLayer.Draw += () => BossIntroArt.Draw(_introLayer, Introductions, Board?.BoardSize ?? Grid.Size);
+		AddChild(_introLayer);
 		// The blue screen covers the whole board, above everything else.
 		_screen = new Node2D { Material = FxUtil.Unshaded, ZIndex = 30 };
 		_screen.Draw += DrawBlueScreen;
 		AddChild(_screen);
 	}
+
+	public override void _ExitTree() => PostFx.SetBossGlitch(0);
 
 	static EnemyDef Def(BugSnap b) => Catalog.Enemy(b.Type);
 
@@ -68,8 +80,22 @@ public partial class BossFx : Node2D
 		_t += dt;
 		_bosses.Clear();
 		foreach (var b in snap.Bugs)
-			if (Def(b) is { Boss: true })
+			if (Def(b) is { Boss: true } && b.Hp > 0)
 				_bosses.Add(b);
+		Introductions.Sync(snap, dt);
+		foreach (var arrival in Introductions.Arrivals)
+		{
+			Fx?.Sparks(arrival.Position, arrival.Def.Eye.Lerp(Colors.White, 0.25f), arrival.Particles,
+				70 + arrival.Tier * 15, 0.3f + arrival.Tier * 0.04f);
+			Fx?.Shake(arrival.Shake);
+		}
+		foreach (var intro in Introductions.Live)
+			if (intro.Active && intro.Age >= 0.55f && !intro.AccentPlayed)
+			{
+				intro.AccentPlayed = true;
+				Fx?.Shake(intro.Shake * 0.65f);
+			}
+		PostFx.SetBossGlitch(Introductions.Featured?.GlitchStrength ?? 0);
 		_turrets.Clear();
 		foreach (var t in snap.Turrets)
 			_turrets.Add(Grid.CellCenter(new Vector2I(t.Cell[0], t.Cell[1])));
@@ -96,8 +122,10 @@ public partial class BossFx : Node2D
 				_rings.RemoveAt(i);
 		}
 		_bsod = Mathf.Max(_bsod - dt, 0);
+		if (Find(_bsodBossId) == null) _bsod = 0;
 		QueueRedraw();
-		_screen.QueueRedraw();
+		_introLayer?.QueueRedraw();
+		_screen?.QueueRedraw();
 	}
 
 	BugSnap Find(int id) => _bosses.Find(b => b.Id == id);
@@ -152,7 +180,11 @@ public partial class BossFx : Node2D
 				Fx.FloatingText(at + new Vector2(0, -40), "FILES ENCRYPTED", new Color("f0c040"));
 				return "lock";
 			case "panic":
+				// Snapshots are applied before events. A delayed event from a removed
+				// boss must not bring its screen-covering attack back after death.
+				if (Find(e.Id) == null) return null;
 				_bsod = 1.1f;
+				_bsodBossId = e.Id;
 				Fx.Shake(9);
 				return "crash";
 			case "reveal":
