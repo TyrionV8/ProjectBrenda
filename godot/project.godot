@@ -12,8 +12,8 @@ config_version=5
 
 config/name="Project Brenda"
 config/description="Tower defense on a circuit board: stop the bugs before they reach the CPU."
-run/main_scene="res://scenes/ui/main_menu.tscn"
-config/features=PackedStringArray("4.5", "GL Compatibility")
+run/main_scene="res://scenes/main_menu.tscn"
+config/features=PackedStringArray("4.5", "C#", "GL Compatibility")
 boot_splash/bg_color=Color(0.0235, 0.0431, 0.0745, 1)
 config/icon="res://icon.svg"
 
@@ -23,13 +23,11 @@ buses/default_bus_layout="res://default_bus_layout.tres"
 
 [autoload]
 
-DB="*res://src/autoload/db.gd"
-Settings="*res://src/autoload/settings.gd"
-GameState="*res://src/autoload/game_state.gd"
-Audio="*res://src/autoload/audio.gd"
-Transition="*res://src/autoload/transition.gd"
-PostFx="*res://src/autoload/post_fx.gd"
-DevTools="*res://src/autoload/dev_tools.gd"
+Settings="*res://src/Autoload/Settings.cs"
+Audio="*res://src/Autoload/Audio.cs"
+Transition="*res://src/Autoload/Transition.cs"
+PostFx="*res://src/Autoload/PostFx.cs"
+DevTools="*res://src/Autoload/DevTools.cs"
 
 [display]
 
@@ -39,9 +37,14 @@ window/stretch/mode="canvas_items"
 window/stretch/aspect="keep"
 window/handheld/orientation=0
 
+[dotnet]
+
+project/assembly_name="ProjectBrenda"
+
 [gui]
 
 theme/custom="res://assets/ui/theme.tres"
+
 theme/custom_font="res://assets/fonts/ShareTechMono-Regular.ttf"
 
 [input]

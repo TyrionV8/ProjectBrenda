@@ -4,3 +4,9 @@
 *.translation
 export_credentials.cfg
 /builds/
+# .NET
+.mono/
+.vs/
+bin/
+obj/
+*.user
