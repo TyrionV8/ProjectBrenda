@@ -70,16 +70,18 @@ public sealed class LedTests : TestSuite
 		var led = match.Components[0];
 		Check(led.Chewable && led.Data.Kind.Blocks, "LED is chewable and blocks construction");
 		CheckNear(led.MaxHp, ComponentTypes.Get("led").HpPerCell, "same health as SMD LED");
-		var bug = match.SpawnBug("brute");
-		bug.Progress = 3 * Grid.Cell;
+		var bug = match.SpawnBug("termite", 3 * Grid.Cell);
+		var leftRoute = false;
 		var reward = 0f;
 		for (var step = 0; step < 600 && !led.Destroyed; step++)
 		{
 			var before = match.Energy;
 			match.Step(Match.StepTime);
+			leftRoute |= bug.OffRoute && bug.Pos.DistanceTo(match.Path.Sample(bug.Progress)) > 1;
 			if (led.Destroyed)
 				reward = match.Energy - before;
 		}
+		Check(leftRoute, "bug left the route to reach the LED");
 		Check(led.Destroyed, "bug destroyed the 5 mm LED");
 		CheckNear(match.BoardIntegrity, 0, "destroyed LED reduces board integrity");
 		CheckNear(match.LightLevel, 0, "destroyed LED turns off the light fraction");

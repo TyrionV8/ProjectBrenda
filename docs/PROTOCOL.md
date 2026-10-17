@@ -67,8 +67,8 @@ blocking components or on the 3 × 3 cells around the CPU.
 | `energy`, `energy_rate` | Attacker's energy and its regeneration per second. |
 | `cpu_hp` | 10 at the start; the attacker wins at 0. |
 | `time_left` | Seconds until the defender wins. |
-| `integrity` | Share of component HP still standing (bugs chew components next to the route). |
-| `bugs` | `[{id, type, x, y, angle, hp, slowed, chewing, progress, cloaked, revealed}]` — `progress` is the distance walked along the route; `cloaked`: a rootkit hiding (can't be targeted or hurt); `revealed`: a trojan without its disguise. |
+| `integrity` | Share of component HP still standing. Components take chewing damage only during a bug's detour, never automatically from passing bugs on the route. |
+| `bugs` | `[{id, type, x, y, angle, hp, slowed, chewing, off_route, progress, cloaked, revealed}]` — `x`, `y` and `angle` are the real position/direction. `off_route` is true while approaching a component, chewing, or returning. `progress` stays frozen at the exit point until the bug returns exactly there. `chewing` is true only for actual chewing, not travel; `cloaked`: a rootkit hiding (can't be targeted or hurt); `revealed`: a trojan without its disguise. |
 | `turrets` | `[{id, type, cell, direction, head, locked}]` — `locked`: encrypted (ransomware) or crashed (kernel panic), it can't fire. |
 | `projectiles` | `[{id, kind (bullet/bomb/orb), source, x, y, h, a}]` |
 | `components` | Remaining HP of each `level.components[i]`, in exactly the level's order and with the same indices (-1 = destroyed). Includes ordinary `led` and `led_5mm` components; no extra components are derived from the route. LEDs count for `integrity` and award component energy like other components. Their light is visual only. |

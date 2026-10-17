@@ -75,25 +75,23 @@ public sealed class SimTests : TestSuite
 	[Test]
 	public void BugsChewComponents()
 	{
-		var level = Catalog.Levels[0].Clone();
-		// A component right next to the first straight part of the route.
-		var a = level.Waypoints[0];
-		var b = level.Waypoints[1];
-		var along = new Vector2I(System.Math.Sign(b.X - a.X), System.Math.Sign(b.Y - a.Y));
-		var cell = a + along * 4 + new Vector2I(along.Y, along.X);
-		level.Components.Clear();
-		level.Components.Add(new ComponentData { Type = "smd", Cell = new[] { cell.X, cell.Y } });
-		var m = new Match(level);
-		for (var i = 0; i < 6; i++)
-			m.SpawnBug("brute").Progress = -i * 30;
+		var level = new LevelData
+		{
+			Path = new() { new[] { 0, 2 }, new[] { 18, 2 } },
+			Components = new() { new() { Type = "smd", Cell = new[] { 3, 4 } } },
+		};
+		var m = new Match(level, MatchMode.Versus, seed: 1);
+		m.SpawnBug("termite", 3 * Grid.Cell);
+		var leftRoute = false;
 		var destroyed = false;
-		for (var i = 0; i < 60 * 60 && m.State == MatchState.Playing; i++)
+		for (var i = 0; i < 60 * 20 && !destroyed; i++)
 		{
 			m.Step(Match.StepTime);
+			leftRoute |= m.Bugs.Any(b => b.OffRoute && b.Pos.DistanceTo(m.Path.Sample(b.Progress)) > 1);
 			destroyed |= m.Events.Any(e => e.Kind == EventKind.ComponentDestroyed);
-			m.Events.Clear();
 		}
-		Check(destroyed, "brutes destroyed the component");
+		Check(leftRoute, "termite physically left the route before chewing");
+		Check(destroyed, "detouring termite destroyed the component");
 		Check(m.Components[0].Destroyed, "component flagged destroyed");
 		Check(m.BoardIntegrity < 1, "integrity dropped");
 	}

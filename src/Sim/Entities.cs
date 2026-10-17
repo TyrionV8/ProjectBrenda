@@ -4,12 +4,20 @@ using Godot;
 
 namespace HardwareDefence.Sim;
 
+public enum DetourState
+{
+	OnRoute,
+	Going,
+	Chewing,
+	Returning,
+}
+
 public sealed class Bug
 {
 	public int Id;
 	public EnemyDef Def;
 	public float Hp;
-	/// <summary>Distance travelled along the route, in pixels.</summary>
+	/// <summary>Distance along the route in pixels; frozen while off route.</summary>
 	public float Progress;
 	public Vector2 Pos;
 	public float Angle;
@@ -20,6 +28,15 @@ public sealed class Bug
 	/// <summary>Index of the component being chewed, or -1.</summary>
 	public int ChewTarget = -1;
 	public float ChewFxTimer;
+	public DetourState Detour;
+	public int DetourTarget = -1;
+	public Vector2 DetourExit;
+	public Vector2 DetourDestination;
+	public float DetourChewLeft;
+	public float DetourCooldown;
+	/// <summary>One decision per component and bug, including unsuccessful rolls.</summary>
+	public readonly HashSet<int> DetourConsidered = new();
+	public bool OffRoute => Detour != DetourState.OnRoute;
 	/// <summary>Boss abilities: time until the next use (or until the rootkit changes state).</summary>
 	public float AbilityTimer;
 	/// <summary>Rootkit: hidden, so turrets can't aim at or damage it.</summary>
@@ -112,7 +129,7 @@ public sealed class Projectile
 	public float Phase;
 }
 
-/// <summary>A component on the board. Bugs chew on it while they walk past.</summary>
+/// <summary>A component on the board. Bugs leave the route to chew on it.</summary>
 public sealed class BoardComponent
 {
 	public int Index;

@@ -33,8 +33,6 @@ public sealed partial class Match
 {
 	public const int CpuMaxHp = 10;
 	public const float StepTime = 1f / 60f;
-	/// <summary>How far past their body bugs can reach to chew a component.</summary>
-	public const float ChewReach = 16f;
 
 	public readonly LevelData Level;
 	public readonly MatchMode Mode;
@@ -56,6 +54,7 @@ public sealed partial class Match
 	public MatchState State = MatchState.Playing;
 
 	readonly Func<TurretDef, IReadOnlyDictionary<string, int>> _upgrades;
+	readonly Random _detourRandom;
 	readonly Dictionary<int, Bug> _bugById = new();
 	readonly Dictionary<int, Projectile> _projById = new();
 	int _nextId = 1;
@@ -66,13 +65,15 @@ public sealed partial class Match
 	float _stepAccumulator;
 
 	/// <param name="upgrades">Upgrade levels per turret (campaign); null means base stats.</param>
+	/// <param name="seed">Seed for deterministic, match-local detour decisions.</param>
 	public Match(LevelData level, MatchMode mode = MatchMode.Campaign, VersusRules rules = null,
-		Func<TurretDef, IReadOnlyDictionary<string, int>> upgrades = null)
+		Func<TurretDef, IReadOnlyDictionary<string, int>> upgrades = null, int seed = 1)
 	{
 		Level = level;
 		Mode = mode;
 		Rules = rules ?? Catalog.Versus;
 		_upgrades = upgrades;
+		_detourRandom = new Random(seed);
 		Path = new PathLine(level.PathPoints());
 		Blocked = level.BlockedCells();
 		Money = level.StartMoney + (mode == MatchMode.Versus ? Rules.DefenderBonusMoney : 0);
@@ -278,64 +279,35 @@ public sealed partial class Match
 			if (b.SlowTime <= 0)
 				b.SlowFactor = 1;
 		}
-		b.Progress += b.Def.Speed * b.SlowFactor * dt;
-		if (b.Progress >= Path.Length)
+		b.DetourCooldown = Mathf.Max(b.DetourCooldown - dt, 0);
+		if (b.OffRoute)
+			StepDetour(b, dt);
+		else
 		{
-			b.Escaped = true;
-			Events.Add(new SimEvent(EventKind.BugEscaped, b.Id, b.Pos, Type: b.Def.Id));
-			// DDoS packets just clog things up; everything else hurts the CPU.
-			if (b.Def.CpuDamage <= 0)
-				return;
-			CpuHp = Mathf.Max(CpuHp - b.Def.CpuDamage, 0);
-			Events.Add(new SimEvent(EventKind.CpuHit, Value: CpuHp, Pos: Path.Sample(Path.Length)));
-			return;
-		}
-		b.Pos = Path.Sample(b.Progress);
-		b.Angle = Path.AngleAt(b.Progress);
-		Chew(b, dt);
-		if (!string.IsNullOrEmpty(b.Def.Ability))
-			StepAbility(b, dt);
-	}
-
-	void Chew(Bug b, float dt)
-	{
-		var reach = b.Radius + ChewReach;
-		var target = b.ChewTarget >= 0 ? Components[b.ChewTarget] : null;
-		if (target == null || !target.Chewable || target.DistanceTo(b.Pos) > reach)
-		{
-			target = null;
-			var best = reach;
-			foreach (var c in Components)
+			b.Pos = Path.Sample(b.Progress);
+			if (TryStartDetour(b))
+				StepDetour(b, dt);
+			else
 			{
-				if (!c.Chewable)
-					continue;
-				var d = c.DistanceTo(b.Pos);
-				if (d <= best)
+				b.Progress += b.Def.Speed * b.SlowFactor * dt;
+				b.Pos = Path.Sample(b.Progress);
+				b.Angle = Path.AngleAt(b.Progress);
+				if (b.Progress >= Path.Length)
 				{
-					best = d;
-					target = c;
+					b.Escaped = true;
+					Events.Add(new SimEvent(EventKind.BugEscaped, b.Id, b.Pos, Type: b.Def.Id));
+					// DDoS packets just clog things up; everything else hurts the CPU.
+					if (b.Def.CpuDamage > 0)
+					{
+						CpuHp = Mathf.Max(CpuHp - b.Def.CpuDamage, 0);
+						Events.Add(new SimEvent(EventKind.CpuHit, Value: CpuHp, Pos: b.Pos));
+					}
+					return;
 				}
 			}
-			b.ChewTarget = target?.Index ?? -1;
 		}
-		if (target == null)
-			return;
-		target.Hp -= b.Def.ChewDps * b.SlowFactor * dt;
-		b.ChewFxTimer -= dt;
-		if (b.ChewFxTimer <= 0)
-		{
-			b.ChewFxTimer = 0.35f;
-			Events.Add(new SimEvent(EventKind.Chew, target.Index, target.ClosestPoint(b.Pos), Type: b.Def.Id));
-		}
-		if (target.Hp <= 0)
-		{
-			target.Hp = 0;
-			target.Destroyed = true;
-			b.ChewTarget = -1;
-			if (Mode == MatchMode.Versus)
-				Energy = Mathf.Min(Energy + target.MaxHp * Rules.ComponentEnergy, Rules.EnergyCap);
-			Events.Add(new SimEvent(EventKind.ComponentDestroyed, target.Index, target.Rect.GetCenter(), target.MaxHp, target.Data.Type));
-		}
+		if (!string.IsNullOrEmpty(b.Def.Ability))
+			StepAbility(b, dt);
 	}
 
 	public void DamageBug(Bug b, float amount)

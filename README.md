@@ -2,8 +2,9 @@
 
 *(Codename during development: Project Brenda.)*
 
-Tower defense on a circuit board: bugs crawl along the copper trace, chewing the components
-they pass, and the player defends the CPU with turrets. Made with **Godot 4.7 .NET** (C#);
+Tower defense on a circuit board: bugs follow the copper trace, sometimes leaving it to
+chew nearby components before returning, while the player defends the CPU with turrets.
+Made with **Godot 4.7 .NET** (C#);
 it started as a GameMaker prototype, which was retired once the Godot version replaced it
 (it is still in the git history, before the Godot 4.7 migration).
 
@@ -71,10 +72,20 @@ the network — which is what makes versus, AIs and headless tests share the sam
   rise by $10 per bought level; damage, density and freezing start at $30 and rise by $15.
 * **Bugs** (`data/enemies.json`): HP, speed, reward, size, effect colours, how fast they chew
   components, and their versus cost/unlock time. Each bug's art is the sprite sheet
-  `assets/sprites/bugs/ID.png` (see *Art* below).
+  `assets/sprites/bugs/ID.png` (see *Art* below). `detour_chance` is rolled once per bug and
+  nearby component; `detour_range` measures cells to the component rectangle,
+  `detour_chew_time` limits chewing seconds, and `detour_cooldown` sets seconds on the route
+  after returning. Missing fields safely disable detours. Current common bugs use a range
+  of 3 cells and a 16-second cooldown, with 6 seconds chewing (8 for termites).
 * **Levels** (`data/levels/level_N.json`): route waypoints, components, theme, money, waves.
   Edit them with the Level Editor (when run from the Godot editor it can overwrite built-in
   levels) or by hand; `level_9.json` would add a level.
+
+Components take damage only when a bug walks to their edge and chews during a detour;
+passing them on the route deals no automatic damage. The bug returns to its exact exit
+point before continuing. It stays targetable and affected by slowing throughout the trip.
+Bosses and DDoS packets never detour. Match-local seeded randomness keeps identical runs
+reproducible; the `Match` constructor accepts an optional seed.
 
 ### Art
 

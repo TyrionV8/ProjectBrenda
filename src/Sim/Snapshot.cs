@@ -18,7 +18,9 @@ public sealed class BugSnap
 	public float Hp { get; set; }
 	public bool Slowed { get; set; }
 	public bool Chewing { get; set; }
-	/// <summary>Distance travelled along the route (pixels).</summary>
+	/// <summary>Leaving the route, chewing a component or returning to the saved exit.</summary>
+	public bool OffRoute { get; set; }
+	/// <summary>Distance along the route (pixels), frozen during a detour.</summary>
 	public float Progress { get; set; }
 	/// <summary>Rootkit boss hiding from the turrets.</summary>
 	public bool Cloaked { get; set; }
@@ -118,7 +120,7 @@ public sealed class Snapshot
 			s.Bugs.Add(new BugSnap
 			{
 				Id = b.Id, Type = b.Def.Id, X = R(b.Pos.X), Y = R(b.Pos.Y), Angle = R(b.Angle, 3), Hp = R(b.Hp, 2),
-				Slowed = b.Slowed, Chewing = b.ChewTarget >= 0, Progress = R(b.Progress), Cloaked = b.Cloaked, Revealed = b.Revealed,
+				Slowed = b.Slowed, Chewing = b.Detour == DetourState.Chewing && b.ChewTarget >= 0, OffRoute = b.OffRoute, Progress = R(b.Progress), Cloaked = b.Cloaked, Revealed = b.Revealed,
 			});
 		foreach (var t in m.Turrets)
 			s.Turrets.Add(new TurretSnap

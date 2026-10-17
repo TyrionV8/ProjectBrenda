@@ -19,8 +19,16 @@ public sealed class EnemyDef
 	public string AccentColor { get; set; } = "1f5f1a";
 	public string EyeColor { get; set; } = "ff3d3d";
 	public string LegColor { get; set; } = "10220c";
-	/// <summary>Damage per second dealt to components next to the route.</summary>
+	/// <summary>Damage per second dealt while chewing during a detour.</summary>
 	public float ChewDps { get; set; } = 1;
+	/// <summary>Chance to leave the route, rolled once per nearby component. Zero disables detours.</summary>
+	public float DetourChance { get; set; }
+	/// <summary>Maximum distance to a component rectangle, in board cells.</summary>
+	public float DetourRange { get; set; }
+	/// <summary>Maximum seconds spent chewing per detour.</summary>
+	public float DetourChewTime { get; set; }
+	/// <summary>Seconds on the route after returning before another detour is allowed.</summary>
+	public float DetourCooldown { get; set; }
 	/// <summary>Versus mode: energy the attacker pays to send it.</summary>
 	public int VersusCost { get; set; } = 10;
 	/// <summary>Versus mode: seconds into the match before it can be sent.</summary>
