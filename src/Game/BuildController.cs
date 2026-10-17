@@ -31,6 +31,7 @@ public partial class BuildController : Node2D
 	{
 		Material = View.FxUtil.Unshaded;
 		ZIndex = 10;
+		TextureFilter = TextureFilterEnum.Linear;
 	}
 
 	public void Select(TurretDef def)
@@ -41,7 +42,7 @@ public partial class BuildController : Node2D
 		Aiming = false;
 		Audio.Ui("click");
 		SelectionChanged?.Invoke(def);
-		UpdatePointer(GetLocalMousePosition());
+		UpdatePointer(Screen.BoardMouse());
 		QueueRedraw();
 	}
 
@@ -58,27 +59,27 @@ public partial class BuildController : Node2D
 	/// <summary>True while placing; Esc then cancels instead of pausing.</summary>
 	public bool Busy => Selected != null;
 
-	public override void _UnhandledInput(InputEvent e)
+	/// <summary>Mouse/touch input forwarded by the game screen. Returns true when it was used.</summary>
+	public bool HandlePointer(InputEvent e)
 	{
 		if (!Screen.Playing)
-			return;
+			return false;
 		if (e is InputEventMouseMotion)
-			UpdatePointer(GetLocalMousePosition());
+			UpdatePointer(Screen.BoardMouse());
 		else if (e is InputEventMouseButton mb && mb.Pressed)
 		{
-			UpdatePointer(GetLocalMousePosition());
+			UpdatePointer(Screen.BoardMouse());
 			if (mb.ButtonIndex == MouseButton.Left)
 				Primary();
 			else if (mb.ButtonIndex == MouseButton.Right)
 				Secondary();
-			GetViewport().SetInputAsHandled();
+			return true;
 		}
-		else if (e.IsActionPressed("pause") && Selected != null)
-		{
-			Secondary();
-			GetViewport().SetInputAsHandled();
-		}
+		return false;
 	}
+
+	/// <summary>Esc while placing: stop aiming, or stop placing.</summary>
+	public void Back() => Secondary();
 
 	public override void _Process(double delta)
 	{
@@ -180,13 +181,13 @@ public partial class BuildController : Node2D
 		var color = (ok ? new Color(0.3f, 1f, 0.85f) : new Color(1f, 0.3f, 0.35f)).Lerp(new Color(1, 0.2f, 0.2f), _deny);
 		var rect = Grid.CellRect(cell, Vector2I.One).Grow(-2);
 		DrawRect(rect, new Color(color, 0.18f));
-		DrawRect(rect, new Color(color, 0.9f), false, 2);
+		DrawRect(rect, new Color(color, 0.9f), false, View.PixelWorld.Scale);
 		var stats = Screen.Feed.StatsFor(Selected);
 		var range = stats.GetValueOrDefault("range");
 		if (range > 0 && !Selected.NeedsDirection)
 		{
 			DrawCircle(center, range, new Color(color, 0.06f));
-			DrawArc(center, range, 0, Mathf.Tau, 64, new Color(color, 0.5f), 1.5f, true);
+			DrawArc(center, range, 0, Mathf.Tau, 64, new Color(color, 0.5f), View.PixelWorld.Scale);
 		}
 		DrawSetTransform(center, 0, Vector2.One * 0.5f);
 		DrawTexture(Socket, -Socket.GetSize() / 2, new Color(1, 1, 1, 0.55f));
@@ -202,11 +203,9 @@ public partial class BuildController : Node2D
 			var a = d * Mathf.Pi / 2;
 			var active = Aiming && Mathf.IsZeroApprox(Mathf.Wrap(a - _aimDir, -Mathf.Pi, Mathf.Pi));
 			var tip = center + Vector2.FromAngle(a) * (active ? length : 30);
-			DrawLine(center + Vector2.FromAngle(a) * 24, tip, new Color(Selected.Color, active ? 0.9f : 0.3f), active ? 4 : 2, true);
+			DrawLine(center + Vector2.FromAngle(a) * 24, tip, new Color(Selected.Color, active ? 0.9f : 0.3f), active ? 6 : 3);
 		}
 		var label = Aiming ? "click to confirm" : "click to aim";
-		var font = ThemeDB.FallbackFont;
-		DrawStringOutline(font, center + new Vector2(-60, -34), label, HorizontalAlignment.Center, 120, 14, 4, new Color(0, 0, 0, 0.8f));
-		DrawString(font, center + new Vector2(-60, -34), label, HorizontalAlignment.Center, 120, 14, Colors.White);
+		View.MicroFont.DrawOutlined(this, center + new Vector2(0, -36), label, Colors.White, new Color(0, 0, 0, 0.85f));
 	}
 }

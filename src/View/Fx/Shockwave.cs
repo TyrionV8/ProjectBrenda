@@ -28,7 +28,8 @@ public partial class Shockwave : Node2D
 		var k = Mathf.Ease(_t, 0.4f);
 		var r = Mathf.Lerp(Radius * 0.15f, Radius, k);
 		var a = 1 - _t;
-		DrawArc(Vector2.Zero, r, 0, Mathf.Tau, 48, new Color(RingColor, a * 0.9f), Mathf.Lerp(10, 1.5f, _t), true);
-		DrawArc(Vector2.Zero, r * 0.85f, 0, Mathf.Tau, 48, new Color(RingColor, a * 0.25f), Mathf.Lerp(18, 3, _t), true);
+		const int px = PixelWorld.Scale;
+		DrawArc(Vector2.Zero, r, 0, Mathf.Tau, 48, new Color(RingColor, a * 0.9f), Mathf.Max(Mathf.Round(Mathf.Lerp(3, 1, _t)) * px, px));
+		DrawArc(Vector2.Zero, r * 0.85f, 0, Mathf.Tau, 48, new Color(RingColor, a * 0.25f), Mathf.Round(Mathf.Lerp(5, 1, _t)) * px);
 	}
 }

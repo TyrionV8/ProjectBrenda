@@ -54,10 +54,10 @@ public partial class DecorPulses : Node2D
 		{
 			if (p.Line.Length < 2)
 				continue;
-			var pos = PointAt(p.Line, p.D);
+			var pos = PixelWorld.Snap(PointAt(p.Line, p.D));
 			var fade = Mathf.Clamp(Mathf.Min(p.D, p.Length - p.D) / 30f, 0, 1);
 			FxUtil.DrawGlow(this, pos, 18, new Color(0.3f, 0.8f, 1f, 0.7f * fade));
-			DrawCircle(pos, 1.6f, new Color(0.85f, 0.97f, 1f, fade));
+			DrawRect(new Rect2(pos - Vector2.One * PixelWorld.Scale, Vector2.One * PixelWorld.Scale * 2), new Color(0.85f, 0.97f, 1f, fade));
 		}
 	}
 

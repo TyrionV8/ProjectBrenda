@@ -149,13 +149,13 @@
    {"enemy": "beetle", "time": 9},
    {"enemy": "beetle", "time": 12},
    {"enemy": "bug", "time": 14.0},
-   {"enemy": "bug", "time": 14.6},
+   {"enemy": "termite", "time": 14.6},
    {"enemy": "bug", "time": 15.2},
-   {"enemy": "bug", "time": 15.8},
+   {"enemy": "termite", "time": 15.8},
    {"enemy": "bug", "time": 16.4},
-   {"enemy": "bug", "time": 17.0},
+   {"enemy": "termite", "time": 17.0},
    {"enemy": "bug", "time": 17.6},
-   {"enemy": "bug", "time": 18.2}
+   {"enemy": "termite", "time": 18.2}
   ],
   [
    {"enemy": "beetle", "time": 0.0},
@@ -172,14 +172,14 @@
    {"enemy": "spider", "time": 9.6},
    {"enemy": "beetle", "time": 10.0},
    {"enemy": "bug", "time": 12.0},
-   {"enemy": "bug", "time": 12.5},
+   {"enemy": "termite", "time": 12.5},
    {"enemy": "bug", "time": 13.0},
-   {"enemy": "bug", "time": 13.5},
+   {"enemy": "termite", "time": 13.5},
    {"enemy": "bug", "time": 14.0},
    {"enemy": "bug", "time": 14.5},
-   {"enemy": "bug", "time": 15.0},
+   {"enemy": "termite", "time": 15.0},
    {"enemy": "bug", "time": 15.5},
-   {"enemy": "bug", "time": 16.0},
+   {"enemy": "termite", "time": 16.0},
    {"enemy": "bug", "time": 16.5}
   ]
  ]

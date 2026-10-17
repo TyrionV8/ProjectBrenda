@@ -40,15 +40,21 @@ public partial class MapCanvas : Node2D
 	public override void _Ready()
 	{
 		Position = Grid.Origin;
+		// The level is drawn like in the game, in the low-resolution pixel world.
+		var world = new PixelWorld { Position = -Grid.Origin };
+		AddChild(world);
+		world.Root.AddChild(new CanvasModulate { Color = new Color(0.72f, 0.76f, 0.86f) });
+		var origin = new Node2D { Position = Grid.Origin };
+		world.Root.AddChild(origin);
 		_board = new BoardView { ShowGrid = true };
-		AddChild(_board);
+		origin.AddChild(_board);
 		_trace = new PathTraceView();
-		AddChild(_trace);
+		origin.AddChild(_trace);
 		_cpu = new CpuView();
-		AddChild(_cpu);
+		origin.AddChild(_cpu);
 		_ghost = new Node2D { Modulate = new Color(1, 1, 1, 0.6f), ZIndex = 5 };
 		_ghost.Draw += DrawGhost;
-		AddChild(_ghost);
+		origin.AddChild(_ghost);
 		_overlay = new Node2D { Material = FxUtil.Unshaded, ZIndex = 10 };
 		_overlay.Draw += DrawOverlay;
 		AddChild(_overlay);
@@ -312,9 +318,8 @@ public partial class MapCanvas : Node2D
 		if (c == null)
 			return;
 		var origin = new Vector2(c.Cell[0], c.Cell[1]) * Grid.Cell;
-		_ghost.DrawSetTransform(origin, 0, Vector2.One);
-		ComponentArt.Draw(_ghost, c, new Vector2(c.Size[0], c.Size[1]) * Grid.Cell, BoardTheme.Get(Level.Theme), 1);
-		_ghost.DrawSetTransformMatrix(Transform2D.Identity);
+		var tex = ComponentArt.Texture(c, BoardTheme.Get(Level.Theme), 1);
+		_ghost.DrawTextureRect(tex, new Rect2(origin - Vector2.One * ComponentArt.Pad * PixelWorld.Scale, tex.GetSize() * PixelWorld.Scale), false);
 	}
 
 	void DrawOverlay()

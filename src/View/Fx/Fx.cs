@@ -7,21 +7,20 @@ namespace HardwareDefence.View;
 /// <summary>Spawns short-lived visual effects. Lives inside the board, so positions are board-local.</summary>
 public partial class Fx : Node2D
 {
-	static readonly Font BoldFont = GD.Load<Font>("res://assets/fonts/Silkscreen-Bold.ttf");
-
 	public event Action<float> ShakeRequested;
 
 	public void Sparks(Vector2 pos, Color color, int amount = 14, float speed = 160, float lifetime = 0.45f, float size = 0.5f)
 	{
 		var p = Particles(pos, amount, lifetime);
-		p.Texture = FxUtil.SparkTexture;
+		// Sparks are single art pixels (big ones two): the pixel texture is 8 world units wide.
+		p.Texture = FxUtil.PixelTexture;
 		p.Material = FxUtil.Additive;
 		p.InitialVelocityMin = speed * 0.4f;
 		p.InitialVelocityMax = speed;
 		p.DampingMin = speed * 1.2f;
 		p.DampingMax = speed * 2f;
-		p.ScaleAmountMin = size * 0.5f;
-		p.ScaleAmountMax = size;
+		p.ScaleAmountMin = 0.375f;
+		p.ScaleAmountMax = size >= 0.6f ? 0.75f : 0.375f;
 		p.ColorRamp = Fade(color);
 		p.Emitting = true;
 	}
@@ -46,15 +45,15 @@ public partial class Fx : Node2D
 	{
 		var p = Particles(pos, amount, lifetime);
 		p.Explosiveness = 0.3f;
-		p.Texture = FxUtil.GlowTexture;
+		p.Texture = FxUtil.PixelTexture;
 		p.EmissionShape = CpuParticles2D.EmissionShapeEnum.Sphere;
 		p.EmissionSphereRadius = radius;
 		p.Direction = Vector2.Up;
 		p.Spread = 25;
 		p.InitialVelocityMin = 10;
 		p.InitialVelocityMax = 30;
-		p.ScaleAmountMin = 0.2f;
-		p.ScaleAmountMax = 0.45f;
+		p.ScaleAmountMin = 0.75f;
+		p.ScaleAmountMax = 1.5f;
 		var g = new Gradient { Colors = new[] { new Color(0.2f, 0.2f, 0.22f, 0.7f), new Color(0.1f, 0.1f, 0.1f, 0) } };
 		p.ColorRamp = g;
 		p.Emitting = true;
@@ -84,8 +83,8 @@ public partial class Fx : Node2D
 	public void Shockwave(Vector2 pos, float radius, Color color, float duration = 0.4f) =>
 		AddChild(new Shockwave { Position = pos, Radius = radius, RingColor = color, Duration = duration });
 
-	public void FloatingText(Vector2 pos, string text, Color color, int size = 16) =>
-		AddChild(new FloatingText { Position = pos, Text = text, TextColor = color, Font = BoldFont, FontSize = size });
+	public void FloatingText(Vector2 pos, string text, Color color) =>
+		AddChild(new FloatingText { Position = PixelWorld.Snap(pos), Text = text, TextColor = color });
 
 	public void Explosion(Vector2 pos, float radius)
 	{

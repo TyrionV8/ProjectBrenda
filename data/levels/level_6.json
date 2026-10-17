@@ -129,9 +129,9 @@
    {"enemy": "bug", "time": 4.5},
    {"enemy": "bug", "time": 5.0},
    {"enemy": "bug", "time": 5.5},
-   {"enemy": "beetle", "time": 5.5},
+   {"enemy": "termite", "time": 5.5},
    {"enemy": "beetle", "time": 7.0},
-   {"enemy": "beetle", "time": 8.5}
+   {"enemy": "termite", "time": 8.5}
   ],
   [
    {"enemy": "runner", "time": 0},
@@ -156,11 +156,11 @@
    {"enemy": "beetle", "time": 10.0},
    {"enemy": "beetle", "time": 10.8},
    {"enemy": "runner", "time": 11.0},
-   {"enemy": "beetle", "time": 11.6},
+   {"enemy": "roach", "time": 11.6},
    {"enemy": "beetle", "time": 12.4},
    {"enemy": "beetle", "time": 13.2},
    {"enemy": "beetle", "time": 14.0},
-   {"enemy": "beetle", "time": 14.8},
+   {"enemy": "roach", "time": 14.8},
    {"enemy": "beetle", "time": 15.6}
   ],
   [
@@ -190,15 +190,15 @@
   ],
   [
    {"enemy": "beetle", "time": 0.0},
-   {"enemy": "beetle", "time": 0.8},
+   {"enemy": "termite", "time": 0.8},
    {"enemy": "beetle", "time": 1.6},
    {"enemy": "beetle", "time": 2.4},
    {"enemy": "beetle", "time": 3.2},
-   {"enemy": "beetle", "time": 4.0},
+   {"enemy": "termite", "time": 4.0},
    {"enemy": "beetle", "time": 4.8},
    {"enemy": "beetle", "time": 5.6},
    {"enemy": "runner", "time": 6.0},
-   {"enemy": "beetle", "time": 6.4},
+   {"enemy": "termite", "time": 6.4},
    {"enemy": "beetle", "time": 7.2},
    {"enemy": "runner", "time": 7.2},
    {"enemy": "runner", "time": 8.4},
@@ -214,7 +214,7 @@
    {"enemy": "bug", "time": 16.3},
    {"enemy": "bug", "time": 16.6},
    {"enemy": "bug", "time": 16.9},
-   {"enemy": "bug", "time": 17.2},
+   {"enemy": "termite", "time": 17.2},
    {"enemy": "bug", "time": 17.5},
    {"enemy": "bug", "time": 17.8},
    {"enemy": "bug", "time": 18.1},
@@ -222,7 +222,7 @@
    {"enemy": "bug", "time": 18.7},
    {"enemy": "bug", "time": 19.0},
    {"enemy": "bug", "time": 19.3},
-   {"enemy": "bug", "time": 19.6},
+   {"enemy": "termite", "time": 19.6},
    {"enemy": "bug", "time": 19.9},
    {"enemy": "bug", "time": 20.2},
    {"enemy": "bug", "time": 20.5}

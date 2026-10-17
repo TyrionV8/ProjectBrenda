@@ -13,7 +13,7 @@ public sealed class EnemyDef
 	public int Reward { get; set; } = 1;
 	/// <summary>Body radius in pixels, also used for hit detection.</summary>
 	public float Radius { get; set; } = 11;
-	/// <summary>Drawing style: beetle, spider, slim, armored or boss.</summary>
+	/// <summary>Kind of bug (informative; "boss" gets the boss effects). The art is assets/sprites/bugs/ID.png.</summary>
 	public string Style { get; set; } = "beetle";
 	public string ShellColor { get; set; } = "5bd94a";
 	public string AccentColor { get; set; } = "1f5f1a";

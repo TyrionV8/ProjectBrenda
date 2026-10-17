@@ -6,7 +6,7 @@
   "speed": 30,
   "reward": 1,
   "radius": 11,
-  "style": "beetle",
+  "style": "glitch",
   "shell_color": "5bd94a",
   "accent_color": "1f5f1a",
   "eye_color": "ff3d3d",
@@ -30,6 +30,22 @@
   "chew_dps": 1.5,
   "versus_cost": 9,
   "versus_unlock": 0
+ },
+ {
+  "id": "termite",
+  "name": "Termite",
+  "max_hp": 6,
+  "speed": 33,
+  "reward": 2,
+  "radius": 11,
+  "style": "termite",
+  "shell_color": "e8cf9a",
+  "accent_color": "8a6a3a",
+  "eye_color": "ffb347",
+  "leg_color": "6a4a20",
+  "chew_dps": 6.0,
+  "versus_cost": 12,
+  "versus_unlock": 20
  },
  {
   "id": "beetle",
@@ -62,6 +78,22 @@
   "chew_dps": 4.0,
   "versus_cost": 28,
   "versus_unlock": 60
+ },
+ {
+  "id": "roach",
+  "name": "Roach",
+  "max_hp": 10,
+  "speed": 58,
+  "reward": 3,
+  "radius": 13,
+  "style": "roach",
+  "shell_color": "8a4a1e",
+  "accent_color": "3a1d0a",
+  "eye_color": "ff8a3d",
+  "leg_color": "2a1408",
+  "chew_dps": 1.5,
+  "versus_cost": 20,
+  "versus_unlock": 45
  },
  {
   "id": "runner",

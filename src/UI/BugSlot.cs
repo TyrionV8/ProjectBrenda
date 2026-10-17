@@ -18,9 +18,9 @@ public partial class BugSlot : Button
 		_hotkey = hotkey;
 		Flat = true;
 		FocusMode = FocusModeEnum.None;
-		CustomMinimumSize = new Vector2(186, 74);
+		CustomMinimumSize = new Vector2(186, 56);
 		TooltipText = $"{def.Name}\nHP {def.MaxHp}  speed {def.Speed}  chews {def.ChewDps}/s";
-		var icon = new BugIcon(def, 54) { Position = new Vector2(8, 10) };
+		var icon = new BugIcon(def, 50) { Position = new Vector2(4, 3) };
 		AddChild(icon);
 		MouseEntered += () =>
 		{
@@ -66,11 +66,11 @@ public partial class BugSlot : Button
 			bg = bg.Lightened(0.08f);
 		var border = ready ? new Color(UiTheme.Magenta, hovered ? 0.8f : 0.35f) : new Color(1, 1, 1, 0.1f);
 		DrawStyleBox(UiTheme.Box(bg, border, 2, 8, 0, 0, new Color(0, 0, 0, 0.4f), 6), new Rect2(Vector2.Zero, Size));
-		DrawString(UiTheme.PixelFont, new Vector2(70, 26), Def.Name.ToUpperInvariant(), HorizontalAlignment.Left, Size.X - 76, 11, ready ? UiTheme.TextColor : UiTheme.Dim);
-		DrawString(UiTheme.PixelBold, new Vector2(70, 56), Def.VersusCost.ToString(), HorizontalAlignment.Left, -1, 22, ready ? UiTheme.Magenta : UiTheme.Dim);
+		DrawString(UiTheme.PixelFont, new Vector2(60, 21), Def.Name.ToUpperInvariant(), HorizontalAlignment.Left, Size.X - 66, 11, ready ? UiTheme.TextColor : UiTheme.Dim);
+		DrawString(UiTheme.PixelBold, new Vector2(60, 45), Def.VersusCost.ToString(), HorizontalAlignment.Left, -1, 20, ready ? UiTheme.Magenta : UiTheme.Dim);
 		if (locked)
-			DrawString(UiTheme.PixelFont, new Vector2(118, 56), _blocked.Replace("Unlocks in ", ""), HorizontalAlignment.Left, -1, 13, UiTheme.Gold);
-		DrawString(UiTheme.PixelFont, new Vector2(Size.X - 20, Size.Y - 10), _hotkey.ToString(), HorizontalAlignment.Left, -1, 12, UiTheme.Dim);
+			DrawString(UiTheme.PixelFont, new Vector2(108, 45), _blocked.Replace("Unlocks in ", ""), HorizontalAlignment.Left, -1, 13, UiTheme.Gold);
+		DrawString(UiTheme.PixelFont, new Vector2(Size.X - 18, Size.Y - 8), _hotkey.ToString(), HorizontalAlignment.Left, -1, 12, UiTheme.Dim);
 		if (locked)
 			DrawRect(new Rect2(Vector2.Zero, Size), new Color(0, 0, 0, 0.35f));
 	}

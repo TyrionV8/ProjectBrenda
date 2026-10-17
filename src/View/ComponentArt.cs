@@ -1,22 +1,31 @@
 using System;
+using System.Collections.Generic;
 using HardwareDefence.Data;
 using Godot;
 
 namespace HardwareDefence.View;
 
 /// <summary>
-/// Procedural drawings of board components, plus their damage states. Everything is drawn
-/// in a rect starting at (0, 0) of the calling canvas item.
+/// Pixel-art board components, painted into a <see cref="PixelCanvas"/> in art pixels (a cell
+/// is 16 px), plus their damage states. The canvas has a <see cref="Pad"/> pixel margin for
+/// the drop shadow, so the art of a component at (0, 0) starts at (Pad, Pad).
 /// </summary>
 public static class ComponentArt
 {
-	public static readonly Font SilkFont = GD.Load<Font>("res://assets/fonts/Silkscreen-Regular.ttf");
-	public static readonly Font MarkFont = GD.Load<Font>("res://assets/fonts/ShareTechMono-Regular.ttf");
+	public const int Pad = 3;
+	const int C = BoardView.CellPx;
 
 	static readonly Color Gold = new("d9a441");
+	static readonly Color GoldLight = new("ffe7a3");
 	static readonly Color GoldDark = new("7a5212");
 	static readonly Color Silver = new("aeb7c2");
-	static readonly Color Shadow = new(0, 0, 0, 0.45f);
+	static readonly Color SilverLight = new("dfe5ec");
+	static readonly Color SilverDark = new("6d7682");
+	static readonly Color Black = new("16191e");
+	static readonly Color BlackLight = new("2c323b");
+	static readonly Color Shadow = new(0, 0, 0, 0.42f);
+
+	static readonly Dictionary<string, ImageTexture> Cache = new();
 
 	/// <summary>Main colour of a component (used for debris when it's chewed).</summary>
 	public static Color MainColor(ComponentData c) => c.Type switch
@@ -32,471 +41,596 @@ public static class ComponentArt
 		_ => new Color("1d2026"),
 	};
 
-	public static void Draw(CanvasItem ci, ComponentData c, Vector2 size, BoardTheme theme, int seed)
+	/// <summary>Taller parts cast longer shadows.</summary>
+	static int ShadowLength(string type) => type switch
 	{
-		var r = new Rect2(Vector2.Zero, size);
-		switch (c.Type)
+		"capacitor" or "heatsink" or "port" or "connector" or "battery" or "inductor" or "switch" or "ram_slot" or "pcie_slot" or "sata" or "header" => 2,
+		"label" or "fingers" or "hole" => 0,
+		_ => 1,
+	};
+
+	/// <summary>The undamaged art (cached), as a texture with the shadow margin.</summary>
+	public static ImageTexture Texture(ComponentData c, BoardTheme theme, int seed)
+	{
+		var key = $"{c.Type}|{c.Size[0]}x{c.Size[1]}|{c.Color}|{c.Label}|{theme.Silk.ToHtml()}|{seed}";
+		if (!Cache.TryGetValue(key, out var tex))
 		{
-			case "chip": Chip(ci, r, c.Label ?? $"U{seed % 90 + 1}", c.Color); break;
-			case "bga": Bga(ci, r, c.Label); break;
-			case "header": Header(ci, r); break;
-			case "connector": Connector(ci, r, c.Color); break;
-			case "capacitor": Capacitor(ci, r, c.Color); break;
-			case "smd": Smd(ci, r, seed); break;
-			case "resistor": Resistor(ci, r, seed); break;
-			case "led": LedPad(ci, r, c.Color); break;
-			case "crystal": Crystal(ci, r, c.Label); break;
-			case "inductor": Inductor(ci, r, c.Label); break;
-			case "mosfet": Mosfet(ci, r); break;
-			case "ram_slot": Slot(ci, r, c.Color ?? "16191e", latches: true, notchAt: 0.42f); break;
-			case "pcie_slot": Slot(ci, r, c.Color ?? "121417", latches: false, notchAt: 0.18f); break;
-			case "sata": Sata(ci, r, c.Color); break;
-			case "port": Port(ci, r, c.Label); break;
-			case "battery": Battery(ci, r); break;
-			case "heatsink": Heatsink(ci, r, c.Color); break;
-			case "shield": ShieldCan(ci, r, c.Label); break;
-			case "switch": KeySwitch(ci, r, c.Color); break;
-			case "jumper": Jumper(ci, r, c.Color); break;
-			case "fingers": Fingers(ci, r); break;
-			case "hole": Hole(ci, r); break;
-			case "label": Label(ci, r, c.Label ?? "", theme.Silk); break;
-			default: Chip(ci, r, c.Type, null); break;
+			tex = Paint(c, theme, seed).ToTexture();
+			if (Cache.Count > 400)
+				Cache.Clear();
+			Cache[key] = tex;
 		}
+		return tex;
 	}
 
-	/// <summary>Bite marks, cracks and scorching depending on how damaged it is.</summary>
-	public static void DrawDamage(CanvasItem ci, Vector2 size, float ratio, bool destroyed, int seed)
+	public static PixelCanvas Paint(ComponentData c, BoardTheme theme, int seed)
+	{
+		var w = c.Size[0] * C;
+		var h = c.Size[1] * C;
+		var canvas = new PixelCanvas(w + Pad * 2, h + Pad * 2);
+		var art = new PixelCanvas(w, h);
+		var rng = new RandomNumberGenerator { Seed = (ulong)(seed * 31 + 5) };
+		switch (c.Type)
+		{
+			case "chip": Chip(art, c.Label ?? $"U{seed % 90 + 1}", c.Color); break;
+			case "bga": Bga(art, c.Label); break;
+			case "header": Header(art); break;
+			case "connector": Connector(art, c.Color); break;
+			case "capacitor": Capacitor(art, c.Color); break;
+			case "smd": Smd(art, rng); break;
+			case "resistor": Resistor(art, seed); break;
+			case "led": Led(art, c.Color); break;
+			case "crystal": Crystal(art, c.Label); break;
+			case "inductor": Inductor(art, c.Label); break;
+			case "mosfet": Mosfet(art); break;
+			case "ram_slot": Slot(art, c.Color ?? "16191e", true, 0.42f); break;
+			case "pcie_slot": Slot(art, c.Color ?? "121417", false, 0.18f); break;
+			case "sata": Sata(art, c.Color); break;
+			case "port": Port(art, c.Label); break;
+			case "battery": Battery(art); break;
+			case "heatsink": Heatsink(art, c.Color); break;
+			case "shield": ShieldCan(art, c.Label); break;
+			case "switch": KeySwitch(art, c.Color); break;
+			case "jumper": Jumper(art, c.Color); break;
+			case "fingers": Fingers(art); break;
+			case "hole": Hole(art); break;
+			case "label": art.TextCentered(w / 2f, h / 2f, Fit(c.Label ?? "", w - 2), theme.Silk); break;
+			default: Chip(art, c.Type, null); break;
+		}
+		canvas.Draw(art, Pad, Pad);
+		var shadow = ShadowLength(c.Type);
+		if (shadow > 0)
+			canvas.DropShadow(shadow, shadow, Shadow);
+		return canvas;
+	}
+
+	/// <summary>Bites (pixels chewed away with a scorched rim), cracks and, once destroyed, charring.</summary>
+	public static void Damage(PixelCanvas canvas, ComponentData c, float ratio, bool destroyed, int seed)
 	{
 		if (!destroyed && ratio >= 0.999f)
 			return;
 		var rng = new RandomNumberGenerator { Seed = (ulong)(seed * 7919 + 13) };
-		var r = new Rect2(Vector2.Zero, size).Grow(-3);
-		var soot = new Color(0.06f, 0.035f, 0.02f, 0.9f);
+		var w = c.Size[0] * C;
+		var h = c.Size[1] * C;
+		var damage = destroyed ? 1f : 1f - ratio;
+		var soot = new Color(0.07f, 0.04f, 0.02f, 0.95f);
 		if (destroyed)
 		{
-			var center = r.GetCenter();
-			var radius = Mathf.Max(size.X, size.Y) * 0.65f;
-			for (var i = 0; i < 6; i++)
-				ci.DrawCircle(center, radius * (1 - i * 0.14f), new Color(0.05f, 0.03f, 0.02f, 0.18f));
-			ci.DrawRect(r, new Color(0.04f, 0.03f, 0.03f, 0.72f));
+			for (var y = 0; y < canvas.Height; y++)
+				for (var x = 0; x < canvas.Width; x++)
+				{
+					var p = canvas.Get(x, y);
+					if (p.A <= 0.01f)
+						continue;
+					var grey = (p.R + p.G + p.B) / 3;
+					canvas.Set(x, y, new Color(grey * 0.35f + 0.02f, grey * 0.3f + 0.015f, grey * 0.28f + 0.01f, p.A));
+				}
 		}
-		var damage = destroyed ? 1f : 1f - ratio;
-		var bites = Mathf.CeilToInt(damage * 9);
+		var bites = Mathf.CeilToInt(damage * (6 + (w + h) / 16));
 		for (var i = 0; i < bites; i++)
 		{
 			var edge = rng.RandiRange(0, 3);
 			var t = rng.RandfRange(0.1f, 0.9f);
 			var p = edge switch
 			{
-				0 => new Vector2(r.Position.X + r.Size.X * t, r.Position.Y),
-				1 => new Vector2(r.End.X, r.Position.Y + r.Size.Y * t),
-				2 => new Vector2(r.Position.X + r.Size.X * t, r.End.Y),
-				_ => new Vector2(r.Position.X, r.Position.Y + r.Size.Y * t),
-			};
-			var radius = rng.RandfRange(4, 9) * (0.6f + damage * 0.6f);
-			var pts = new Vector2[9];
-			for (var k = 0; k < pts.Length; k++)
-			{
-				var a = Mathf.Tau * k / pts.Length;
-				pts[k] = p + Vector2.FromAngle(a) * radius * rng.RandfRange(0.6f, 1.15f);
-			}
-			ci.DrawColoredPolygon(pts, soot);
+				0 => new Vector2(w * t, 0),
+				1 => new Vector2(w, h * t),
+				2 => new Vector2(w * t, h),
+				_ => new Vector2(0, h * t),
+			} + Vector2.One * Pad;
+			var radius = rng.RandfRange(1.6f, 3.4f) * (0.7f + damage * 0.6f);
+			Bite(canvas, p, radius, soot, rng);
 		}
 		if (damage > 0.4f)
 		{
-			var cracks = Mathf.CeilToInt((damage - 0.4f) * 8);
+			var cracks = Mathf.CeilToInt((damage - 0.4f) * 6);
 			for (var i = 0; i < cracks; i++)
 			{
-				var p = new Vector2(rng.RandfRange(r.Position.X, r.End.X), rng.RandfRange(r.Position.Y, r.End.Y));
-				var line = new Vector2[4];
-				line[0] = p;
-				for (var k = 1; k < line.Length; k++)
-					line[k] = line[k - 1] + Vector2.FromAngle(rng.RandfRange(0, Mathf.Tau)) * rng.RandfRange(5, 12);
-				ci.DrawPolyline(line, new Color(0, 0, 0, 0.75f), 1.6f, true);
+				var x = rng.RandiRange(Pad + 2, Pad + w - 3);
+				var y = rng.RandiRange(Pad + 2, Pad + h - 3);
+				for (var k = 0; k < 6; k++)
+				{
+					if (canvas.Opaque(x, y))
+						canvas.Set(x, y, soot);
+					x += rng.RandiRange(-1, 1);
+					y += rng.RandiRange(-1, 1);
+				}
 			}
 		}
 	}
 
-	static void Box(CanvasItem ci, Rect2 r, Color body, float radius = 3)
+	static void Bite(PixelCanvas canvas, Vector2 centre, float radius, Color soot, RandomNumberGenerator rng)
 	{
-		ci.DrawRect(new Rect2(r.Position + new Vector2(3, 4), r.Size), Shadow);
-		ci.DrawRect(r, body);
-		ci.DrawRect(new Rect2(r.Position, new Vector2(r.Size.X, Mathf.Min(5, r.Size.Y * 0.2f))), new Color(1, 1, 1, 0.08f));
-	}
-
-	static void Text(CanvasItem ci, Font font, Vector2 center, string text, int size, Color color, float maxWidth = -1)
-	{
-		if (string.IsNullOrEmpty(text))
-			return;
-		var w = font.GetStringSize(text, HorizontalAlignment.Left, -1, size).X;
-		if (maxWidth > 0 && w > maxWidth)
-		{
-			size = Math.Max(6, (int)(size * maxWidth / w));
-			w = font.GetStringSize(text, HorizontalAlignment.Left, -1, size).X;
-		}
-		ci.DrawString(font, center + new Vector2(-w / 2, size * 0.35f), text, HorizontalAlignment.Left, -1, size, color);
-	}
-
-	static void Chip(CanvasItem ci, Rect2 r, string label, string color)
-	{
-		var body = r.Grow(-7);
-		var wide = r.Size.X >= r.Size.Y * 1.5f;
-		var tall = r.Size.Y >= r.Size.X * 1.5f;
-		var pin = new Color("b9c2cc");
-		if (!tall)
-			for (var x = body.Position.X + 5; x < body.End.X - 3; x += 8)
+		var r = (int)MathF.Ceiling(radius) + 1;
+		for (var y = -r; y <= r; y++)
+			for (var x = -r; x <= r; x++)
 			{
-				ci.DrawRect(new Rect2(x - 2.5f, body.Position.Y - 5, 5, 6), pin);
-				ci.DrawRect(new Rect2(x - 2.5f, body.End.Y - 1, 5, 6), pin);
+				var px = (int)centre.X + x;
+				var py = (int)centre.Y + y;
+				var d = new Vector2(x, y).Length() + rng.RandfRange(-0.4f, 0.4f);
+				if (d <= radius)
+					canvas.Set(px, py, new Color(0, 0, 0, 0));
+				else if (d <= radius + 1.1f && canvas.Opaque(px, py))
+					canvas.Set(px, py, soot);
+			}
+	}
+
+	static string Fit(string text, int width)
+	{
+		while (text.Length > 0 && MicroFont.Width(text) > width)
+			text = text[..^1];
+		return text;
+	}
+
+	static void Label(PixelCanvas a, float cx, float cy, string text, Color color, int maxWidth)
+	{
+		if (string.IsNullOrEmpty(text) || maxWidth < 3)
+			return;
+		a.TextCentered(cx, cy, Fit(text.ToUpperInvariant(), maxWidth), color);
+	}
+
+	/// <summary>Flat body with a lit top edge and a darker bottom edge.</summary>
+	static void Body(PixelCanvas a, int x, int y, int w, int h, Color col)
+	{
+		a.Rect(x, y, w, h, col);
+		a.HLine(x, x + w - 1, y, col.Lightened(0.14f));
+		a.HLine(x, x + w - 1, y + h - 1, col.Darkened(0.3f));
+	}
+
+	// ------------------------------------------------------------------ the parts
+
+	static void Chip(PixelCanvas a, string label, string color)
+	{
+		var w = a.Width;
+		var h = a.Height;
+		var wide = w >= h * 1.5f;
+		var tall = h >= w * 1.5f;
+		const int inset = 3;
+		var bx = inset;
+		var by = inset;
+		var bw = w - inset * 2;
+		var bh = h - inset * 2;
+		if (!tall)
+			for (var x = bx + 2; x < bx + bw - 2; x += 3)
+			{
+				a.Rect(x, by - 2, 2, 2, Silver);
+				a.Rect(x, by + bh, 2, 2, Silver);
+				a.Set(x, by - 2, SilverLight);
+				a.Set(x + 1, by + bh + 1, SilverDark);
 			}
 		if (!wide)
-			for (var y = body.Position.Y + 5; y < body.End.Y - 3; y += 8)
+			for (var y = by + 2; y < by + bh - 2; y += 3)
 			{
-				ci.DrawRect(new Rect2(body.Position.X - 5, y - 2.5f, 6, 5), pin);
-				ci.DrawRect(new Rect2(body.End.X - 1, y - 2.5f, 6, 5), pin);
+				a.Rect(bx - 2, y, 2, 2, Silver);
+				a.Rect(bx + bw, y, 2, 2, Silver);
+				a.Set(bx - 2, y, SilverLight);
+				a.Set(bx + bw + 1, y + 1, SilverDark);
 			}
-		Box(ci, body, color != null ? new Color(color) : new Color("16191e"));
-		ci.DrawRect(body, new Color("2c323b"), false, 1.5f);
-		ci.DrawCircle(body.Position + new Vector2(7, 7), 2.5f, new Color("2c323b"));
-		Text(ci, MarkFont, body.GetCenter(), label, 12, new Color(1, 1, 1, 0.42f), body.Size.X - 8);
+		var body = color != null ? new Color(color) : Black;
+		Body(a, bx, by, bw, bh, body);
+		a.Frame(bx, by, bw, bh, body.Lightened(0.08f));
+		a.Disc(bx + 3, by + 3, 1.2f, body.Lightened(0.2f));
+		Label(a, w / 2f, h / 2f + 0.5f, label, new Color(1, 1, 1, 0.5f), bw - 2);
 	}
 
-	static void Bga(CanvasItem ci, Rect2 r, string label)
+	static void Bga(PixelCanvas a, string label)
 	{
-		var sub = r.Grow(-4);
-		Box(ci, sub, new Color("2e4d33"));
-		ci.DrawRect(sub, new Color("4d7a52"), false, 1.5f);
-		// Tiny decoupling caps around the die.
-		for (var x = sub.Position.X + 8; x < sub.End.X - 6; x += 10)
+		var w = a.Width;
+		var h = a.Height;
+		var sub = new Color("2e4d33");
+		Body(a, 1, 1, w - 2, h - 2, sub);
+		a.Frame(1, 1, w - 2, h - 2, new Color("4d7a52"));
+		for (var x = 5; x < w - 6; x += 4)
 		{
-			ci.DrawRect(new Rect2(x, sub.Position.Y + 5, 5, 3), new Color("c9a26b"));
-			ci.DrawRect(new Rect2(x, sub.End.Y - 8, 5, 3), new Color("c9a26b"));
+			a.Rect(x, 3, 2, 1, new Color("c9a26b"));
+			a.Rect(x, h - 4, 2, 1, new Color("c9a26b"));
 		}
-		var die = sub.Grow(-sub.Size.X * 0.2f);
-		ci.DrawRect(new Rect2(die.Position + new Vector2(2, 3), die.Size), Shadow);
-		ci.DrawRect(die, new Color("9aa4b1"));
-		ci.DrawRect(new Rect2(die.Position, new Vector2(die.Size.X, die.Size.Y * 0.45f)), new Color("c3cbd4"));
-		ci.DrawRect(die, new Color("5d6773"), false, 1.5f);
-		Text(ci, MarkFont, die.GetCenter(), label ?? "SoC", 14, new Color(0.15f, 0.17f, 0.2f, 0.75f), die.Size.X - 6);
+		var dx = w / 5;
+		var dy = h / 5;
+		a.Rect(dx + 1, dy + 1, w - dx * 2, h - dy * 2, new Color(0, 0, 0, 0.35f));
+		a.Rect(dx, dy, w - dx * 2, h - dy * 2, new Color("9aa4b1"));
+		a.Rect(dx, dy, w - dx * 2, (h - dy * 2) / 2, new Color("b4bdc8"));
+		a.Frame(dx, dy, w - dx * 2, h - dy * 2, new Color("5d6773"));
+		a.HLine(dx + 1, w - dx - 2, dy + 1, new Color("d5dce4"));
+		Label(a, w / 2f, h / 2f + 0.5f, label ?? "SOC", new Color(0.12f, 0.14f, 0.17f, 0.85f), w - dx * 2 - 2);
 	}
 
-	static void Header(CanvasItem ci, Rect2 r)
+	static void Header(PixelCanvas a)
 	{
-		var body = r.Grow(-6);
-		Box(ci, body, new Color("141518"));
-		var cols = Math.Max(1, Mathf.RoundToInt(body.Size.X / 16));
-		var rows = Math.Max(1, Mathf.RoundToInt(body.Size.Y / 16));
-		var cell = new Vector2(body.Size.X / cols, body.Size.Y / rows);
-		for (var x = 0; x < cols; x++)
-			for (var y = 0; y < rows; y++)
+		var w = a.Width;
+		var h = a.Height;
+		Body(a, 2, 2, w - 4, h - 4, new Color("141518"));
+		for (var cx = 0; cx < w / C; cx++)
+			for (var cy = 0; cy < h / C; cy++)
 			{
-				var c = body.Position + cell * new Vector2(x + 0.5f, y + 0.5f);
-				ci.DrawRect(new Rect2(c - Vector2.One * 4.5f, Vector2.One * 9), new Color("1f2125"));
-				ci.DrawRect(new Rect2(c - Vector2.One * 3, Vector2.One * 6), Gold);
-				ci.DrawRect(new Rect2(c - new Vector2(3, 3), new Vector2(6, 2)), new Color("ffe7a3"));
+				var x = cx * C + C / 2 - 2;
+				var y = cy * C + C / 2 - 2;
+				a.Rect(x - 1, y - 1, 6, 6, new Color("24262b"));
+				a.Rect(x, y, 4, 4, Gold);
+				a.HLine(x, x + 3, y, GoldLight);
+				a.VLine(x + 3, y + 1, y + 3, GoldDark);
 			}
 	}
 
-	static void Connector(CanvasItem ci, Rect2 r, string color)
+	static void Connector(PixelCanvas a, string color)
 	{
-		var body = r.Grow(-5);
+		var w = a.Width;
+		var h = a.Height;
 		var col = color != null ? new Color(color) : new Color("d9d2c3");
-		Box(ci, body, col);
-		ci.DrawRect(body, col.Darkened(0.35f), false, 1.5f);
-		var cols = Math.Max(1, Mathf.RoundToInt(body.Size.X / 16));
-		var rows = Math.Max(1, Mathf.RoundToInt(body.Size.Y / 16));
-		var cell = new Vector2(body.Size.X / cols, body.Size.Y / rows);
-		for (var x = 0; x < cols; x++)
-			for (var y = 0; y < rows; y++)
+		Body(a, 2, 2, w - 4, h - 4, col);
+		a.Frame(2, 2, w - 4, h - 4, col.Darkened(0.35f));
+		for (var cx = 0; cx < w / C; cx++)
+			for (var cy = 0; cy < h / C; cy++)
 			{
-				var c = body.Position + cell * new Vector2(x + 0.5f, y + 0.5f);
-				ci.DrawRect(new Rect2(c - Vector2.One * 5, Vector2.One * 10), col.Darkened(0.25f));
-				ci.DrawRect(new Rect2(c - Vector2.One * 3.5f, Vector2.One * 7), new Color("2a2622"));
+				var x = cx * C + C / 2 - 3;
+				var y = cy * C + C / 2 - 3;
+				a.Rect(x, y, 6, 6, col.Darkened(0.25f));
+				a.Rect(x + 1, y + 1, 4, 4, new Color("2a2622"));
+				a.HLine(x + 1, x + 4, y + 4, new Color("4a443e"));
 			}
 	}
 
-	static void Capacitor(CanvasItem ci, Rect2 r, string color)
+	static void Capacitor(PixelCanvas a, string color)
 	{
-		var center = r.GetCenter();
-		var radius = Mathf.Min(r.Size.X, r.Size.Y) * 0.42f;
+		var cx = a.Width / 2f;
+		var cy = a.Height / 2f;
+		var r = MathF.Min(a.Width, a.Height) * 0.44f;
 		var col = color != null ? new Color(color) : new Color("1e3f7a");
-		ci.DrawCircle(center + new Vector2(3, 4), radius, Shadow);
-		ci.DrawCircle(center, radius, col.Darkened(0.35f));
-		ci.DrawCircle(center, radius - 1.5f, col);
-		ci.DrawArc(center, radius - radius * 0.15f, Mathf.Pi * 0.65f, Mathf.Pi * 1.35f, 20, col.Lightened(0.55f), radius * 0.22f);
-		ci.DrawCircle(center, radius * 0.7f, new Color("a9b4c2"));
-		ci.DrawCircle(center + new Vector2(-1.5f, -2) * (radius / 18), radius * 0.48f, new Color("d5dde7"));
-		foreach (var a in new[] { 0f, Mathf.Pi / 2, Mathf.Pi / 4 })
-		{
-			var d = Vector2.FromAngle(a) * radius * 0.58f;
-			ci.DrawLine(center - d, center + d, new Color("6b7684"), Mathf.Max(1.5f, radius * 0.1f));
-		}
+		a.Disc(cx, cy, r, col.Darkened(0.45f));
+		a.Disc(cx, cy, r - 1, col);
+		// Lit side of the sleeve.
+		a.Ring(cx, cy, r - 1, 1.2f, col.Lightened(0.15f));
+		for (var y = 0; y < a.Height; y++)
+			for (var x = 0; x < a.Width; x++)
+				if (x + y < cx + cy - r * 0.6f && a.Opaque(x, y))
+					a.Tint(x, y, new Color(1.35f, 1.35f, 1.35f));
+		// Aluminium top with the vent cross.
+		var top = r * 0.66f;
+		a.Disc(cx, cy, top, new Color("a9b4c2"));
+		a.Disc(cx - 0.6f, cy - 0.6f, top - 1, new Color("cfd7e1"));
+		var k = (int)MathF.Round(top * 0.7f);
+		var ix = (int)MathF.Floor(cx);
+		var iy = (int)MathF.Floor(cy);
+		a.HLine(ix - k, ix + k - 1, iy, new Color("6b7684"));
+		a.VLine(ix, iy - k, iy + k - 1, new Color("6b7684"));
+		a.HLine(ix - k, ix + k - 1, iy - 1, new Color("6b7684"));
+		a.VLine(ix - 1, iy - k, iy + k - 1, new Color("6b7684"));
 	}
 
-	static void Smd(CanvasItem ci, Rect2 r, int seed)
+	static void Smd(PixelCanvas a, RandomNumberGenerator rng)
 	{
-		var rng = new RandomNumberGenerator { Seed = (ulong)(seed * 31 + 5) };
 		var n = rng.RandiRange(3, 5);
 		for (var i = 0; i < n; i++)
 		{
 			var vertical = rng.Randf() < 0.5f;
-			var size = vertical ? new Vector2(7, 13) : new Vector2(13, 7);
-			var pos = new Vector2(rng.RandfRange(4, r.Size.X - size.X - 4), rng.RandfRange(4, r.Size.Y - size.Y - 4));
+			var size = vertical ? new Vector2I(3, 5) : new Vector2I(5, 3);
+			var x = rng.RandiRange(1, a.Width - size.X - 1);
+			var y = rng.RandiRange(1, a.Height - size.Y - 1);
 			var body = rng.Randf() < 0.55f ? new Color("c9a26b") : new Color("1a1c20");
-			ci.DrawRect(new Rect2(pos + new Vector2(1, 2), size), Shadow);
-			ci.DrawRect(new Rect2(pos, size), body);
+			a.Rect(x, y, size.X, size.Y, body);
 			if (vertical)
 			{
-				ci.DrawRect(new Rect2(pos, new Vector2(size.X, 3)), Silver);
-				ci.DrawRect(new Rect2(pos + new Vector2(0, size.Y - 3), new Vector2(size.X, 3)), Silver);
+				a.HLine(x, x + 2, y, Silver);
+				a.HLine(x, x + 2, y + 4, SilverDark);
 			}
 			else
 			{
-				ci.DrawRect(new Rect2(pos, new Vector2(3, size.Y)), Silver);
-				ci.DrawRect(new Rect2(pos + new Vector2(size.X - 3, 0), new Vector2(3, size.Y)), Silver);
+				a.VLine(x, y, y + 2, Silver);
+				a.VLine(x + 4, y, y + 2, SilverDark);
 			}
 		}
 	}
 
-	static void Resistor(CanvasItem ci, Rect2 r, int seed)
+	static void Resistor(PixelCanvas a, int seed)
 	{
-		var horizontal = r.Size.X >= r.Size.Y;
-		var a = horizontal ? new Vector2(r.Position.X + 7, r.GetCenter().Y) : new Vector2(r.GetCenter().X, r.Position.Y + 7);
-		var b = horizontal ? new Vector2(r.End.X - 7, r.GetCenter().Y) : new Vector2(r.GetCenter().X, r.End.Y - 7);
-		foreach (var p in new[] { a, b })
+		var horizontal = a.Width >= a.Height;
+		var len = horizontal ? a.Width : a.Height;
+		var mid = (horizontal ? a.Height : a.Width) / 2;
+		void At(int along, int across, int lw, int lh, Color col)
 		{
-			ci.DrawCircle(p, 7, GoldDark);
-			ci.DrawCircle(p, 5, Gold);
+			if (horizontal)
+				a.Rect(along, mid + across, lw, lh, col);
+			else
+				a.Rect(mid + across, along, lh, lw, col);
 		}
-		ci.DrawLine(a, b, Silver, 3);
-		var len = (b - a).Length() - 26;
-		var body = horizontal ? new Rect2(a.X + 13, a.Y - 9, len, 18) : new Rect2(a.X - 9, a.Y + 13, 18, len);
-		Box(ci, body, new Color("d8c39a"));
+		// Pads, lead, body, bands.
+		foreach (var p in new[] { 2, len - 6 })
+		{
+			At(p, -2, 4, 4, GoldDark);
+			At(p, -2, 3, 3, Gold);
+		}
+		At(4, -1, len - 8, 1, SilverLight);
+		At(4, 0, len - 8, 1, SilverDark);
+		var bodyLen = len - 14;
+		At(7, -3, bodyLen, 6, new Color("d8c39a"));
+		At(7, -3, bodyLen, 1, new Color("efe0bd"));
+		At(7, 2, bodyLen, 1, new Color("a8946c"));
 		var bands = new[] { new Color("8a4b13"), new Color("111111"), new Color("d12f2f"), Gold };
-		for (var i = 0; i < bands.Length; i++)
+		for (var i = 0; i < 4; i++)
 		{
-			var off = 6 + i * 8 + (i == 3 ? 6 : 0);
-			ci.DrawRect(horizontal ? new Rect2(body.Position.X + off, body.Position.Y, 4, body.Size.Y) : new Rect2(body.Position.X, body.Position.Y + off, body.Size.X, 4), bands[(i + seed) % 3 == 0 && i < 3 ? (i + 1) % 3 : i]);
+			var colour = bands[(i + seed) % 3 == 0 && i < 3 ? (i + 1) % 3 : i];
+			At(9 + i * 3 + (i == 3 ? 2 : 0), -3, 2, 6, colour);
 		}
 	}
 
-	static void LedPad(CanvasItem ci, Rect2 r, string color)
+	static void Led(PixelCanvas a, string color)
 	{
-		var c = r.GetCenter();
 		var col = color != null ? new Color(color) : new Color("ff3344");
-		ci.DrawRect(new Rect2(c - new Vector2(14, 6), new Vector2(8, 12)), Gold);
-		ci.DrawRect(new Rect2(c + new Vector2(6, -6), new Vector2(8, 12)), Gold);
-		ci.DrawCircle(c + new Vector2(1, 2), 9, Shadow);
-		ci.DrawCircle(c, 9, col.Darkened(0.55f));
-		ci.DrawCircle(c, 7, col);
-		ci.DrawCircle(c + new Vector2(-2.5f, -2.5f), 3, col.Lightened(0.7f));
+		var cx = a.Width / 2;
+		var cy = a.Height / 2;
+		a.Rect(cx - 7, cy - 3, 3, 6, Gold);
+		a.Rect(cx + 4, cy - 3, 3, 6, Gold);
+		a.Rect(cx - 5, cy - 4, 10, 8, new Color("e8e2d4"));
+		a.HLine(cx - 5, cx + 4, cy + 3, new Color("b8b0a0"));
+		a.Disc(cx, cy, 3, col.Darkened(0.4f));
+		a.Disc(cx, cy, 2.2f, col);
+		a.Set(cx - 1, cy - 2, col.Lightened(0.75f));
+		a.Set(cx + 3, cy - 4, new Color("4ad04a"));
 	}
 
-	static void Crystal(CanvasItem ci, Rect2 r, string label)
+	static void Crystal(PixelCanvas a, string label)
 	{
-		var body = r.Grow(-8);
-		var radius = Mathf.Min(body.Size.X, body.Size.Y) / 2;
-		var sb = new StyleBoxFlat { BgColor = new Color("c5ccd5"), BorderColor = new Color("7d8794"), CornerDetail = 8, AntiAliasing = true };
-		sb.SetCornerRadiusAll((int)radius);
-		sb.SetBorderWidthAll(2);
-		sb.ShadowColor = Shadow;
-		sb.ShadowSize = 3;
-		sb.ShadowOffset = new Vector2(2, 3);
-		ci.DrawStyleBox(sb, body);
-		Text(ci, MarkFont, body.GetCenter(), label ?? "16.000", 11, new Color(0.2f, 0.22f, 0.26f, 0.8f), body.Size.X - radius);
+		var x = 3;
+		var y = 3;
+		var w = a.Width - 6;
+		var h = a.Height - 6;
+		var body = new Color("c5ccd5");
+		a.Rect(x + 1, y, w - 2, h, body);
+		a.Rect(x, y + 1, w, h - 2, body);
+		a.HLine(x + 1, x + w - 2, y, new Color("e6ebf0"));
+		a.HLine(x + 1, x + w - 2, y + h - 1, new Color("7d8794"));
+		a.VLine(x, y + 1, y + h - 2, new Color("7d8794"));
+		a.VLine(x + w - 1, y + 1, y + h - 2, new Color("7d8794"));
+		Label(a, a.Width / 2f, a.Height / 2f + 0.5f, label ?? "16.000", new Color(0.18f, 0.2f, 0.24f, 0.85f), w - 4);
 	}
 
-	static void Inductor(CanvasItem ci, Rect2 r, string label)
+	static void Inductor(PixelCanvas a, string label)
 	{
-		var body = r.Grow(-6);
-		ci.DrawRect(new Rect2(body.Position.X - 2, body.GetCenter().Y - 6, body.Size.X + 4, 12), Silver);
-		var sb = new StyleBoxFlat { BgColor = new Color("2d3138"), BorderColor = new Color("484e57"), AntiAliasing = true, ShadowColor = Shadow, ShadowSize = 3, ShadowOffset = new Vector2(2, 3) };
-		sb.SetCornerRadiusAll(5);
-		sb.SetBorderWidthAll(1);
-		ci.DrawStyleBox(sb, body);
-		ci.DrawRect(new Rect2(body.Position + new Vector2(3, 3), new Vector2(body.Size.X - 6, 4)), new Color(1, 1, 1, 0.08f));
-		Text(ci, MarkFont, body.GetCenter(), label ?? "R47", 11, new Color(1, 1, 1, 0.5f), body.Size.X - 6);
+		var w = a.Width;
+		var h = a.Height;
+		a.Rect(1, h / 2 - 2, w - 2, 4, Silver);
+		a.HLine(1, w - 2, h / 2 - 2, SilverLight);
+		var col = new Color("2d3138");
+		a.Rect(3, 2, w - 6, h - 4, col);
+		a.Rect(2, 3, w - 4, h - 6, col);
+		a.HLine(3, w - 4, 2, new Color("484e57"));
+		a.HLine(4, w - 5, 4, new Color(1, 1, 1, 0.08f));
+		a.HLine(3, w - 4, h - 3, new Color("1c1f24"));
+		Label(a, w / 2f, h / 2f + 0.5f, label ?? "R47", new Color(1, 1, 1, 0.5f), w - 4);
 	}
 
-	static void Mosfet(CanvasItem ci, Rect2 r)
+	static void Mosfet(PixelCanvas a)
 	{
-		var tab = new Rect2(r.Position + new Vector2(10, 5), new Vector2(r.Size.X - 20, 12));
-		ci.DrawRect(tab, Silver);
-		var body = new Rect2(r.Position + new Vector2(8, 15), new Vector2(r.Size.X - 16, r.Size.Y - 28));
-		Box(ci, body, new Color("17191d"));
+		var w = a.Width;
+		a.Rect(4, 1, w - 8, 4, Silver);
+		a.HLine(4, w - 5, 1, SilverLight);
+		a.Disc(w / 2f, 3, 1, SilverDark);
+		Body(a, 3, 5, w - 6, 6, new Color("17191d"));
 		for (var i = 0; i < 3; i++)
-			ci.DrawRect(new Rect2(body.Position.X + 4 + i * (body.Size.X - 12) / 2, body.End.Y, 4, 7), Silver);
+			a.Rect(4 + i * (w - 10) / 2, 11, 2, 3, Silver);
 	}
 
-	static void Slot(CanvasItem ci, Rect2 r, string color, bool latches, float notchAt)
+	static void Slot(PixelCanvas a, string color, bool latches, float notchAt)
 	{
-		var horizontal = r.Size.X >= r.Size.Y;
-		var body = horizontal ? r.Grow(-3).GrowSide(Side.Top, -8).GrowSide(Side.Bottom, -8) : r.Grow(-3).GrowSide(Side.Left, -8).GrowSide(Side.Right, -8);
+		var horizontal = a.Width >= a.Height;
 		var col = new Color(color);
-		Box(ci, body, col);
-		ci.DrawRect(body, col.Lightened(0.15f), false, 1.5f);
-		var groove = horizontal ? new Rect2(body.Position.X + 10, body.GetCenter().Y - 2.5f, body.Size.X - 20, 5) : new Rect2(body.GetCenter().X - 2.5f, body.Position.Y + 10, 5, body.Size.Y - 20);
-		ci.DrawRect(groove, new Color(0, 0, 0, 0.8f));
-		// Contacts along the groove.
-		var length = horizontal ? groove.Size.X : groove.Size.Y;
-		for (var d = 3f; d < length - 3; d += 5)
+		var len = horizontal ? a.Width : a.Height;
+		var thick = horizontal ? a.Height : a.Width;
+		void At(int along, int across, int lw, int lh, Color c)
 		{
-			var p = horizontal ? new Vector2(groove.Position.X + d, groove.GetCenter().Y) : new Vector2(groove.GetCenter().X, groove.Position.Y + d);
-			ci.DrawRect(new Rect2(p - Vector2.One, Vector2.One * 2), new Color(Gold, 0.7f));
+			if (horizontal)
+				a.Rect(along, across, lw, lh, c);
+			else
+				a.Rect(across, along, lh, lw, c);
 		}
-		var notch = horizontal ? new Rect2(groove.Position.X + groove.Size.X * notchAt, groove.Position.Y - 1, 5, groove.Size.Y + 2) : new Rect2(groove.Position.X - 1, groove.Position.Y + groove.Size.Y * notchAt, groove.Size.X + 2, 5);
-		ci.DrawRect(notch, col);
+		var y0 = thick / 2 - 4;
+		At(1, y0, len - 2, 8, col);
+		At(1, y0, len - 2, 1, col.Lightened(0.2f));
+		At(1, y0 + 7, len - 2, 1, col.Darkened(0.4f));
+		At(4, y0 + 3, len - 8, 2, new Color(0, 0, 0, 0.85f));
+		for (var d = 5; d < len - 5; d += 2)
+			At(d, y0 + 3, 1, 1, new Color(Gold, 0.8f));
+		At((int)(4 + (len - 8) * notchAt), y0 + 2, 2, 4, col);
 		if (!latches)
 			return;
 		var latch = new Color("e2e6ea");
-		if (horizontal)
-		{
-			ci.DrawRect(new Rect2(body.Position.X - 2, body.Position.Y - 3, 8, body.Size.Y + 6), latch);
-			ci.DrawRect(new Rect2(body.End.X - 6, body.Position.Y - 3, 8, body.Size.Y + 6), latch);
-		}
-		else
-		{
-			ci.DrawRect(new Rect2(body.Position.X - 3, body.Position.Y - 2, body.Size.X + 6, 8), latch);
-			ci.DrawRect(new Rect2(body.Position.X - 3, body.End.Y - 6, body.Size.X + 6, 8), latch);
-		}
+		At(0, y0 - 1, 3, 10, latch);
+		At(len - 3, y0 - 1, 3, 10, latch);
+		At(0, y0 + 8, 3, 1, new Color("9aa2ab"));
+		At(len - 3, y0 + 8, 3, 1, new Color("9aa2ab"));
 	}
 
-	static void Sata(CanvasItem ci, Rect2 r, string color)
+	static void Sata(PixelCanvas a, string color)
 	{
-		var body = r.Grow(-7);
 		var col = color != null ? new Color(color) : new Color("b3242b");
-		Box(ci, body, col);
-		var inner = body.Grow(-5);
-		ci.DrawRect(inner, new Color(0, 0, 0, 0.75f));
-		ci.DrawRect(new Rect2(inner.Position.X, inner.Position.Y, inner.Size.X * 0.3f, inner.Size.Y * 0.45f), col);
+		Body(a, 3, 3, a.Width - 6, a.Height - 6, col);
+		a.Rect(5, 5, a.Width - 10, a.Height - 10, new Color(0, 0, 0, 0.8f));
+		a.Rect(5, 5, (a.Width - 10) / 3, (a.Height - 10) / 2, col);
+		for (var x = 7; x < a.Width - 6; x += 2)
+			a.Set(x, a.Height - 7, new Color(Gold, 0.8f));
 	}
 
-	static void Port(CanvasItem ci, Rect2 r, string kind)
+	static void Port(PixelCanvas a, string kind)
 	{
-		var body = r.Grow(-3);
-		Box(ci, body, new Color("b8c0ca"));
-		ci.DrawRect(body, new Color("6d7682"), false, 1.5f);
-		ci.DrawRect(new Rect2(body.Position + new Vector2(3, 3), new Vector2(body.Size.X - 6, 3)), new Color(1, 1, 1, 0.35f));
+		var w = a.Width;
+		var h = a.Height;
+		Body(a, 1, 1, w - 2, h - 2, new Color("b8c0ca"));
+		a.Frame(1, 1, w - 2, h - 2, new Color("6d7682"));
+		a.HLine(2, w - 3, 2, new Color("e4e9ef"));
 		switch (kind)
 		{
 			case "rj45":
-				var opening = new Rect2(body.Position + body.Size * 0.18f, body.Size * 0.64f);
-				ci.DrawRect(opening, new Color("15171a"));
-				ci.DrawRect(new Rect2(opening.GetCenter().X - opening.Size.X * 0.2f, opening.End.Y - 6, opening.Size.X * 0.4f, 6), new Color("6d7682"));
-				ci.DrawCircle(body.Position + new Vector2(7, 7), 3, new Color("3dff6a"));
-				ci.DrawCircle(new Vector2(body.End.X - 7, body.Position.Y + 7), 3, new Color("ffb43d"));
+				a.Rect(w / 5, h / 5, w - w * 2 / 5, h - h * 2 / 5, new Color("15171a"));
+				a.Rect(w / 2 - 3, h - h / 5 - 3, 6, 3, new Color("6d7682"));
+				for (var x = w / 5 + 2; x < w - w / 5 - 2; x += 2)
+					a.Set(x, h / 5 + 1, new Color(Gold, 0.9f));
+				a.Rect(3, 3, 2, 2, new Color("3dff6a"));
+				a.Rect(w - 5, 3, 2, 2, new Color("ffb43d"));
 				break;
 			case "hdmi":
-				var h = new Rect2(body.Position + new Vector2(6, body.Size.Y * 0.3f), new Vector2(body.Size.X - 12, body.Size.Y * 0.4f));
-				ci.DrawRect(h, new Color("15171a"));
-				ci.DrawRect(h.Grow(-4), new Color("1e2a40"));
+				var top = h * 3 / 10;
+				a.Rect(4, top, w - 8, h * 2 / 5, new Color("15171a"));
+				a.Rect(6, top + 2, w - 12, h * 2 / 5 - 4, new Color("1e2a40"));
+				a.Rect(4, top + h * 2 / 5 - 2, 2, 2, new Color("b8c0ca"));
+				a.Rect(w - 6, top + h * 2 / 5 - 2, 2, 2, new Color("b8c0ca"));
 				break;
 			case "audio":
-				foreach (var (c, i) in new[] { (new Color("3dff6a"), 0), (new Color("ff5fd2"), 1), (new Color("4da3ff"), 2) })
+				var colours = new[] { new Color("3dff6a"), new Color("ff5fd2"), new Color("4da3ff") };
+				for (var i = 0; i < 3; i++)
 				{
-					var p = body.Position + new Vector2(body.Size.X / 2, body.Size.Y * (0.2f + 0.3f * i));
-					ci.DrawCircle(p, Mathf.Min(body.Size.X, body.Size.Y) * 0.14f, c);
-					ci.DrawCircle(p, Mathf.Min(body.Size.X, body.Size.Y) * 0.07f, new Color("101010"));
+					var cy = h * (0.2f + 0.3f * i);
+					var r = MathF.Min(w, h) * 0.15f;
+					a.Disc(w / 2f, cy, r, colours[i]);
+					a.Disc(w / 2f, cy, r * 0.5f, new Color("101010"));
 				}
 				break;
 			default:
 				for (var i = 0; i < 2; i++)
 				{
-					var slot = new Rect2(body.Position.X + 6, body.Position.Y + 6 + i * body.Size.Y / 2, body.Size.X - 12, body.Size.Y / 2 - 12);
-					ci.DrawRect(slot, new Color("15171a"));
-					ci.DrawRect(new Rect2(slot.Position + new Vector2(3, slot.Size.Y * 0.35f), new Vector2(slot.Size.X - 6, slot.Size.Y * 0.3f)), new Color("2b62c9"));
+					var y = 4 + i * h / 2;
+					a.Rect(4, y, w - 8, h / 2 - 7, new Color("15171a"));
+					a.Rect(6, y + (h / 2 - 7) / 3, w - 12, Math.Max((h / 2 - 7) / 3, 1), new Color("2b62c9"));
 				}
 				break;
 		}
 	}
 
-	static void Battery(CanvasItem ci, Rect2 r)
+	static void Battery(PixelCanvas a)
 	{
-		var center = r.GetCenter();
-		var radius = Mathf.Min(r.Size.X, r.Size.Y) * 0.44f;
-		ci.DrawCircle(center + new Vector2(3, 4), radius + 3, Shadow);
-		ci.DrawCircle(center, radius + 3, new Color("1b1d21"));
-		ci.DrawCircle(center, radius, new Color("aeb6c0"));
-		ci.DrawCircle(center + new Vector2(-3, -4), radius * 0.82f, new Color("d3dae2"));
-		ci.DrawArc(center, radius * 0.9f, 0, Mathf.Tau, 40, new Color("8b939d"), 2, true);
-		Text(ci, MarkFont, center + new Vector2(0, -radius * 0.15f), "+", (int)(radius * 0.6f), new Color(0.3f, 0.33f, 0.38f));
-		Text(ci, MarkFont, center + new Vector2(0, radius * 0.35f), "CR2032", 11, new Color(0.3f, 0.33f, 0.38f));
+		var cx = a.Width / 2f;
+		var cy = a.Height / 2f;
+		var r = MathF.Min(a.Width, a.Height) * 0.44f;
+		a.Disc(cx, cy, r + 1, new Color("1b1d21"));
+		a.Disc(cx, cy, r, new Color("aeb6c0"));
+		a.Disc(cx - 1, cy - 1, r * 0.8f, new Color("d3dae2"));
+		a.Ring(cx, cy, r * 0.92f, 1, new Color("8b939d"));
+		a.TextCentered(cx, cy - 3, "+", new Color(0.3f, 0.33f, 0.38f));
+		Label(a, cx, cy + 4, "CR2032", new Color(0.3f, 0.33f, 0.38f), (int)(r * 1.7f));
 	}
 
-	static void Heatsink(CanvasItem ci, Rect2 r, string color)
+	static void Heatsink(PixelCanvas a, string color)
 	{
-		var body = r.Grow(-4);
+		var w = a.Width;
+		var h = a.Height;
 		var col = color != null ? new Color(color) : new Color("3d4c5c");
-		Box(ci, body, col.Darkened(0.3f));
-		var horizontalFins = body.Size.X < body.Size.Y;
-		for (var d = 4f; d < (horizontalFins ? body.Size.Y : body.Size.X) - 2; d += 7)
+		Body(a, 2, 2, w - 4, h - 4, col.Darkened(0.35f));
+		var horizontalFins = w < h;
+		var span = horizontalFins ? h : w;
+		for (var d = 4; d < span - 4; d += 3)
 		{
-			var fin = horizontalFins ? new Rect2(body.Position.X + 2, body.Position.Y + d, body.Size.X - 4, 4) : new Rect2(body.Position.X + d, body.Position.Y + 2, 4, body.Size.Y - 4);
-			ci.DrawRect(fin, col.Lightened(0.15f));
-			ci.DrawRect(horizontalFins ? new Rect2(fin.Position, new Vector2(fin.Size.X, 1.5f)) : new Rect2(fin.Position, new Vector2(1.5f, fin.Size.Y)), col.Lightened(0.45f));
+			if (horizontalFins)
+			{
+				a.Rect(3, d, w - 6, 2, col.Lightened(0.12f));
+				a.HLine(3, w - 4, d, col.Lightened(0.4f));
+			}
+			else
+			{
+				a.Rect(d, 3, 2, h - 6, col.Lightened(0.12f));
+				a.VLine(d, 3, h - 4, col.Lightened(0.4f));
+			}
 		}
-		foreach (var p in new[] { body.Position + new Vector2(5, 5), new Vector2(body.End.X - 5, body.Position.Y + 5), new Vector2(body.Position.X + 5, body.End.Y - 5), body.End - new Vector2(5, 5) })
-			ci.DrawCircle(p, 3.5f, new Color("dcdfe3"));
+		foreach (var (x, y) in new[] { (4, 4), (w - 5, 4), (4, h - 5), (w - 5, h - 5) })
+		{
+			a.Disc(x + 0.5f, y + 0.5f, 1.6f, new Color("dcdfe3"));
+			a.Set(x, y, new Color("8a9099"));
+		}
 	}
 
-	static void ShieldCan(CanvasItem ci, Rect2 r, string label)
+	static void ShieldCan(PixelCanvas a, string label)
 	{
-		var body = r.Grow(-4);
-		Box(ci, body, new Color("b5bdc7"));
-		ci.DrawRect(body, new Color("7f8894"), false, 1.5f);
-		for (var x = body.Position.X + 8; x < body.End.X - 4; x += 10)
-			for (var y = body.Position.Y + 8; y < body.End.Y - 4; y += 10)
-				ci.DrawCircle(new Vector2(x, y), 1.6f, new Color("8e97a2"));
-		Text(ci, MarkFont, body.GetCenter(), label ?? "", 12, new Color(0.25f, 0.28f, 0.32f, 0.8f), body.Size.X - 8);
+		var w = a.Width;
+		var h = a.Height;
+		Body(a, 2, 2, w - 4, h - 4, new Color("b5bdc7"));
+		a.Frame(2, 2, w - 4, h - 4, new Color("7f8894"));
+		a.HLine(3, w - 4, 3, new Color("dde3ea"));
+		for (var x = 6; x < w - 4; x += 4)
+			for (var y = 6; y < h - 4; y += 4)
+				a.Set(x, y, new Color("8e97a2"));
+		if (!string.IsNullOrEmpty(label))
+		{
+			var lw = Math.Min(MicroFont.Width(label.ToUpperInvariant()) + 4, w - 8);
+			a.Rect((w - lw) / 2, h / 2 - 4, lw, 8, new Color("b5bdc7"));
+			Label(a, w / 2f, h / 2f, label, new Color(0.22f, 0.25f, 0.29f, 0.9f), w - 10);
+		}
 	}
 
-	static void KeySwitch(CanvasItem ci, Rect2 r, string color)
+	static void KeySwitch(PixelCanvas a, string color)
 	{
-		var body = r.Grow(-5);
-		var sb = new StyleBoxFlat { BgColor = new Color("1d2026"), BorderColor = new Color("3a4049"), AntiAliasing = true, ShadowColor = Shadow, ShadowSize = 3, ShadowOffset = new Vector2(2, 3) };
-		sb.SetCornerRadiusAll(4);
-		sb.SetBorderWidthAll(1);
-		ci.DrawStyleBox(sb, body);
-		var inner = body.Grow(-6);
-		ci.DrawRect(inner, new Color("2a2e36"));
+		var w = a.Width;
+		var h = a.Height;
+		var housing = new Color("1d2026");
+		a.Rect(2, 1, w - 4, h - 2, housing);
+		a.Rect(1, 2, w - 2, h - 4, housing);
+		a.HLine(2, w - 3, 1, new Color("3a4049"));
+		a.Rect(4, 4, w - 8, h - 8, new Color("2a2e36"));
 		var stem = color != null ? new Color(color) : new Color("d93b3b");
-		var c = body.GetCenter();
-		ci.DrawRect(new Rect2(c - new Vector2(6, 1.8f), new Vector2(12, 3.6f)), stem);
-		ci.DrawRect(new Rect2(c - new Vector2(1.8f, 6), new Vector2(3.6f, 12)), stem);
+		var cx = w / 2;
+		var cy = h / 2;
+		a.Rect(cx - 3, cy - 1, 6, 2, stem);
+		a.Rect(cx - 1, cy - 3, 2, 6, stem);
+		a.Set(cx - 1, cy - 3, stem.Lightened(0.4f));
 	}
 
-	static void Jumper(CanvasItem ci, Rect2 r, string color)
+	static void Jumper(PixelCanvas a, string color)
 	{
-		var body = r.Grow(-10);
-		Box(ci, body, new Color("141518"));
+		var w = a.Width;
+		var h = a.Height;
+		Body(a, 4, 4, w - 8, h - 8, new Color("141518"));
 		var cap = color != null ? new Color(color) : new Color("2f6fd6");
-		var capRect = new Rect2(body.Position + new Vector2(2, 2), new Vector2(body.Size.X - 4, body.Size.Y * 0.6f));
-		ci.DrawRect(capRect, cap);
-		ci.DrawRect(new Rect2(capRect.Position, new Vector2(capRect.Size.X, 3)), cap.Lightened(0.4f));
+		a.Rect(5, 5, w - 10, (h - 8) * 3 / 5, cap);
+		a.HLine(5, w - 6, 5, cap.Lightened(0.4f));
+		a.Rect(6, h - 7, 2, 2, Gold);
+		a.Rect(w - 8, h - 7, 2, 2, Gold);
 	}
 
-	static void Fingers(CanvasItem ci, Rect2 r)
+	static void Fingers(PixelCanvas a)
 	{
-		var horizontal = r.Size.X >= r.Size.Y;
-		var length = horizontal ? r.Size.X : r.Size.Y;
-		for (var d = 6f; d < length - 6; d += 9)
+		var horizontal = a.Width >= a.Height;
+		var len = horizontal ? a.Width : a.Height;
+		var thick = horizontal ? a.Height : a.Width;
+		for (var d = 2; d < len - 3; d += 4)
 		{
-			var f = horizontal ? new Rect2(r.Position.X + d, r.Position.Y + 6, 6, r.Size.Y - 12) : new Rect2(r.Position.X + 6, r.Position.Y + d, r.Size.X - 12, 6);
-			ci.DrawRect(f, Gold);
-			ci.DrawRect(horizontal ? new Rect2(f.Position, new Vector2(2, f.Size.Y)) : new Rect2(f.Position, new Vector2(f.Size.X, 2)), new Color("ffe7a3"));
+			if (horizontal)
+			{
+				a.Rect(d, 2, 3, thick - 4, Gold);
+				a.VLine(d, 2, thick - 3, GoldLight);
+				a.HLine(d, d + 2, thick - 3, GoldDark);
+			}
+			else
+			{
+				a.Rect(2, d, thick - 4, 3, Gold);
+				a.HLine(2, thick - 3, d, GoldLight);
+				a.VLine(thick - 3, d, d + 2, GoldDark);
+			}
 		}
 	}
 
-	static void Hole(CanvasItem ci, Rect2 r)
+	static void Hole(PixelCanvas a)
 	{
-		var c = r.GetCenter();
-		ci.DrawCircle(c, 16, GoldDark);
-		ci.DrawCircle(c, 13, Gold);
-		ci.DrawCircle(c, 8, new Color("030608"));
-	}
-
-	static void Label(CanvasItem ci, Rect2 r, string text, Color silk)
-	{
-		Text(ci, SilkFont, r.GetCenter(), text, 14, silk, r.Size.X - 4);
+		var cx = a.Width / 2f;
+		var cy = a.Height / 2f;
+		a.Disc(cx, cy, 6, GoldDark);
+		a.Disc(cx - 0.5f, cy - 0.5f, 5, Gold);
+		a.Disc(cx, cy, 3.4f, new Color("030608"));
 	}
 }

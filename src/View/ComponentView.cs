@@ -4,16 +4,19 @@ using Godot;
 namespace HardwareDefence.View;
 
 /// <summary>
-/// One board component. Redraws only when its health changes; smokes when badly damaged;
-/// LEDs blink and light up the board around them.
+/// One board component: its pixel art, repainted when its health changes; smokes when badly
+/// damaged; LEDs blink and light up the board around them.
 /// </summary>
 public partial class ComponentView : Node2D
 {
+	const int Px = PixelWorld.Scale;
+
 	public readonly ComponentData Data;
 	public readonly int Index;
 	readonly BoardTheme _theme;
 	float _ratio = 1;
 	bool _destroyed;
+	Sprite2D _sprite;
 	CpuParticles2D _smoke;
 	Sprite2D _ledGlow;
 	PointLight2D _ledLight;
@@ -33,6 +36,12 @@ public partial class ComponentView : Node2D
 
 	public override void _Ready()
 	{
+		_sprite = new Sprite2D
+		{
+			Texture = ComponentArt.Texture(Data, _theme, Index + 1), Centered = false, Scale = Vector2.One * Px,
+			Position = -Vector2.One * ComponentArt.Pad * Px,
+		};
+		AddChild(_sprite);
 		if (Data.Type != "led")
 		{
 			SetProcess(false);
@@ -52,12 +61,12 @@ public partial class ComponentView : Node2D
 	{
 		var destroyed = hp < 0;
 		var ratio = maxHp <= 0 ? 1 : Mathf.Clamp(hp / maxHp, 0, 1);
-		// Redraw in 5% steps so chewing doesn't redraw every frame.
+		// Repaint in 5% steps so chewing doesn't repaint every frame.
 		if (destroyed == _destroyed && Mathf.Abs(ratio - _ratio) < 0.05f)
 			return;
 		_destroyed = destroyed;
 		_ratio = ratio;
-		QueueRedraw();
+		Repaint();
 		var smoking = _destroyed || _ratio < 0.5f;
 		if (smoking && _smoke == null)
 			AddSmoke();
@@ -77,18 +86,32 @@ public partial class ComponentView : Node2D
 		_ratio = 1;
 		_smoke?.QueueFree();
 		_smoke = null;
-		QueueRedraw();
+		Repaint();
+	}
+
+	void Repaint()
+	{
+		if (_sprite == null)
+			return;
+		if (!_destroyed && _ratio >= 0.999f)
+		{
+			_sprite.Texture = ComponentArt.Texture(Data, _theme, Index + 1);
+			return;
+		}
+		var canvas = ComponentArt.Paint(Data, _theme, Index + 1);
+		ComponentArt.Damage(canvas, Data, _ratio, _destroyed, Index + 1);
+		_sprite.Texture = canvas.ToTexture();
 	}
 
 	void AddSmoke()
 	{
 		_smoke = new CpuParticles2D
 		{
-			Position = Size / 2, Amount = 4, Lifetime = 2, Texture = FxUtil.GlowTexture,
+			Position = Size / 2, Amount = 4, Lifetime = 2, Texture = FxUtil.PixelTexture,
 			EmissionShape = CpuParticles2D.EmissionShapeEnum.Rectangle, EmissionRectExtents = Size * 0.3f,
 			Direction = Vector2.Up, Spread = 20, Gravity = Vector2.Zero, InitialVelocityMin = 8, InitialVelocityMax = 20,
-			ScaleAmountMin = 0.15f, ScaleAmountMax = 0.35f, ZIndex = 5,
-			ColorRamp = new Gradient { Colors = new[] { new Color(0.25f, 0.25f, 0.27f, 0.55f), new Color(0.1f, 0.1f, 0.1f, 0) } },
+			ScaleAmountMin = 0.75f, ScaleAmountMax = 1.5f, ZIndex = 5,
+			ColorRamp = new Gradient { Colors = new[] { new Color(0.25f, 0.25f, 0.27f, 0.6f), new Color(0.1f, 0.1f, 0.1f, 0) } },
 		};
 		AddChild(_smoke);
 	}
@@ -100,11 +123,5 @@ public partial class ComponentView : Node2D
 		on *= Mathf.Lerp(0.3f, 1, _ratio);
 		_ledGlow.Modulate = new Color(_ledGlow.Modulate, on);
 		_ledLight.Energy = on * 0.9f;
-	}
-
-	public override void _Draw()
-	{
-		ComponentArt.Draw(this, Data, Size, _theme, Index + 1);
-		ComponentArt.DrawDamage(this, Size, _ratio, _destroyed, Index + 1);
 	}
 }

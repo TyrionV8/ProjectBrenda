@@ -22,6 +22,7 @@ public partial class GameScreen : Node2D
 	public Hud Hud { get; private set; }
 	public bool Playing => _state == MatchState.Playing && Feed.Current != null && string.IsNullOrEmpty(Feed.Status);
 
+	PixelWorld _world;
 	Camera2D _camera;
 	BoardView _board;
 	PathTraceView _trace;
@@ -48,14 +49,17 @@ public partial class GameScreen : Node2D
 		var level = Feed.Level;
 		_blocked = level.BlockedCells();
 
-		_camera = new Camera2D { AnchorMode = Camera2D.AnchorModeEnum.FixedTopLeft };
-		AddChild(_camera);
+		// The board is drawn in a low-resolution world so all the art shares one pixel grid.
+		_world = new PixelWorld();
+		AddChild(_world);
+		_camera = _world.Camera;
+		var world = _world.Root;
 		var backdrop = new ColorRect { Color = new Color(0.0235f, 0.0431f, 0.0745f), Position = new Vector2(-40, -40), Size = new Vector2(1446, 848), MouseFilter = Control.MouseFilterEnum.Ignore };
-		AddChild(backdrop);
-		AddChild(new CanvasModulate { Color = new Color(0.5f, 0.55f, 0.68f) });
+		world.AddChild(backdrop);
+		world.AddChild(new CanvasModulate { Color = new Color(0.5f, 0.55f, 0.68f) });
 
 		_board = new BoardView { Position = Grid.Origin };
-		AddChild(_board);
+		world.AddChild(_board);
 		_board.Setup(level, Grid.Cols, Grid.Rows, level.Title.GetHashCode() & 0xffff);
 		_trace = new PathTraceView();
 		_board.AddChild(_trace);
@@ -80,8 +84,6 @@ public partial class GameScreen : Node2D
 		AddChild(_pause);
 		Build.SelectionChanged += Hud.OnSelectionChanged;
 		Build.Denied += Hud.FlashMoney;
-		if (Feed.LocalSide == PlayerSide.Attacker)
-			Build.ProcessMode = ProcessModeEnum.Disabled;
 
 		Audio.PlayMusic(string.IsNullOrEmpty(level.Music) ? "music_level_1" : level.Music);
 		var subtitle = Feed.Mode == MatchMode.Versus ? (Feed.LocalSide == PlayerSide.Defender ? "Defend the CPU" : "Break into the CPU") : "Defend the CPU";
@@ -97,6 +99,9 @@ public partial class GameScreen : Node2D
 	public bool CanBuild(Vector2I cell) => Feed.Current != null && Feed.Current.CanBuild(Feed.Level, _blocked, cell);
 
 	public TurretView TurretViewAt(Vector2I cell) => _turretsByCell.GetValueOrDefault(cell);
+
+	/// <summary>The pointer in board coordinates (the world viewport doesn't get input events itself).</summary>
+	public Vector2 BoardMouse() => GetGlobalMousePosition() - Grid.Origin;
 
 	public override void _Process(double delta)
 	{
@@ -133,9 +138,13 @@ public partial class GameScreen : Node2D
 
 	public override void _UnhandledInput(InputEvent e)
 	{
-		if (e.IsActionPressed("pause") && !Build.Busy)
+		if (Feed.LocalSide == PlayerSide.Defender && e is InputEventMouse && Build.HandlePointer(e))
+			GetViewport().SetInputAsHandled();
+		else if (e.IsActionPressed("pause"))
 		{
-			if (!_ended)
+			if (Build.Busy)
+				Build.Back();
+			else if (!_ended)
 				OpenMenu();
 			GetViewport().SetInputAsHandled();
 		}

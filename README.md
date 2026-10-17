@@ -16,7 +16,7 @@ it started as a GameMaker prototype, which was retired once the Godot version re
 Controls: pick a turret on the right (or `1`–`5`) and click a free cell; the laser asks for a
 second click to aim it. Right click / `Esc` / CANCEL stops placing. `F` changes game speed,
 `G` shows the grid, `Esc` pauses. Everything also works with touch. In versus as the attacker,
-click a bug (or `1`–`7`) to send it.
+click a bug (or `1`–`9`) to send it.
 
 ## Modes
 
@@ -61,12 +61,29 @@ the network — which is what makes versus, AIs and headless tests share the sam
 * **Turrets** (`data/turrets.json`): `stats` + `upgrades`; each upgrade adds `per_level` to a
   stat per level bought, `limits` clamp the result. Seconds and pixels (the prototype ran at
   30 steps per second; values were converted).
-* **Bugs** (`data/enemies.json`): HP, speed, reward, size, drawing style and colours, how fast
-  they chew components, and their versus cost/unlock time. Bugs are drawn procedurally, so a
-  new type is just a new entry.
+* **Bugs** (`data/enemies.json`): HP, speed, reward, size, effect colours, how fast they chew
+  components, and their versus cost/unlock time. Each bug's art is the sprite sheet
+  `assets/sprites/bugs/ID.png` (see *Art* below).
 * **Levels** (`data/levels/level_N.json`): route waypoints, components, theme, money, waves.
   Edit them with the Level Editor (when run from the Godot editor it can overwrite built-in
   levels) or by hand; `level_9.json` would add a level.
+
+### Art
+
+Everything on the board is pixel art on one grid: **1 art pixel = 3 screen pixels** and a
+board cell is 16 art pixels. The game screen, menu background and editor render the board in
+a low-resolution `PixelWorld` (a `SubViewport` at 1/3 scale, upscaled with sharp pixels), so
+sprites, lines, particles and lights all share that grid. Keep new art at 1:1 in art pixels.
+
+* `assets/sprites/bugs/ID.png` — 6 frames per row (walk ×4, chew ×2); row 1 holds the
+  emissive pixels (eyes) drawn additively. Bugs face right and turn in 90° steps.
+* Board, components and the CPU are painted pixel by pixel in code (`View/Pixel/PixelCanvas`,
+  `ComponentArt`), with a 3×5 pixel font (`MicroFont`) for markings.
+* `tools/sprites/make_sprites.py` generates the sprite sheets from the designs next to it
+  (`--preview FILE` writes a zoomed contact sheet). The PNGs can also be edited by hand.
+
+The 8 bugs: Glitch, Spider, Termite (weak, eats the board fast), Beetle, Armored Worm,
+Roach (fast), Runner and Brute, plus the boss.
 
 Saves: `user://save.json` (campaign), `user://settings.cfg`, `user://levels/` (custom levels).
 

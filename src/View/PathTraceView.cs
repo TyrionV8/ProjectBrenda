@@ -108,7 +108,7 @@ public partial class PathTraceView : Node2D
 			_breach.DrawRect(new Rect2(_entry + off - size / 2, size), new Color(1, 0.2f, 0.4f, rng.RandfRange(0.3f, 0.9f)));
 		}
 		_breach.DrawCircle(_entry, 17, new Color(0.05f, 0, 0.02f, 0.85f));
-		_breach.DrawArc(_entry, 19, 0, Mathf.Tau, 32, new Color(1, 0.25f, 0.45f, 0.9f), 2.5f, true);
+		_breach.DrawArc(_entry, 19, 0, Mathf.Tau, 32, new Color(1, 0.25f, 0.45f, 0.9f), PixelWorld.Scale);
 	}
 
 	Line2D AddLine(Vector2[] points, float width, Color color, Vector2 offset = default)
@@ -116,7 +116,7 @@ public partial class PathTraceView : Node2D
 		var line = new Line2D
 		{
 			Points = points, Position = offset, Width = width, DefaultColor = color, JointMode = Line2D.LineJointMode.Round,
-			BeginCapMode = Line2D.LineCapMode.Round, EndCapMode = Line2D.LineCapMode.Round, Antialiased = true,
+			BeginCapMode = Line2D.LineCapMode.Round, EndCapMode = Line2D.LineCapMode.Round, Antialiased = false,
 		};
 		AddChild(line);
 		return line;

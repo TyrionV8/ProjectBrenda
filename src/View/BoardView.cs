@@ -5,11 +5,15 @@ using Godot;
 namespace HardwareDefence.View;
 
 /// <summary>
-/// The printed circuit board: solder mask, decorative traces and silkscreen (drawn once
-/// and cached), plus a <see cref="ComponentView"/> for every component.
+/// The printed circuit board: solder mask, decorative traces, vias and silkscreen, painted
+/// once in art pixels, plus a <see cref="ComponentView"/> for every component.
 /// </summary>
 public partial class BoardView : Node2D
 {
+	const int Px = PixelWorld.Scale;
+	/// <summary>Art pixels per board cell.</summary>
+	public const int CellPx = Grid.Cell / Px;
+
 	public LevelData Level;
 	public BoardTheme Theme;
 	public int Cols = Grid.Cols;
@@ -23,15 +27,16 @@ public partial class BoardView : Node2D
 		set
 		{
 			_showGrid = value;
-			QueueRedraw();
+			_grid?.QueueRedraw();
 		}
 	}
 
-	GradientTexture2D _gradient;
-	readonly List<Vector2[]> _decor = new();
-	readonly List<Vector2> _vias = new();
+	readonly List<Vector2I[]> _decor = new();
+	Sprite2D _background;
+	Node2D _grid;
 	Node2D _componentLayer;
 	DecorPulses _pulses;
+	int _seed;
 
 	public Vector2 BoardSize => new Vector2(Cols, Rows) * Grid.Cell;
 
@@ -40,17 +45,22 @@ public partial class BoardView : Node2D
 		Level = level;
 		Cols = cols;
 		Rows = rows;
+		_seed = seed;
 		Theme = BoardTheme.Get(level?.Theme ?? "blue");
-		_gradient = new GradientTexture2D
-		{
-			Fill = GradientTexture2D.FillEnum.Radial, FillFrom = new Vector2(0.5f, 0.45f), FillTo = new Vector2(1.1f, 1f),
-			Gradient = new Gradient { Colors = new[] { Theme.Center, Theme.Edge } },
-		};
 		BuildDecor(seed);
+		if (_background == null)
+		{
+			_background = new Sprite2D { Centered = false, Scale = Vector2.One * Px };
+			AddChild(_background);
+			_grid = new Node2D();
+			_grid.Draw += DrawGrid;
+			AddChild(_grid);
+		}
+		_background.Texture = Paint().ToTexture();
 		_pulses?.QueueFree();
-		_pulses = new DecorPulses { Lines = _decor };
+		_pulses = new DecorPulses { Lines = DecorWorldLines() };
 		AddChild(_pulses);
-		MoveChild(_pulses, 0);
+		MoveChild(_pulses, _grid.GetIndex() + 1);
 		RebuildComponents();
 		QueueRedraw();
 	}
@@ -75,78 +85,150 @@ public partial class BoardView : Node2D
 	public void RefreshBackground()
 	{
 		Theme = BoardTheme.Get(Level?.Theme ?? "blue");
-		_gradient.Gradient = new Gradient { Colors = new[] { Theme.Center, Theme.Edge } };
-		QueueRedraw();
+		_background.Texture = Paint().ToTexture();
 	}
 
+	/// <summary>Random PCB routing in art pixels: straight runs with 45 degree jogs, ending on vias.</summary>
 	void BuildDecor(int seed)
 	{
 		var rng = new RandomNumberGenerator { Seed = (ulong)seed };
 		_decor.Clear();
-		_vias.Clear();
-		var step = Grid.Cell * 0.5f;
-		var size = BoardSize;
-		var min = Vector2.One * step;
-		var max = size - Vector2.One * step;
+		const int step = CellPx / 2;
+		var size = new Vector2I(Cols, Rows) * CellPx;
+		var min = new Vector2I(step, step);
+		var max = size - new Vector2I(step, step);
 		var count = (int)(34 * (Cols * Rows) / (float)(Grid.Cols * Grid.Rows));
-		var dirs = new[] { Vector2.Right, Vector2.Left, Vector2.Up, Vector2.Down };
+		var dirs = new[] { Vector2I.Right, Vector2I.Left, Vector2I.Up, Vector2I.Down };
 		for (var i = 0; i < count; i++)
 		{
-			var p = new Vector2(rng.RandiRange(1, (int)(size.X / step) - 1), rng.RandiRange(1, (int)(size.Y / step) - 1)) * step;
-			var line = new List<Vector2> { p };
+			var p = new Vector2I(rng.RandiRange(1, size.X / step - 1), rng.RandiRange(1, size.Y / step - 1)) * step;
+			var line = new List<Vector2I> { p };
 			var dir = dirs[rng.RandiRange(0, 3)];
 			var segments = rng.RandiRange(2, 5);
 			for (var s = 0; s < segments; s++)
 			{
 				p = (p + dir * rng.RandiRange(2, 7) * step).Clamp(min, max);
 				line.Add(p);
-				// A short 45 degree run, then continue orthogonally (classic PCB routing).
-				var diag = (dir + dir.Orthogonal() * (rng.Randf() < 0.5f ? 1 : -1)).Normalized();
-				p = (p + diag * step * rng.RandiRange(1, 2) * Mathf.Sqrt2).Clamp(min, max);
+				var side = new Vector2I(-dir.Y, dir.X) * (rng.Randf() < 0.5f ? 1 : -1);
+				p = (p + (dir + side) * step * rng.RandiRange(1, 2) / 2).Clamp(min, max);
 				line.Add(p);
 				if (rng.Randf() < 0.4f)
-					dir = dir.Orthogonal() * (rng.Randf() < 0.5f ? 1 : -1);
+					dir = side;
 			}
 			_decor.Add(line.ToArray());
-			_vias.Add(line[0]);
-			_vias.Add(line[^1]);
 		}
+	}
+
+	List<Vector2[]> DecorWorldLines()
+	{
+		var lines = new List<Vector2[]>();
+		foreach (var line in _decor)
+		{
+			var world = new Vector2[line.Length];
+			for (var i = 0; i < line.Length; i++)
+				world[i] = (new Vector2(line[i].X, line[i].Y) + Vector2.One) * Px;
+			lines.Add(world);
+		}
+		return lines;
+	}
+
+	PixelCanvas Paint()
+	{
+		var w = Cols * CellPx;
+		var h = Rows * CellPx;
+		var c = new PixelCanvas(w, h);
+		var rng = new RandomNumberGenerator { Seed = (ulong)(_seed * 31 + 7) };
+
+		// Solder mask: a radial gradient in a few flat bands, dithered where they meet.
+		const int bands = 6;
+		var centre = new Vector2(w * 0.5f, h * 0.45f);
+		var reach = new Vector2(w, h).Length() * 0.62f;
+		for (var y = 0; y < h; y++)
+			for (var x = 0; x < w; x++)
+			{
+				var t = Mathf.Clamp(new Vector2(x, y).DistanceTo(centre) / reach, 0, 1) * (bands - 1);
+				var band = Mathf.FloorToInt(t);
+				if (t - band > PixelCanvas.Bayer(x, y))
+					band++;
+				var col = Theme.Center.Lerp(Theme.Edge, (float)band / (bands - 1));
+				// Glass-fibre weave: a faint woven check.
+				if (((x >> 1) + (y >> 1)) % 2 == 0 && (x + y) % 2 == 0)
+					col = col.Lightened(0.03f);
+				c.Set(x, y, col);
+			}
+		// Specks in the mask.
+		for (var i = 0; i < w * h / 90; i++)
+		{
+			var x = rng.RandiRange(0, w - 1);
+			var y = rng.RandiRange(0, h - 1);
+			c.Tint(x, y, rng.Randf() < 0.5f ? new Color(1.08f, 1.08f, 1.08f) : new Color(0.92f, 0.92f, 0.92f));
+		}
+
+		// Traces: 2 px copper under the mask, a lit top edge and a shadow below.
+		var trace = Theme.Decor;
+		foreach (var line in _decor)
+			c.Polyline(Offset(line, 1, 1), new Color(0, 0, 0, 0.22f), 2);
+		foreach (var line in _decor)
+		{
+			c.Polyline(line, trace, 2);
+			c.Polyline(line, trace.Lightened(0.18f));
+		}
+		foreach (var line in _decor)
+		{
+			Via(c, line[0], trace);
+			Via(c, line[^1], trace);
+		}
+
+		// Mounting holes in the corners.
+		foreach (var corner in new[] { new Vector2I(10, 10), new Vector2I(w - 10, 10), new Vector2I(10, h - 10), new Vector2I(w - 10, h - 10) })
+		{
+			c.Disc(corner.X, corner.Y, 5.5f, new Color("7a5212"));
+			c.Disc(corner.X - 0.5f, corner.Y - 0.5f, 4.6f, new Color("d9a441"));
+			c.Disc(corner.X, corner.Y, 3, new Color("030608"));
+		}
+
+		var silk = new Color(Theme.Silk, Theme.Silk.A * 0.4f);
+		c.Frame(3, 3, w - 6, h - 6, silk);
+		var title = Level?.Title?.ToUpperInvariant() ?? "";
+		c.Text(20, h - 9, $"HARDWARE DEFENCE  {title}  REV 0.7", new Color(Theme.Silk, Theme.Silk.A * 0.85f));
+		return c;
+	}
+
+	static Vector2I[] Offset(Vector2I[] line, int dx, int dy)
+	{
+		var copy = new Vector2I[line.Length];
+		for (var i = 0; i < line.Length; i++)
+			copy[i] = line[i] + new Vector2I(dx, dy);
+		return copy;
+	}
+
+	/// <summary>A plated via: copper ring, gold barrel, dark hole.</summary>
+	static void Via(PixelCanvas c, Vector2I p, Color trace)
+	{
+		var x = p.X + 1f;
+		var y = p.Y + 1f;
+		c.Disc(x + 0.5f, y + 0.5f, 2.6f, new Color(0, 0, 0, 0.25f));
+		c.Disc(x, y, 2.6f, trace.Lightened(0.1f));
+		c.Disc(x, y, 1.9f, new Color("b8893a"));
+		c.Set(p.X, p.Y, new Color("ffe7a3"));
+		c.Disc(x, y, 0.8f, new Color("05101c"));
+	}
+
+	void DrawGrid()
+	{
+		if (!_showGrid)
+			return;
+		var size = BoardSize;
+		var line = new Color(0, 0, 0, 0.35f);
+		for (var x = 1; x < Cols; x++)
+			_grid.DrawRect(new Rect2(x * Grid.Cell, 0, Px, size.Y), line);
+		for (var y = 1; y < Rows; y++)
+			_grid.DrawRect(new Rect2(0, y * Grid.Cell, size.X, Px), line);
 	}
 
 	public override void _Draw()
 	{
-		var size = BoardSize;
-		DrawRect(new Rect2(new Vector2(6, 8), size), new Color(0, 0, 0, 0.45f));
-		DrawTextureRect(_gradient, new Rect2(Vector2.Zero, size), false);
-		// Fibre-glass weave: very faint diagonal hatching.
-		for (var x = -(int)size.Y; x < size.X; x += 12)
-			DrawLine(new Vector2(x, 0), new Vector2(x + size.Y, size.Y), new Color(1, 1, 1, 0.012f), 1);
-		foreach (var line in _decor)
-		{
-			DrawPolyline(line, new Color(0, 0, 0, 0.25f), 7, true);
-			DrawPolyline(line, Theme.Decor, 4, true);
-			DrawPolyline(line, Theme.Decor.Lightened(0.15f), 1.5f, true);
-		}
-		foreach (var via in _vias)
-		{
-			DrawCircle(via, 6, Theme.Decor.Lightened(0.1f));
-			DrawCircle(via, 4.5f, new Color("b8893a"));
-			DrawCircle(via, 2.2f, new Color("05101c"));
-		}
-		foreach (var corner in new[] { new Vector2(30, 30), new Vector2(size.X - 30, 30), new Vector2(30, size.Y - 30), size - new Vector2(30, 30) })
-		{
-			DrawCircle(corner, 15, new Color("7a5212"));
-			DrawCircle(corner, 12, new Color("d9a441"));
-			DrawCircle(corner, 8, new Color("030608"));
-		}
-		DrawRect(new Rect2(new Vector2(10, 10), size - new Vector2(20, 20)), new Color(Theme.Silk, Theme.Silk.A * 0.35f), false, 1.5f);
-		var title = Level?.Title?.ToUpperInvariant() ?? "";
-		DrawString(ComponentArt.SilkFont, new Vector2(60, size.Y - 16), $"HARDWARE DEFENCE  {title}  REV 0.7", HorizontalAlignment.Left, -1, 12, new Color(Theme.Silk, Theme.Silk.A * 0.8f));
-		if (!_showGrid)
-			return;
-		for (var x = 1; x < Cols; x++)
-			DrawLine(new Vector2(x * Grid.Cell, 0), new Vector2(x * Grid.Cell, size.Y), new Color(0, 0, 0, 0.45f), 1);
-		for (var y = 1; y < Rows; y++)
-			DrawLine(new Vector2(0, y * Grid.Cell), new Vector2(size.X, y * Grid.Cell), new Color(0, 0, 0, 0.45f), 1);
+		// Board shadow on the backdrop.
+		DrawRect(new Rect2(new Vector2(2, 3) * Px, BoardSize), new Color(0, 0, 0, 0.45f));
 	}
 }

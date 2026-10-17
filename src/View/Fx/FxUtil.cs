@@ -7,7 +7,6 @@ public static class FxUtil
 {
 	public static readonly Texture2D LightTexture = GD.Load<Texture2D>("res://assets/fx/light_soft.png");
 	public static readonly Texture2D GlowTexture = GD.Load<Texture2D>("res://assets/fx/glow.png");
-	public static readonly Texture2D SparkTexture = GD.Load<Texture2D>("res://assets/fx/spark.png");
 	public static readonly Texture2D PixelTexture = GD.Load<Texture2D>("res://assets/fx/pixel.png");
 
 	static CanvasItemMaterial _additive;

@@ -49,6 +49,7 @@ public partial class TurretView : Node2D
 
 	public override void _Ready()
 	{
+		TextureFilter = TextureFilterEnum.Linear;
 		AddChild(new Sprite2D { Texture = Socket, Scale = Vector2.One * 0.5f });
 		_core = FxUtil.GlowSprite(Def.Color, 0.55f);
 		_core.Modulate = new Color(Def.Color, 0.5f);

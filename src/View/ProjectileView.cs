@@ -54,9 +54,9 @@ public partial class ProjectileView : Node2D
 		{
 			case "bullet":
 				var back = -Vector2.FromAngle(_angle) * _trail;
-				DrawLine(back, Vector2.Zero, new Color(_color, 0.35f), 6, true);
+				DrawLine(back, Vector2.Zero, new Color(_color, 0.35f), 6);
 				FxUtil.DrawGlow(this, Vector2.Zero, 30, new Color(_color, 0.9f));
-				DrawCircle(Vector2.Zero, 2.6f, new Color(1, 1, 1, 0.95f));
+				DrawRect(new Rect2(-3, -3, 6, 6), new Color(1, 1, 1, 0.95f));
 				break;
 			case "bomb":
 				var lift = new Vector2(0, -_height * 26);
@@ -72,7 +72,7 @@ public partial class ProjectileView : Node2D
 				for (var i = 0; i < 3; i++)
 				{
 					var a = _t * 2.5f + Mathf.Tau * i / 3;
-					DrawCircle(Vector2.FromAngle(a) * 8, 1.3f, new Color(0.8f, 0.95f, 1f, 0.9f));
+					DrawRect(new Rect2(PixelWorld.Snap(Vector2.FromAngle(a) * 9) - new Vector2(1.5f, 1.5f), new Vector2(3, 3)), new Color(0.8f, 0.95f, 1f, 0.9f));
 				}
 				break;
 		}

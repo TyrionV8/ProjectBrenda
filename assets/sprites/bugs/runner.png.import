@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dkj23jvq58myw"
-path="res://.godot/imported/spark.png-691b541a20686e52ee66d70fe6dfc073.ctex"
+uid="uid://dvuwgpkwcjbn2"
+path="res://.godot/imported/runner.png-bd701f393533fd03d761e195f4eeffb9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/fx/spark.png"
-dest_files=["res://.godot/imported/spark.png-691b541a20686e52ee66d70fe6dfc073.ctex"]
+source_file="res://assets/sprites/bugs/runner.png"
+dest_files=["res://.godot/imported/runner.png-bd701f393533fd03d761e195f4eeffb9.ctex"]
 
 [params]
 

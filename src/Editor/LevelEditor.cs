@@ -53,7 +53,6 @@ public partial class LevelEditor : Control
 		_boardLayer = new CanvasLayer { Layer = -1 };
 		AddChild(_boardLayer);
 		_boardLayer.AddChild(new ColorRect { Color = new Color(0.0235f, 0.0431f, 0.0745f), Size = new Vector2(1366, 768), MouseFilter = MouseFilterEnum.Ignore });
-		_boardLayer.AddChild(new CanvasModulate { Color = new Color(0.72f, 0.76f, 0.86f) });
 		_canvas = new MapCanvas();
 		_boardLayer.AddChild(_canvas);
 		_canvas.SelectionChanged += _ => RefreshToolPanel();

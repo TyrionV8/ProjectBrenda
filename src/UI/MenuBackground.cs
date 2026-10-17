@@ -9,7 +9,7 @@ namespace HardwareDefence.UI;
 /// <summary>Living circuit board behind the menus: flowing route, blinking LEDs and bugs crawling by.</summary>
 public partial class MenuBackground : CanvasLayer
 {
-	static readonly string[] BugTypes = { "bug", "bug", "spider", "beetle", "runner", "tank", "brute" };
+	static readonly string[] BugTypes = { "bug", "bug", "spider", "termite", "beetle", "roach", "runner", "tank", "brute" };
 
 	readonly List<(BugView View, float Progress, float Speed)> _bugs = new();
 	PathLine _path;
@@ -42,9 +42,11 @@ public partial class MenuBackground : CanvasLayer
 				new() { Type = "crystal", Cell = new[] { 9, 10 }, Size = new[] { 2, 1 } },
 			},
 		};
-		AddChild(new CanvasModulate { Color = new Color(0.55f, 0.6f, 0.72f) });
+		var world = new PixelWorld();
+		AddChild(world);
+		world.Root.AddChild(new CanvasModulate { Color = new Color(0.55f, 0.6f, 0.72f) });
 		var board = new BoardView();
-		AddChild(board);
+		world.Root.AddChild(board);
 		board.Setup(level, 29, 16, 7);
 		var trace = new PathTraceView();
 		board.AddChild(trace);
