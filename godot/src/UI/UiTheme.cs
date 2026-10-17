@@ -56,11 +56,11 @@ public static class UiTheme
 		t.SetStylebox("pressed", "DangerButton", Box(Red, Red, 2, 6, 18, 10));
 
 		Variation(t, "ToolButton", "Button");
-		t.SetFontSize("font_size", "ToolButton", 14);
-		t.SetStylebox("normal", "ToolButton", Box(new Color(0.04f, 0.1f, 0.16f, 0.9f), new Color(Cyan, 0.25f), 1, 4, 8, 6));
-		t.SetStylebox("hover", "ToolButton", Box(new Color(0.07f, 0.2f, 0.3f, 0.95f), Cyan, 1, 4, 8, 6));
-		t.SetStylebox("pressed", "ToolButton", Box(new Color(Cyan, 0.85f), Cyan, 1, 4, 8, 6));
-		t.SetStylebox("disabled", "ToolButton", Box(new Color(0.04f, 0.08f, 0.12f, 0.6f), new Color(0.4f, 0.5f, 0.6f, 0.2f), 1, 4, 8, 6));
+		t.SetFontSize("font_size", "ToolButton", 12);
+		t.SetStylebox("normal", "ToolButton", Box(new Color(0.04f, 0.1f, 0.16f, 0.9f), new Color(Cyan, 0.25f), 1, 4, 5, 6));
+		t.SetStylebox("hover", "ToolButton", Box(new Color(0.07f, 0.2f, 0.3f, 0.95f), Cyan, 1, 4, 5, 6));
+		t.SetStylebox("pressed", "ToolButton", Box(new Color(Cyan, 0.85f), Cyan, 1, 4, 5, 6));
+		t.SetStylebox("disabled", "ToolButton", Box(new Color(0.04f, 0.08f, 0.12f, 0.6f), new Color(0.4f, 0.5f, 0.6f, 0.2f), 1, 4, 5, 6));
 		t.SetColor("font_pressed_color", "ToolButton", new Color("061018"));
 		t.SetColor("font_hover_pressed_color", "ToolButton", new Color("061018"));
 
@@ -87,6 +87,8 @@ public static class UiTheme
 		t.SetColor("font_hover_color", "CheckBox", Colors.White);
 		t.SetColor("font_pressed_color", "CheckBox", Cyan);
 		t.SetColor("font_hover_pressed_color", "CheckBox", Cyan);
+		foreach (var state in new[] { "normal", "pressed", "hover", "hover_pressed", "focus", "disabled" })
+			t.SetStylebox(state, "CheckBox", new StyleBoxEmpty { ContentMarginLeft = 2, ContentMarginRight = 2, ContentMarginTop = 2, ContentMarginBottom = 2 });
 		t.SetIcon("checked", "CheckBox", Check(true));
 		t.SetIcon("unchecked", "CheckBox", Check(false));
 

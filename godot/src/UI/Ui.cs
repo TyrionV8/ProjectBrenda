@@ -5,7 +5,7 @@ using Godot;
 namespace Brenda.UI;
 
 /// <summary>Small helpers to build menus in code with consistent feedback (hover sound + pop).</summary>
-public static class UI
+public static class Ui
 {
 	public static Button Button(string text, Action onPressed, string variation = "")
 	{

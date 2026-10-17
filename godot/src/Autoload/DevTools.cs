@@ -112,7 +112,13 @@ public partial class DevTools : Node
 					await Goto("res://scenes/end_screen.tscn", 2);
 					break;
 				case "editor":
-					await Goto("res://scenes/level_editor.tscn", 1.5f);
+				case "waves":
+					if (parts.Length > 1)
+						Editor.EditorState.Load(Catalog.Levels[level].Clone(), string.Format(Catalog.LevelPath, level + 1));
+					await Goto("res://scenes/level_editor.tscn", 1.0f);
+					if (parts[0] == "waves")
+						(GetTree().CurrentScene as Editor.LevelEditor)?.ShowWaves(true);
+					await Wait(0.5f);
 					break;
 				case "versus":
 					await Goto("res://scenes/versus_menu.tscn", 1.5f);

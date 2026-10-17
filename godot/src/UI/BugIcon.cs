@@ -18,6 +18,8 @@ public partial class BugIcon : Control
 			Scale = Vector2.One * Mathf.Clamp(size * 0.36f / def.Radius, 0.2f, 1.4f), Rotation = -Mathf.Pi / 2, Gait = GD.Randf() * Mathf.Tau,
 		};
 		AddChild(_body);
+		Size = CustomMinimumSize;
+		_body.Position = Size / 2;
 		Resized += () => _body.Position = Size / 2;
 	}
 

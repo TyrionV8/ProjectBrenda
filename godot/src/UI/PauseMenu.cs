@@ -22,19 +22,19 @@ public partial class PauseMenu : CanvasLayer
 		_root = new Control();
 		_root.SetAnchorsPreset(Control.LayoutPreset.FullRect);
 		AddChild(_root);
-		_root.AddChild(UI.Dim(0.72f));
+		_root.AddChild(Ui.Dim(0.72f));
 		var panel = new PanelContainer { CustomMinimumSize = new Vector2(380, 0) };
-		var box = UI.VBox(12);
+		var box = Ui.VBox(12);
 		panel.AddChild(box);
 		var local = _screen.Feed.IsLocalOnly;
-		box.AddChild(UI.Label(local ? "PAUSED" : "MENU", "TitleLabel", HorizontalAlignment.Center));
-		box.AddChild(UI.Spacer(4));
-		box.AddChild(UI.Button("Resume", Close, "BigButton"));
+		box.AddChild(Ui.Label(local ? "PAUSED" : "MENU", "TitleLabel", HorizontalAlignment.Center));
+		box.AddChild(Ui.Spacer(4));
+		box.AddChild(Ui.Button("Resume", Close, "BigButton"));
 		if (local)
-			box.AddChild(UI.Button("Restart", _screen.Restart));
-		box.AddChild(UI.Button("Settings", OpenSettings));
-		box.AddChild(UI.Button(local ? "Quit" : "Leave match", _screen.Leave, "DangerButton"));
-		_menu = UI.Centered(panel);
+			box.AddChild(Ui.Button("Restart", _screen.Restart));
+		box.AddChild(Ui.Button("Settings", OpenSettings));
+		box.AddChild(Ui.Button(local ? "Quit" : "Leave match", _screen.Leave, "DangerButton"));
+		_menu = Ui.Centered(panel);
 		_root.AddChild(_menu);
 		_settings = new SettingsPanel();
 		_settings.Closed += () =>
@@ -42,7 +42,7 @@ public partial class PauseMenu : CanvasLayer
 			_settingsCenter.Visible = false;
 			_menu.Visible = true;
 		};
-		_settingsCenter = UI.Centered(_settings);
+		_settingsCenter = Ui.Centered(_settings);
 		_settingsCenter.Visible = false;
 		_root.AddChild(_settingsCenter);
 	}

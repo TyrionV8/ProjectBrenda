@@ -14,13 +14,13 @@ public partial class SettingsPanel : PanelContainer
 	public override void _Ready()
 	{
 		CustomMinimumSize = new Vector2(520, 0);
-		var box = UI.VBox(14);
+		var box = Ui.VBox(14);
 		AddChild(box);
-		box.AddChild(UI.Label("SETTINGS", "HeaderLabel", HorizontalAlignment.Center));
-		box.AddChild(UI.Spacer(6));
+		box.AddChild(Ui.Label("SETTINGS", "HeaderLabel", HorizontalAlignment.Center));
+		box.AddChild(Ui.Spacer(6));
 		foreach (var (bus, text) in new[] { ("Master", "Master volume"), ("Music", "Music"), ("SFX", "Effects"), ("UI", "Interface sounds") })
 			box.AddChild(Slider(bus, text));
-		box.AddChild(UI.Spacer(4));
+		box.AddChild(Ui.Spacer(4));
 		if (!OS.HasFeature("mobile") && !OS.HasFeature("web"))
 		{
 			var full = new CheckBox { Text = "Full screen", ButtonPressed = Settings.Instance.Fullscreen };
@@ -38,8 +38,8 @@ public partial class SettingsPanel : PanelContainer
 			Settings.Instance.SetScreenFx(on);
 		};
 		box.AddChild(fx);
-		box.AddChild(UI.Spacer(8));
-		var back = UI.Button("Back", () => Closed?.Invoke());
+		box.AddChild(Ui.Spacer(8));
+		var back = Ui.Button("Back", () => Closed?.Invoke());
 		back.SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
 		back.CustomMinimumSize = new Vector2(200, 0);
 		box.AddChild(back);
@@ -47,12 +47,12 @@ public partial class SettingsPanel : PanelContainer
 
 	static Control Slider(string bus, string text)
 	{
-		var row = UI.VBox(4);
-		var top = UI.HBox();
-		var name = UI.Label(text.ToUpperInvariant(), "SmallHeader");
+		var row = Ui.VBox(4);
+		var top = Ui.HBox();
+		var name = Ui.Label(text.ToUpperInvariant(), "SmallHeader");
 		name.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		top.AddChild(name);
-		var value = UI.Label("", "SmallHeader");
+		var value = Ui.Label("", "SmallHeader");
 		top.AddChild(value);
 		row.AddChild(top);
 		var slider = new HSlider { MinValue = 0, MaxValue = 1, Step = 0.01, Value = Settings.Instance.Volumes[bus], CustomMinimumSize = new Vector2(0, 26) };

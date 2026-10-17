@@ -33,42 +33,42 @@ public partial class InfoPanel : PanelContainer
 
 	public override void _Ready()
 	{
-		var box = UI.VBox(4);
+		var box = Ui.VBox(4);
 		AddChild(box);
-		box.AddChild(UI.Label(_versus ? "TIME LEFT" : "LEVEL", "SmallHeader", HorizontalAlignment.Center));
-		_top = UI.Label(_versus ? "5:00" : (_levelNumber > 0 ? _levelNumber.ToString() : "-"), "ValueLabel", HorizontalAlignment.Center);
+		box.AddChild(Ui.Label(_versus ? "TIME LEFT" : "LEVEL", "SmallHeader", HorizontalAlignment.Center));
+		_top = Ui.Label(_versus ? "5:00" : (_levelNumber > 0 ? _levelNumber.ToString() : "-"), "ValueLabel", HorizontalAlignment.Center);
 		if (_versus)
 			_top.AddThemeFontSizeOverride("font_size", 28);
 		box.AddChild(_top);
-		box.AddChild(UI.Spacer(6));
-		box.AddChild(UI.Label(_versus ? "ATTACKER" : "WAVE", "SmallHeader", HorizontalAlignment.Center));
+		box.AddChild(Ui.Spacer(6));
+		box.AddChild(Ui.Label(_versus ? "ATTACKER" : "WAVE", "SmallHeader", HorizontalAlignment.Center));
 		if (_versus)
 		{
 			_energyBar = new Control { CustomMinimumSize = new Vector2(0, 16) };
 			_energyBar.Draw += DrawEnergy;
 			box.AddChild(_energyBar);
 		}
-		_middle = UI.Label("1/1", "ValueLabel", HorizontalAlignment.Center);
+		_middle = Ui.Label("1/1", "ValueLabel", HorizontalAlignment.Center);
 		_middle.AddThemeFontSizeOverride("font_size", _versus ? 18 : 28);
 		if (_versus)
 			_middle.AddThemeColorOverride("font_color", UiTheme.Magenta);
 		box.AddChild(_middle);
-		box.AddChild(UI.Spacer(6));
-		_status = UI.Label("", "SmallHeader", HorizontalAlignment.Center);
+		box.AddChild(Ui.Spacer(6));
+		_status = Ui.Label("", "SmallHeader", HorizontalAlignment.Center);
 		_status.AddThemeColorOverride("font_color", Colors.White);
 		_status.CustomMinimumSize = new Vector2(0, 44);
 		box.AddChild(_status);
-		box.AddChild(UI.Divider());
-		box.AddChild(UI.Label(_versus ? "ON THE BOARD" : "INCOMING", "SmallHeader", HorizontalAlignment.Center));
-		_queue = UI.VBox(2);
+		box.AddChild(Ui.Divider());
+		box.AddChild(Ui.Label(_versus ? "ON THE BOARD" : "INCOMING", "SmallHeader", HorizontalAlignment.Center));
+		_queue = Ui.VBox(2);
 		box.AddChild(_queue);
-		box.AddChild(UI.Spacer(0, true));
-		box.AddChild(UI.Divider());
-		box.AddChild(UI.Label("BOARD", "SmallHeader", HorizontalAlignment.Center));
-		_integrity = UI.Label("100%", "SmallHeader", HorizontalAlignment.Center);
+		box.AddChild(Ui.Spacer(0, true));
+		box.AddChild(Ui.Divider());
+		box.AddChild(Ui.Label("BOARD", "SmallHeader", HorizontalAlignment.Center));
+		_integrity = Ui.Label("100%", "SmallHeader", HorizontalAlignment.Center);
 		_integrity.AddThemeColorOverride("font_color", Colors.White);
 		box.AddChild(_integrity);
-		box.AddChild(UI.Label("CPU", "SmallHeader", HorizontalAlignment.Center));
+		box.AddChild(Ui.Label("CPU", "SmallHeader", HorizontalAlignment.Center));
 		_cpuBar = new Control { CustomMinimumSize = new Vector2(0, 18) };
 		_cpuBar.Draw += DrawCpu;
 		box.AddChild(_cpuBar);
@@ -137,18 +137,18 @@ public partial class InfoPanel : PanelContainer
 			var def = Catalog.Enemy(groups[i].Id);
 			if (def == null)
 				continue;
-			var row = UI.HBox(6);
+			var row = Ui.HBox(6);
 			row.AddChild(new BugIcon(def, 30));
-			var text = UI.Label($"x{groups[i].Count}", "SmallHeader");
+			var text = Ui.Label($"x{groups[i].Count}", "SmallHeader");
 			text.AddThemeColorOverride("font_color", i == 0 ? Colors.White : UiTheme.Dim);
 			text.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 			row.AddChild(text);
 			_queue.AddChild(row);
 		}
 		if (groups.Count > 7)
-			_queue.AddChild(UI.Label($"+{groups.Count - 7} more", "SmallHeader", HorizontalAlignment.Center));
+			_queue.AddChild(Ui.Label($"+{groups.Count - 7} more", "SmallHeader", HorizontalAlignment.Center));
 		if (groups.Count == 0)
-			_queue.AddChild(UI.Label("-", "SmallHeader", HorizontalAlignment.Center));
+			_queue.AddChild(Ui.Label("-", "SmallHeader", HorizontalAlignment.Center));
 	}
 
 	void DrawEnergy()

@@ -20,59 +20,59 @@ public partial class MainMenu : Control
 		Audio.PlayMusic("title");
 		var hasSave = GameState.HasSave();
 
-		var column = UI.VBox(10);
+		var column = Ui.VBox(10);
 		column.Position = new Vector2(110, 50);
 		column.CustomMinimumSize = new Vector2(520, 0);
 		AddChild(column);
-		var project = UI.Label("PROJECT", "HeaderLabel");
+		var project = Ui.Label("PROJECT", "HeaderLabel");
 		project.AddThemeColorOverride("font_color", UiTheme.Dim);
 		project.AddThemeFontSizeOverride("font_size", 34);
 		column.AddChild(project);
 		column.AddChild(new GlitchTitle());
-		column.AddChild(UI.Label("Stop the bugs before they reach the CPU.", "DimLabel"));
-		column.AddChild(UI.Spacer(14));
+		column.AddChild(Ui.Label("Stop the bugs before they reach the CPU.", "DimLabel"));
+		column.AddChild(Ui.Spacer(14));
 
-		var buttons = UI.VBox(10);
+		var buttons = Ui.VBox(10);
 		buttons.CustomMinimumSize = new Vector2(340, 0);
 		buttons.SizeFlagsHorizontal = SizeFlags.ShrinkBegin;
 		column.AddChild(buttons);
 		if (hasSave)
-			buttons.AddChild(UI.Button("Continue", Continue, "BigButton"));
-		_newGame = UI.Button("New Game", NewGame, "BigButton");
+			buttons.AddChild(Ui.Button("Continue", Continue, "BigButton"));
+		_newGame = Ui.Button("New Game", NewGame, "BigButton");
 		buttons.AddChild(_newGame);
-		var select = UI.Button("Select Level", () =>
+		var select = Ui.Button("Select Level", () =>
 		{
 			GameState.Load();
 			Transition.Go("res://scenes/level_select.tscn");
 		}, "BigButton");
 		buttons.AddChild(select);
-		buttons.AddChild(UI.Button("Versus", () => Transition.Go("res://scenes/versus_menu.tscn"), "BigButton"));
-		buttons.AddChild(UI.Button("Level Editor", () => Transition.Go("res://scenes/level_editor.tscn"), "BigButton"));
-		var row = UI.HBox(10);
-		var settings = UI.Button("Settings", OpenSettings, "BigButton");
+		buttons.AddChild(Ui.Button("Versus", () => Transition.Go("res://scenes/versus_menu.tscn"), "BigButton"));
+		buttons.AddChild(Ui.Button("Level Editor", () => Transition.Go("res://scenes/level_editor.tscn"), "BigButton"));
+		var row = Ui.HBox(10);
+		var settings = Ui.Button("Settings", OpenSettings, "BigButton");
 		settings.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		row.AddChild(settings);
 		if (!OS.HasFeature("web") && !OS.HasFeature("mobile"))
 		{
-			var exit = UI.Button("Exit", () => GetTree().Quit(), "BigButton");
+			var exit = Ui.Button("Exit", () => GetTree().Quit(), "BigButton");
 			exit.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 			row.AddChild(exit);
 		}
 		buttons.AddChild(row);
 
-		var footer = UI.VBox(2);
+		var footer = Ui.VBox(2);
 		footer.Position = new Vector2(1366 - 330, 768 - 96);
 		footer.CustomMinimumSize = new Vector2(300, 0);
-		var insta = UI.Button("@atlas_gamedev", () => OS.ShellOpen(Instagram));
+		var insta = Ui.Button("@atlas_gamedev", () => OS.ShellOpen(Instagram));
 		insta.Flat = true;
 		insta.Alignment = HorizontalAlignment.Right;
 		footer.AddChild(insta);
-		footer.AddChild(UI.Label("prototype - godot .net", "DimLabel", HorizontalAlignment.Right));
+		footer.AddChild(Ui.Label("prototype - godot .net", "DimLabel", HorizontalAlignment.Right));
 		AddChild(footer);
 
 		var children = buttons.GetChildren();
 		for (var i = 0; i < children.Count; i++)
-			UI.Reveal((CanvasItem)children[i], 0.15f + i * 0.06f, new Vector2(-30, 0));
+			Ui.Reveal((CanvasItem)children[i], 0.15f + i * 0.06f, new Vector2(-30, 0));
 	}
 
 	static Control Shade()
@@ -113,16 +113,16 @@ public partial class MainMenu : Control
 
 	void OpenSettings()
 	{
-		var dim = UI.Dim();
+		var dim = Ui.Dim();
 		AddChild(dim);
 		var panel = new SettingsPanel();
-		var center = UI.Centered(panel);
+		var center = Ui.Centered(panel);
 		AddChild(center);
 		panel.Closed += () =>
 		{
 			dim.QueueFree();
 			center.QueueFree();
 		};
-		UI.Reveal(panel);
+		Ui.Reveal(panel);
 	}
 }

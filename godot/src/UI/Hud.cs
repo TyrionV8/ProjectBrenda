@@ -120,40 +120,40 @@ public partial class Hud : CanvasLayer
 		_overlay = new Control();
 		_overlay.SetAnchorsPreset(Control.LayoutPreset.FullRect);
 		AddChild(_overlay);
-		var dim = UI.Dim(0);
+		var dim = Ui.Dim(0);
 		_overlay.AddChild(dim);
 		CreateTween().TweenProperty(dim, "color:a", 0.6f, 0.4f);
 		var panel = new PanelContainer { CustomMinimumSize = new Vector2(600, 0) };
-		var box = UI.VBox(16);
+		var box = Ui.VBox(16);
 		panel.AddChild(box);
-		var t = UI.Label(title, "TitleLabel", HorizontalAlignment.Center);
+		var t = Ui.Label(title, "TitleLabel", HorizontalAlignment.Center);
 		t.AddThemeFontSizeOverride("font_size", 44);
 		t.AddThemeColorOverride("font_color", titleColor);
 		box.AddChild(t);
 		if (stars > 0)
 			box.AddChild(new StarRow(stars, 46) { SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter });
-		var m = UI.Label(message, "", HorizontalAlignment.Center);
+		var m = Ui.Label(message, "", HorizontalAlignment.Center);
 		m.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 		box.AddChild(m);
-		var row = UI.HBox(16);
+		var row = Ui.HBox(16);
 		row.Alignment = BoxContainer.AlignmentMode.Center;
 		foreach (var (text, action) in buttons)
-			row.AddChild(UI.Button(text, action, "BigButton"));
-		box.AddChild(UI.Spacer(6));
+			row.AddChild(Ui.Button(text, action, "BigButton"));
+		box.AddChild(Ui.Spacer(6));
 		box.AddChild(row);
-		_overlay.AddChild(UI.Centered(panel));
-		UI.Reveal(panel, 0.1f, new Vector2(0, 40));
+		_overlay.AddChild(Ui.Centered(panel));
+		Ui.Reveal(panel, 0.1f, new Vector2(0, 40));
 	}
 
 	void BuildDefenderPanel()
 	{
 		var panel = SidePanel();
-		var box = UI.VBox(8);
+		var box = Ui.VBox(8);
 		panel.AddChild(box);
-		box.AddChild(UI.Label("CASH", "SmallHeader", HorizontalAlignment.Center));
-		_money = UI.Label("0", "MoneyLabel");
+		box.AddChild(Ui.Label("CASH", "SmallHeader", HorizontalAlignment.Center));
+		_money = Ui.Label("0", "MoneyLabel");
 		box.AddChild(IconRow("res://assets/art/icons/chip.svg", UiTheme.Gold, _money));
-		box.AddChild(UI.Divider());
+		box.AddChild(Ui.Divider());
 		for (var i = 0; i < Catalog.Turrets.Count; i++)
 		{
 			var def = Catalog.Turrets[i];
@@ -168,20 +168,20 @@ public partial class Hud : CanvasLayer
 			box.AddChild(slot);
 			_turretSlots.Add(slot);
 		}
-		box.AddChild(UI.Spacer(0, true));
+		box.AddChild(Ui.Spacer(0, true));
 		box.AddChild(BottomRow());
 	}
 
 	void BuildAttackerPanel()
 	{
 		var panel = SidePanel();
-		var box = UI.VBox(6);
+		var box = Ui.VBox(6);
 		panel.AddChild(box);
-		box.AddChild(UI.Label("ENERGY", "SmallHeader", HorizontalAlignment.Center));
-		_energy = UI.Label("0", "MoneyLabel");
+		box.AddChild(Ui.Label("ENERGY", "SmallHeader", HorizontalAlignment.Center));
+		_energy = Ui.Label("0", "MoneyLabel");
 		_energy.AddThemeColorOverride("font_color", UiTheme.Magenta);
 		box.AddChild(IconRow("res://assets/art/icons/damage.svg", UiTheme.Magenta, _energy));
-		box.AddChild(UI.Divider());
+		box.AddChild(Ui.Divider());
 		for (var i = 0; i < Catalog.EnemyList.Count; i++)
 		{
 			var def = Catalog.EnemyList[i];
@@ -190,21 +190,21 @@ public partial class Hud : CanvasLayer
 			box.AddChild(slot);
 			_bugSlots.Add(slot);
 		}
-		box.AddChild(UI.Spacer(0, true));
+		box.AddChild(Ui.Spacer(0, true));
 		box.AddChild(BottomRow());
 	}
 
 	Control BottomRow()
 	{
-		var row = UI.HBox(8);
+		var row = Ui.HBox(8);
 		if (_screen.Feed.IsLocalOnly)
 		{
-			_speed = UI.Button("1x", _screen.CycleSpeed);
+			_speed = Ui.Button("1x", _screen.CycleSpeed);
 			_speed.TooltipText = "Game speed (F)";
 			_speed.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
 			row.AddChild(_speed);
 		}
-		var menu = UI.Button(_screen.Feed.IsLocalOnly ? "II" : "MENU", _screen.OpenMenu);
+		var menu = Ui.Button(_screen.Feed.IsLocalOnly ? "II" : "MENU", _screen.OpenMenu);
 		menu.TooltipText = "Pause (Esc)";
 		menu.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
 		row.AddChild(menu);
@@ -221,7 +221,7 @@ public partial class Hud : CanvasLayer
 
 	static Control IconRow(string icon, Color color, Label value)
 	{
-		var row = UI.HBox(8);
+		var row = Ui.HBox(8);
 		row.Alignment = BoxContainer.AlignmentMode.Center;
 		row.AddChild(new TextureRect
 		{
@@ -235,7 +235,7 @@ public partial class Hud : CanvasLayer
 	void BuildBoardOverlay()
 	{
 		var centerX = Grid.Origin.X + Grid.Size.X / 2;
-		_cancel = UI.Button("CANCEL", () => _screen.Build.Cancel(), "DangerButton");
+		_cancel = Ui.Button("CANCEL", () => _screen.Build.Cancel(), "DangerButton");
 		_cancel.CustomMinimumSize = new Vector2(200, 52);
 		_cancel.Position = new Vector2(centerX - 100, 768 - 70);
 		_cancel.Visible = false;
@@ -249,22 +249,22 @@ public partial class Hud : CanvasLayer
 		_bannerSub.Modulate = new Color(1, 1, 1, 0);
 		_waiting = new Control { Visible = false };
 		_waiting.SetAnchorsPreset(Control.LayoutPreset.FullRect);
-		_waiting.AddChild(UI.Dim(0.75f));
+		_waiting.AddChild(Ui.Dim(0.75f));
 		var panel = new PanelContainer();
-		var box = UI.VBox(16);
+		var box = Ui.VBox(16);
 		panel.AddChild(box);
-		_waitingText = UI.Label("", "HeaderLabel", HorizontalAlignment.Center);
+		_waitingText = Ui.Label("", "HeaderLabel", HorizontalAlignment.Center);
 		box.AddChild(_waitingText);
-		var leave = UI.Button("Leave", () => _screen.Leave(), "DangerButton");
+		var leave = Ui.Button("Leave", () => _screen.Leave(), "DangerButton");
 		leave.SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter;
 		box.AddChild(leave);
-		_waiting.AddChild(UI.Centered(panel));
+		_waiting.AddChild(Ui.Centered(panel));
 		AddChild(_waiting);
 	}
 
 	Label OverlayLabel(string variation, float y, float height)
 	{
-		var label = UI.Label("", variation, HorizontalAlignment.Center);
+		var label = Ui.Label("", variation, HorizontalAlignment.Center);
 		label.AddThemeColorOverride("font_outline_color", new Color(0, 0, 0, 0.85f));
 		label.AddThemeConstantOverride("outline_size", variation == "TitleLabel" ? 12 : 6);
 		label.Position = new Vector2(Grid.Origin.X, y);

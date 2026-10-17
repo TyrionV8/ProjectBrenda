@@ -16,42 +16,42 @@ public partial class UpgradeScreen : Control
 	{
 		SetAnchorsPreset(LayoutPreset.FullRect);
 		AddChild(new MenuBackground());
-		AddChild(UI.Dim(0.78f));
+		AddChild(Ui.Dim(0.78f));
 		Audio.PlayMusic("title");
 		var level = Catalog.Levels[GameState.CurrentLevel];
 
-		var root = UI.VBox(18);
+		var root = Ui.VBox(18);
 		root.Position = new Vector2(40, 28);
 		root.Size = new Vector2(1366 - 80, 768 - 56);
 		AddChild(root);
 
-		var header = UI.HBox(16);
-		var title = UI.Label("UPGRADES", "TitleLabel");
+		var header = Ui.HBox(16);
+		var title = Ui.Label("UPGRADES", "TitleLabel");
 		title.AddThemeFontSizeOverride("font_size", 52);
 		header.AddChild(title);
-		var next = UI.Label($"next: {GameState.CurrentLevel + 1}. {level.Title.ToUpperInvariant()}", "HeaderLabel");
+		var next = Ui.Label($"next: {GameState.CurrentLevel + 1}. {level.Title.ToUpperInvariant()}", "HeaderLabel");
 		next.AddThemeColorOverride("font_color", UiTheme.Dim);
 		next.AddThemeFontSizeOverride("font_size", 22);
 		next.SizeFlagsVertical = SizeFlags.ShrinkEnd;
 		next.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		header.AddChild(next);
 		var pointsBox = new PanelContainer { ThemeTypeVariation = "CardPanel" };
-		var pointsRow = UI.HBox(10);
+		var pointsRow = Ui.HBox(10);
 		pointsBox.AddChild(pointsRow);
 		pointsRow.AddChild(new TextureRect
 		{
 			Texture = GD.Load<Texture2D>("res://assets/art/icons/chip.svg"), ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
 			CustomMinimumSize = new Vector2(36, 36), Modulate = UiTheme.Gold,
 		});
-		var col = UI.VBox(0);
-		col.AddChild(UI.Label("POINTS", "SmallHeader"));
-		_points = UI.Label("0", "MoneyLabel");
+		var col = Ui.VBox(0);
+		col.AddChild(Ui.Label("POINTS", "SmallHeader"));
+		_points = Ui.Label("0", "MoneyLabel");
 		col.AddChild(_points);
 		pointsRow.AddChild(col);
 		header.AddChild(pointsBox);
 		root.AddChild(header);
 
-		var cards = UI.HBox(14);
+		var cards = Ui.HBox(14);
 		cards.SizeFlagsVertical = SizeFlags.ExpandFill;
 		root.AddChild(cards);
 		var list = new List<Control>();
@@ -63,14 +63,14 @@ public partial class UpgradeScreen : Control
 			list.Add(card);
 		}
 
-		var footer = UI.HBox(16);
-		footer.AddChild(UI.Button("Main Menu", () => Transition.Go(GameSession.MenuScene), "BigButton"));
-		_details = UI.Label("Hover an upgrade to see what it does. Click + to buy it.", "DimLabel");
+		var footer = Ui.HBox(16);
+		footer.AddChild(Ui.Button("Main Menu", () => Transition.Go(GameSession.MenuScene), "BigButton"));
+		_details = Ui.Label("Hover an upgrade to see what it does. Click + to buy it.", "DimLabel");
 		_details.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		_details.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 		_details.VerticalAlignment = VerticalAlignment.Center;
 		footer.AddChild(_details);
-		footer.AddChild(UI.Button($"Start Level {GameState.CurrentLevel + 1}", () =>
+		footer.AddChild(Ui.Button($"Start Level {GameState.CurrentLevel + 1}", () =>
 		{
 			GameState.Save();
 			GameSession.StartCampaign(GameState.CurrentLevel);
@@ -80,7 +80,7 @@ public partial class UpgradeScreen : Control
 		GameState.Changed += Refresh;
 		Refresh();
 		for (var i = 0; i < list.Count; i++)
-			UI.Reveal(list[i], 0.05f * i);
+			Ui.Reveal(list[i], 0.05f * i);
 	}
 
 	public override void _ExitTree() => GameState.Changed -= Refresh;
@@ -90,14 +90,14 @@ public partial class UpgradeScreen : Control
 	Control Card(TurretDef def)
 	{
 		var panel = new PanelContainer { ThemeTypeVariation = "CardPanel" };
-		var box = UI.VBox(8);
+		var box = Ui.VBox(8);
 		panel.AddChild(box);
 		box.AddChild(new TurretPreview(def) { SizeFlagsHorizontal = SizeFlags.ShrinkCenter });
-		var name = UI.Label(def.Name.ToUpperInvariant(), "SmallHeader", HorizontalAlignment.Center);
+		var name = Ui.Label(def.Name.ToUpperInvariant(), "SmallHeader", HorizontalAlignment.Center);
 		name.AddThemeColorOverride("font_color", def.Color);
 		name.AddThemeFontSizeOverride("font_size", 15);
 		box.AddChild(name);
-		var desc = UI.Label(def.Description, "DimLabel", HorizontalAlignment.Center);
+		var desc = Ui.Label(def.Description, "DimLabel", HorizontalAlignment.Center);
 		desc.AddThemeFontSizeOverride("font_size", 14);
 		desc.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 		desc.CustomMinimumSize = new Vector2(200, 54);
