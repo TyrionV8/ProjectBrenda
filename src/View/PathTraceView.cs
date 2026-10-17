@@ -3,14 +3,13 @@ using Godot;
 namespace HardwareDefence.View;
 
 /// <summary>
-/// The bug route: a wide copper trace with solder pads on the corners, painted in art pixels
-/// (in tiles, so the LEDs along it light it), and a glitching breach where bugs come in.
+/// The bug route: a thick copper trace with chamfered bends, raised rails and a recessed lane
+/// marked with chevrons toward the CPU, painted in art pixels (in tiles, so the LEDs along it
+/// light it), and a glitching breach where bugs come in.
 /// </summary>
 public partial class PathTraceView : Node2D
 {
 	const int Px = PixelWorld.Scale;
-	static readonly Color CopperEdge = new("5c3b10");
-	static readonly Color[] Copper = { new("ffd98a"), new("e8ab4c"), new("c4842e"), new("8a5a1a") };
 
 	Vector2[] _points = System.Array.Empty<Vector2>();
 	Vector2 _entry;
@@ -54,8 +53,12 @@ public partial class PathTraceView : Node2D
 		});
 	}
 
-	/// <summary>Distance from q to the route and where across the trace it is (negative = top/left side).</summary>
-	(float Distance, float Across) Measure(Vector2 q, Vector2[] pts)
+	/// <summary>
+	/// Distance from q to the route and where across the trace it is (negative = top/left).
+	/// Distances to the corners use an octagonal measure, so bends get 45 degree chamfers like
+	/// real PCB traces.
+	/// </summary>
+	static (float Distance, float Across) Measure(Vector2 q, Vector2[] pts)
 	{
 		var best = float.MaxValue;
 		var across = 0f;
@@ -63,17 +66,44 @@ public partial class PathTraceView : Node2D
 		{
 			var a = pts[i - 1];
 			var b = pts[i];
-			var c = Geometry2D.GetClosestPointToSegment(q, a, b);
-			var d = q.DistanceTo(c);
-			if (d >= best)
-				continue;
-			best = d;
 			var horizontal = Mathf.Abs(b.Y - a.Y) < 0.01f;
-			var atEnd = c.IsEqualApprox(a) || c.IsEqualApprox(b);
-			across = atEnd ? Mathf.Sign((q - c).X + (q - c).Y) * d : horizontal ? q.Y - a.Y : q.X - a.X;
+			float d, s;
+			var t = horizontal ? (q.X - a.X) / (b.X - a.X) : (q.Y - a.Y) / (b.Y - a.Y);
+			if (t >= 0 && t <= 1)
+			{
+				s = horizontal ? q.Y - a.Y : q.X - a.X;
+				d = Mathf.Abs(s);
+			}
+			else
+			{
+				var end = t < 0 ? a : b;
+				var dx = Mathf.Abs(q.X - end.X);
+				var dy = Mathf.Abs(q.Y - end.Y);
+				d = Mathf.Max(Mathf.Max(dx, dy), (dx + dy) * 0.7071f);
+				s = Mathf.Sign(q.X - end.X + q.Y - end.Y) * d;
+			}
+			if (d < best)
+			{
+				best = d;
+				across = s;
+			}
 		}
 		return (best, across);
 	}
+
+	// The trace, in art pixels from its middle: a 3 px recessed lane where the bugs walk,
+	// raised rails on both sides lit from the top-left, and a dark rim.
+	const float Lane = 3.5f;
+	const float Half = 7.5f;
+	static readonly Color Rim = new("4a2f0c");
+	static readonly Color RailLight = new("f2c25e");
+	static readonly Color RailEdgeLight = new("ffe6a6");
+	static readonly Color RailDark = new("b37428");
+	static readonly Color RailEdgeDark = new("85561a");
+	static readonly Color LaneColor = new("74491b");
+	static readonly Color LaneShade = new("4c3010");
+	static readonly Color LaneLit = new("9a6a2a");
+	static readonly Color Chevron = new("c99245");
 
 	PixelCanvas Paint()
 	{
@@ -81,39 +111,73 @@ public partial class PathTraceView : Node2D
 		var pts = new Vector2[_points.Length];
 		for (var i = 0; i < pts.Length; i++)
 			pts[i] = _points[i] / Px;
-		const float half = 4.5f;
 		for (var y = 0; y < canvas.Height; y++)
 			for (var x = 0; x < canvas.Width; x++)
 			{
 				var q = new Vector2(x + 0.5f, y + 0.5f);
-				var (d, across) = Measure(q, pts);
-				if (d <= half + 1)
+				var (d, s) = Measure(q, pts);
+				if (d > Half)
 				{
-					if (d <= half)
-					{
-						var t = Mathf.Clamp((across / half + 1) / 2, 0, 0.999f);
-						canvas.Set(x, y, Copper[(int)(t * Copper.Length)]);
-						if (d < 1)
-							canvas.Plot(x, y, new Color(0.25f, 0.15f, 0.05f, 0.55f));
-					}
-					else
-						canvas.Set(x, y, CopperEdge);
+					if (Measure(q - new Vector2(1, 2), pts).Distance <= Half)
+						canvas.Set(x, y, new Color(0, 0, 0, 0.45f));
+					continue;
 				}
-				else if (Measure(q - new Vector2(1, 2), pts).Distance <= half + 1)
-					canvas.Set(x, y, new Color(0, 0, 0, 0.4f));
+				Color c;
+				if (d > Half - 1)
+					c = Rim;
+				else if (d > Lane)
+				{
+					var outer = d > Half - 2;
+					c = s < 0 ? (outer ? RailEdgeLight : RailLight) : (outer ? RailEdgeDark : RailDark);
+					// Fine etching along the rails.
+					if ((x + y) % 5 == 0)
+						c = c.Darkened(0.06f);
+				}
+				else
+				{
+					// Recessed: the top/left inner edge is in shadow, the bottom/right one catches light.
+					c = s < -(Lane - 1) ? LaneShade : s > Lane - 1 ? LaneLit : LaneColor;
+					if (((x >> 1) + (y >> 1)) % 3 == 0)
+						c = c.Lightened(0.05f);
+				}
+				canvas.Set(x, y, c);
 			}
-		// Solder pads on the corners.
+		PaintChevrons(canvas, pts);
+		// A via in the middle of every bend.
 		for (var i = 1; i < pts.Length - 1; i++)
 		{
-			var p = pts[i];
-			canvas.Disc(p.X + 1, p.Y + 1.5f, 7.3f, new Color(0, 0, 0, 0.35f));
-			canvas.Disc(p.X, p.Y, 7, CopperEdge);
-			canvas.Disc(p.X, p.Y, 6, new Color("d9a441"));
-			canvas.Disc(p.X - 0.5f, p.Y - 0.5f, 4.6f, new Color("f0c060"));
-			canvas.Disc(p.X, p.Y, 4, new Color("8f6220"));
-			canvas.Disc(p.X, p.Y, 1.7f, new Color("2a1a08"));
+			canvas.Disc(pts[i].X, pts[i].Y, 2.6f, new Color("d9a441"));
+			canvas.Disc(pts[i].X, pts[i].Y, 1.4f, new Color("1a1006"));
 		}
 		return canvas;
+	}
+
+	/// <summary>Static chevrons along the lane, one per cell, pointing toward the CPU.</summary>
+	static void PaintChevrons(PixelCanvas canvas, Vector2[] pts)
+	{
+		for (var i = 1; i < pts.Length; i++)
+		{
+			var a = pts[i - 1];
+			var b = pts[i];
+			var length = a.DistanceTo(b);
+			if (length < 1)
+				continue;
+			var dir = (b - a) / length;
+			var side = dir.Orthogonal();
+			for (var d = BoardView.CellPx; d <= length - BoardView.CellPx * 0.75f; d += BoardView.CellPx)
+			{
+				// The tip sits just ahead of the cell centre; the arms trail back.
+				var tip = a + dir * (d + 1.5f);
+				for (var k = 0; k <= 2; k++)
+					foreach (var sgn in new[] { -1, 1 })
+					{
+						var p = tip - dir * k + side * sgn * (k + 0.5f);
+						canvas.Plot(Mathf.FloorToInt(p.X), Mathf.FloorToInt(p.Y), Chevron);
+						var back = p - dir;
+						canvas.Plot(Mathf.FloorToInt(back.X), Mathf.FloorToInt(back.Y), new Color(Chevron, 0.45f));
+					}
+			}
+		}
 	}
 
 	public override void _Process(double delta)
@@ -138,7 +202,7 @@ public partial class PathTraceView : Node2D
 			var size = new Vector2(rng.RandiRange(1, 5), rng.RandiRange(1, 2)) * Px;
 			_breach.DrawRect(new Rect2(PixelWorld.Snap(_entry + off - size / 2), size), new Color(1, 0.2f, 0.4f, rng.RandfRange(0.3f, 0.9f)));
 		}
-		_breach.DrawCircle(_entry, 17, new Color(0.05f, 0, 0.02f, 0.85f));
-		_breach.DrawArc(_entry, 19, 0, Mathf.Tau, 32, new Color(1, 0.25f, 0.45f, 0.9f), Px);
+		_breach.DrawCircle(_entry, 22, new Color(0.05f, 0, 0.02f, 0.85f));
+		_breach.DrawArc(_entry, 24, 0, Mathf.Tau, 32, new Color(1, 0.25f, 0.45f, 0.9f), Px);
 	}
 }

@@ -37,7 +37,7 @@ public partial class LevelPreview : Control
 		for (var i = 0; i < points.Length; i++)
 			points[i] *= k;
 		if (points.Length > 1)
-			DrawPolyline(points, _locked ? new Color("4a4f58") : new Color("e3a345"), 26 * k + 2, true);
+			DrawPolyline(points, _locked ? new Color("4a4f58") : new Color("e3a345"), 45 * k + 1, true);
 		if (_level.Path.Count == 0)
 			return;
 		DrawCircle(Grid.CellCenter(_level.CpuCell) * k, 7, _locked ? UiTheme.Dim : UiTheme.Cyan);

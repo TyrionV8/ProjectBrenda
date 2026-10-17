@@ -81,7 +81,7 @@ sprites, lines, particles and lights all share that grid. Keep new art at 1:1 in
   frame) and `ID_icon.png` for menus. Heads stay upright; the game draws the barrels as
   pixel lines pointing where the turret aims (the laser turns its sprite in 90° steps).
 * `assets/sprites/icons/` — 10×10 white UI icons (tinted by the UI), shown at 3×.
-* Board, components and the CPU are painted pixel by pixel in code (`View/Pixel/PixelCanvas`,
+* Board, route, components and the CPU are painted pixel by pixel in code (`View/Pixel/PixelCanvas`,
   `ComponentArt`), with a 3×5 pixel font (`MicroFont`) for markings.
 * `tools/sprites/make_sprites.py` generates the sprite sheets from the designs next to it
   (`--preview FILE` writes a zoomed contact sheet). The PNGs can also be edited by hand.
