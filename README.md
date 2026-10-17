@@ -199,6 +199,21 @@ The `upgrades` and `campaignwin` capture preparations use their own disposable c
 save and never replace the player's normal save. For the full test suite, use isolated
 user-data directories: some general tests intentionally write campaign files.
 
+The same Linux test entry point is used locally and by GitHub Actions:
+
+```bash
+# Select the Godot .NET executable; the script compiles, imports and runs every test.
+GODOT_BIN="/absolute/path/to/Godot_v4.7.2-stable_mono_linux.x86_64" \
+  bash tools/ci/run-tests.sh
+```
+
+The script creates exclusive temporary user-data/configuration/cache directories,
+preserves the first failed command's exit code and removes only its own temporary data.
+The workflow in `.github/workflows/tests.yml` runs on pushes and pull requests with
+.NET 8 and the official Godot 4.7.2 .NET archive, checked against its release checksum.
+It compiles and tests only; it does not export or publish the game. See
+[`tools/ci/README.md`](tools/ci/README.md) for setup and isolation details.
+
 ## Exporting
 
 The **Compatibility** renderer runs on Windows, Linux and Android. `export_presets.cfg` has
