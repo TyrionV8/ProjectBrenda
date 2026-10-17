@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+  <polygon points="67.9,59.5 48.0,71.0 28.1,59.5 28.1,36.5 48.0,25.0 67.9,36.5" fill="#e9eef3" stroke="#b7c3ce" stroke-width="1.5" stroke-linejoin="round"/>
+  <g stroke="#7ad7ff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(0 48 48)"><line x1="34" y1="48" x2="62" y2="48"/><polyline points="38,44 34,48 38,52" fill="none"/><polyline points="58,44 62,48 58,52" fill="none"/></g><g transform="rotate(60 48 48)"><line x1="34" y1="48" x2="62" y2="48"/><polyline points="38,44 34,48 38,52" fill="none"/><polyline points="58,44 62,48 58,52" fill="none"/></g><g transform="rotate(120 48 48)"><line x1="34" y1="48" x2="62" y2="48"/><polyline points="38,44 34,48 38,52" fill="none"/><polyline points="58,44 62,48 58,52" fill="none"/></g></g>
+  <circle cx="48" cy="48" r="4" fill="#1d5d86"/>
+</svg>

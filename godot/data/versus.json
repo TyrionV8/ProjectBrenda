@@ -1,0 +1,12 @@
+{
+ "duration": 300,
+ "start_energy": 40,
+ "energy_rate": 6,
+ "energy_rate_growth": 0.03,
+ "energy_cap": 400,
+ "component_energy": 0.5,
+ "defender_bonus_money": 10,
+ "defender_income": 0.4,
+ "kill_reward_factor": 0.4,
+ "send_interval": 0.2
+}
