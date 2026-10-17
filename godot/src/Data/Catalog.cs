@@ -38,6 +38,11 @@ public static class Catalog
 		}
 	}
 
+	static Sim.VersusRules _versus;
+
+	/// <summary>Versus rules from data/versus.json (falls back to the defaults in code).</summary>
+	public static Sim.VersusRules Versus => _versus ??= FileAccess.FileExists("res://data/versus.json") ? JsonIO.Load<Sim.VersusRules>("res://data/versus.json") : new Sim.VersusRules();
+
 	public static TurretDef Turret(string id) => Turrets.FirstOrDefault(t => t.Id == id);
 
 	public static EnemyDef Enemy(string id) => Enemies.TryGetValue(id, out var e) ? e : null;

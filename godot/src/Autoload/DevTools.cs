@@ -16,6 +16,7 @@ namespace Brenda.Autoload;
 ///   godot --headless --path . -- --test                    run all [Test] methods
 ///   godot --path . -- --capture=menu,game:1 --out=DIR      save screenshots
 ///   godot --headless --path . -- --build-theme             regenerate assets/ui/theme.tres
+///   godot --headless --path . -- --balance                 bot vs bot versus report (data/versus.json)
 /// </summary>
 public partial class DevTools : Node
 {
@@ -29,6 +30,11 @@ public partial class DevTools : Node
 			GD.Print($"theme saved: {err}");
 			GetTree().Quit(err == Error.Ok ? 0 : 1);
 		}
+		else if (args.Contains("--balance"))
+		{
+			BalanceReport();
+			GetTree().Quit();
+		}
 		else if (args.Contains("--test"))
 			Callable.From(() => { _ = RunTests(Arg(args, "--filter", "")); }).CallDeferred();
 		else if (args.Any(a => a.StartsWith("--capture=")))
@@ -37,6 +43,36 @@ public partial class DevTools : Node
 
 	static string Arg(string[] args, string key, string fallback) =>
 		args.FirstOrDefault(a => a.StartsWith(key + "="))?.Substring(key.Length + 1) ?? fallback;
+
+	/// <summary>Plays every level 3 times with the defender and attacker bots using data/versus.json.</summary>
+	static void BalanceReport()
+	{
+		var wins = 0;
+		var games = 0;
+		foreach (var level in Catalog.Levels)
+		{
+			var line = $"{level.Title,-18}";
+			for (var seed = 1; seed <= 3; seed++)
+			{
+				var m = new Match(level, MatchMode.Versus);
+				var defender = new DefenderBot();
+				var attacker = new AttackerBot(seed);
+				while (m.State == MatchState.Playing)
+				{
+					m.Step(Match.StepTime);
+					m.Events.Clear();
+					defender.Step(m, Match.StepTime);
+					attacker.Step(m);
+				}
+				games++;
+				var won = m.State == MatchState.DefenderWon;
+				wins += won ? 1 : 0;
+				line += won ? "  defender" : $"  attacker@{m.Time:0}s";
+			}
+			GD.Print(line);
+		}
+		GD.Print($"Defender won {wins}/{games} ({100 * wins / games}%). Aim for 40-60%.");
+	}
 
 	async Task RunTests(string filter)
 	{
@@ -122,6 +158,12 @@ public partial class DevTools : Node
 					break;
 				case "versus":
 					await Goto("res://scenes/versus_menu.tscn", 1.5f);
+					break;
+				case "board":
+					var boardLevel = Catalog.Levels[Math.Min(level, Catalog.Levels.Count - 1)];
+					GameSession.Current = GameSession.Kind.Custom;
+					GameSession.CreateFeed = () => new LocalFeed(boardLevel, MatchMode.Campaign, PlayerSide.Defender, false);
+					await Goto(GameSession.GameScene, 2.5f);
 					break;
 				case "game":
 				case "attack":

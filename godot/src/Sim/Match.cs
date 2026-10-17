@@ -69,7 +69,7 @@ public sealed partial class Match
 	{
 		Level = level;
 		Mode = mode;
-		Rules = rules ?? new VersusRules();
+		Rules = rules ?? Catalog.Versus;
 		_upgrades = upgrades;
 		Path = new PathLine(level.PathPoints());
 		Blocked = level.BlockedCells();
@@ -318,7 +318,7 @@ public sealed partial class Match
 		if (b.Hp > 0)
 			return;
 		b.Dead = true;
-		Money += b.Def.Reward;
+		Money += Mode == MatchMode.Versus ? Mathf.RoundToInt(b.Def.Reward * Rules.KillRewardFactor) : b.Def.Reward;
 		Events.Add(new SimEvent(EventKind.BugDied, b.Id, b.Pos, b.Def.Reward, b.Def.Id));
 	}
 

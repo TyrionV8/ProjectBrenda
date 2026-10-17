@@ -80,51 +80,64 @@ public sealed class DefenderBot
 }
 
 /// <summary>
-/// A simple versus attacker: saves up for a randomly chosen unlocked bug, sometimes
-/// floods cheap ones. Seeded so tests are repeatable.
+/// A simple versus attacker: saves energy into a budget that grows during the match, then
+/// releases a whole wave at once (mostly the strongest unlocked bugs, padded with cheap ones).
+/// Seeded so tests are repeatable.
 /// </summary>
 public sealed class AttackerBot
 {
 	readonly Random _rng;
-	EnemyDef _goal;
-	int _burst;
+	readonly Queue<EnemyDef> _wave = new();
+	float _budget;
 
-	public AttackerBot(int seed = 1) => _rng = new Random(seed);
+	public AttackerBot(int seed = 1)
+	{
+		_rng = new Random(seed);
+		_budget = 40;
+	}
 
 	public void Step(Match m)
 	{
 		if (m.State != MatchState.Playing)
 			return;
-		var unlocked = Catalog.EnemyList.Where(e => m.Time >= e.VersusUnlock).ToList();
-		if (_burst > 0)
+		if (_wave.Count > 0)
 		{
-			var cheap = unlocked.OrderBy(e => e.VersusCost).First();
-			if (m.SendBug(cheap))
-				_burst--;
+			if (m.SendBug(_wave.Peek()))
+				_wave.Dequeue();
+			else if (m.Energy < _wave.Peek().VersusCost && m.CannotSend(_wave.Peek()) == "Not enough energy")
+				_wave.Clear();
 			return;
 		}
-		if (_goal == null || m.Time < _goal.VersusUnlock)
+		if (m.Energy < _budget)
+			return;
+		PlanWave(m);
+		_budget = Mathf.Min(40 + m.Time * (0.8f + (float)_rng.NextDouble() * 0.8f), m.Rules.EnergyCap * 0.9f);
+	}
+
+	void PlanWave(Match m)
+	{
+		var unlocked = Catalog.EnemyList.Where(e => m.Time >= e.VersusUnlock).OrderByDescending(e => e.VersusCost).ToList();
+		var energy = m.Energy;
+		// Spend about two thirds on the heavy hitters and the rest on a swarm.
+		var heavy = unlocked.Take(Math.Min(2, unlocked.Count)).ToList();
+		var heavyBudget = energy * (0.5f + (float)_rng.NextDouble() * 0.3f);
+		while (heavy.Count > 0)
 		{
-			if (_rng.NextDouble() < 0.25)
+			var pick = heavy[_rng.Next(heavy.Count)];
+			if (pick.VersusCost > heavyBudget)
 			{
-				_burst = 3 + _rng.Next(5);
-				return;
+				heavy.Remove(pick);
+				continue;
 			}
-			// Favour the newest unlocks so the pressure grows during the match.
-			var weights = unlocked.Select((e, i) => (e, w: 1.0 + i * i)).ToList();
-			var roll = _rng.NextDouble() * weights.Sum(x => x.w);
-			foreach (var (e, w) in weights)
-			{
-				roll -= w;
-				if (roll <= 0)
-				{
-					_goal = e;
-					break;
-				}
-			}
-			_goal ??= unlocked.Last();
+			heavyBudget -= pick.VersusCost;
+			energy -= pick.VersusCost;
+			_wave.Enqueue(pick);
 		}
-		if (m.SendBug(_goal))
-			_goal = null;
+		var cheap = unlocked.Last();
+		while (energy >= cheap.VersusCost)
+		{
+			energy -= cheap.VersusCost;
+			_wave.Enqueue(cheap);
+		}
 	}
 }
