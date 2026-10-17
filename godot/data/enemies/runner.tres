@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnemyDef" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/enemy_def.gd" id="1_yyxed"]
+
+[resource]
+script = ExtResource("1_yyxed")
+id = "runner"
+display_name = "Runner"
+max_hp = 30.0
+speed = 42.0
+reward = 5
+radius = 13.0
+style = 2
+shell_color = Color(1, 0.37254903, 0.8235294, 1)
+accent_color = Color(0.47843137, 0.078431375, 0.38431373, 1)
+eye_color = Color(1, 1, 1, 1)
+leg_color = Color(0.16470589, 0.039215688, 0.13333334, 1)

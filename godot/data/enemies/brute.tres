@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnemyDef" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/enemy_def.gd" id="1_enbfl"]
+
+[resource]
+script = ExtResource("1_enbfl")
+id = "brute"
+display_name = "Brute"
+max_hp = 50.0
+reward = 6
+radius = 18.0
+shell_color = Color(0.60784316, 0.36078432, 1, 1)
+accent_color = Color(0.23921569, 0.101960786, 0.5019608, 1)
+eye_color = Color(1, 0.88235295, 0.2901961, 1)
+leg_color = Color(0.09411765, 0.039215688, 0.2, 1)

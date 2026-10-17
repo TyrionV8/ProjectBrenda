@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="EnemyDef" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/enemy_def.gd" id="1_bx538"]
+
+[resource]
+script = ExtResource("1_bx538")
+id = "bug"
+display_name = "Glitch"

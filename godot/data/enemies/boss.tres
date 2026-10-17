@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnemyDef" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/enemy_def.gd" id="1_73sii"]
+
+[resource]
+script = ExtResource("1_73sii")
+id = "boss"
+display_name = "Kernel Panic"
+max_hp = 200.0
+speed = 15.0
+reward = 6
+radius = 30.0
+style = 4
+shell_color = Color(0.7529412, 0.14901961, 0.22745098, 1)
+accent_color = Color(0.3019608, 0.03137255, 0.07058824, 1)
+eye_color = Color(1, 0.827451, 0.3019608, 1)
+leg_color = Color(0.101960786, 0.011764706, 0.023529412, 1)

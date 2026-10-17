@@ -1,0 +1,30 @@
+{
+ "title": "Level 3",
+ "start_money": 25,
+ "music": "music_level_3",
+ "path": [[-1, 2], [4, 2], [4, 8], [13, 8], [13, 10], [4, 10], [4, 13], [14, 13]],
+ "components": [
+  {"type": "chip", "cell": [8, 4], "size": [2, 2]},
+  {"type": "capacitor", "cell": [17, 2], "size": [2, 2]},
+  {"type": "resistor", "cell": [16, 6], "size": [2, 1]},
+  {"type": "led", "cell": [8, 11], "color": "ff3344", "size": [1, 1]},
+  {"type": "led", "cell": [9, 11], "color": "3dff6a", "size": [1, 1]},
+  {"type": "connector", "cell": [18, 10], "size": [2, 2]}
+ ],
+ "waves": [
+  [
+   {"enemy": "spider", "time": 0.0},
+   {"enemy": "bug", "time": 1.0},
+   {"enemy": "bug", "time": 1.5},
+   {"enemy": "bug", "time": 2.5},
+   {"enemy": "spider", "time": 3.0},
+   {"enemy": "bug", "time": 4.0},
+   {"enemy": "bug", "time": 4.5},
+   {"enemy": "spider", "time": 5.5},
+   {"enemy": "bug", "time": 6.5},
+   {"enemy": "bug", "time": 7.5},
+   {"enemy": "bug", "time": 8.0},
+   {"enemy": "bug", "time": 9.0}
+  ]
+ ]
+}

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5a3446"/>
+      <stop offset="0.45" stop-color="#2d1622"/>
+      <stop offset="1" stop-color="#12070d"/>
+    </linearGradient>
+    <linearGradient id="band" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f1f3f6"/>
+      <stop offset="0.5" stop-color="#9aa2ad"/>
+      <stop offset="1" stop-color="#4b525c"/>
+    </linearGradient>
+    <radialGradient id="lens" cx="0.4" cy="0.35" r="0.7">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.3" stop-color="#ff9ab3"/>
+      <stop offset="0.75" stop-color="#ff2d6a"/>
+      <stop offset="1" stop-color="#5c0020"/>
+    </radialGradient>
+  </defs>
+  <g fill="#1d2228" stroke="#454d57" stroke-width="1.2">
+    <rect x="8" y="24" width="8" height="48" rx="2"/>
+    <rect x="17" y="24" width="4" height="48" rx="1.5"/>
+  </g>
+  <rect x="20" y="28" width="56" height="40" rx="10" fill="#07030a"/>
+  <rect x="20" y="29" width="55" height="38" rx="10" fill="url(#body)" stroke="#8c5068" stroke-width="1.5"/>
+  <rect x="26" y="32" width="44" height="5" rx="2.5" fill="#ffffff" opacity="0.13"/>
+  <rect x="32" y="29" width="9" height="38" fill="url(#band)"/>
+  <rect x="62" y="34" width="20" height="28" rx="6" fill="#120a0f" stroke="#8c5068" stroke-width="1.5"/>
+  <circle cx="80" cy="48" r="11" fill="#0d0508"/>
+  <circle cx="80" cy="48" r="9" fill="url(#lens)"/>
+  <ellipse cx="77" cy="44" rx="3" ry="2" fill="#ffffff" opacity="0.8"/>
+</svg>

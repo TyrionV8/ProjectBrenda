@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+  <defs>
+    <linearGradient id="oct" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4b4630"/>
+      <stop offset="0.5" stop-color="#25221a"/>
+      <stop offset="1" stop-color="#0f0e0a"/>
+    </linearGradient>
+    <radialGradient id="dome" cx="0.42" cy="0.38" r="0.65">
+      <stop offset="0" stop-color="#fffbe0"/>
+      <stop offset="0.35" stop-color="#ffe14a"/>
+      <stop offset="0.8" stop-color="#a87a0c"/>
+      <stop offset="1" stop-color="#4d3604"/>
+    </radialGradient>
+  </defs>
+  <g fill="#0b0b08" stroke="#ffe14a" stroke-width="2">
+    <rect x="78" y="42" width="12" height="12" rx="3"/>
+    <rect x="6" y="42" width="12" height="12" rx="3"/>
+    <rect x="42" y="6" width="12" height="12" rx="3"/>
+    <rect x="42" y="78" width="12" height="12" rx="3"/>
+    <rect x="68" y="16" width="12" height="12" rx="3" transform="rotate(45 74 22)"/>
+    <rect x="16" y="16" width="12" height="12" rx="3" transform="rotate(45 22 22)"/>
+    <rect x="68" y="68" width="12" height="12" rx="3" transform="rotate(45 74 74)"/>
+    <rect x="16" y="68" width="12" height="12" rx="3" transform="rotate(45 22 74)"/>
+  </g>
+  <polygon points="36,14 60,14 82,36 82,60 60,82 36,82 14,60 14,36" fill="#050504"/>
+  <polygon points="37,16 59,16 80,37 80,59 59,80 37,80 16,59 16,37" fill="url(#oct)" stroke="#8d8256" stroke-width="1.5"/>
+  <polygon points="38,19 58,19 66,27 30,27" fill="#ffffff" opacity="0.10"/>
+  <circle cx="48" cy="48" r="19" fill="#0a0906" stroke="#8d8256" stroke-width="1.5"/>
+  <circle cx="48" cy="48" r="15" fill="url(#dome)"/>
+  <ellipse cx="43" cy="42" rx="6" ry="4" fill="#ffffff" opacity="0.55"/>
+</svg>

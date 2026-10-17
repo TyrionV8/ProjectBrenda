@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+  <defs>
+    <linearGradient id="shell" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3f5d73"/>
+      <stop offset="0.45" stop-color="#22374a"/>
+      <stop offset="1" stop-color="#0e1822"/>
+    </linearGradient>
+    <linearGradient id="barrel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c8d3de"/>
+      <stop offset="0.5" stop-color="#6d7b89"/>
+      <stop offset="1" stop-color="#2c3540"/>
+    </linearGradient>
+    <radialGradient id="core" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#e6ffff"/>
+      <stop offset="0.5" stop-color="#3ef0ff"/>
+      <stop offset="1" stop-color="#0a6c80"/>
+    </radialGradient>
+  </defs>
+  <rect x="52" y="40" width="38" height="16" rx="3" fill="#0b0f14"/>
+  <rect x="52" y="41" width="37" height="14" rx="3" fill="url(#barrel)"/>
+  <rect x="80" y="39" width="10" height="18" rx="3" fill="#1b2631" stroke="#3ef0ff" stroke-width="2"/>
+  <rect x="58" y="44" width="18" height="2" fill="#ffffff" opacity="0.35"/>
+  <path d="M20 26 L52 26 L62 36 L62 60 L52 70 L20 70 Q14 70 14 64 L14 32 Q14 26 20 26 Z" fill="#06090d"/>
+  <path d="M21 27 L51 27 L60 36 L60 60 L51 69 L21 69 Q16 69 16 64 L16 32 Q16 27 21 27 Z" fill="url(#shell)" stroke="#5f86a3" stroke-width="1.5"/>
+  <path d="M22 30 L50 30 L56 36 L22 36 Z" fill="#ffffff" opacity="0.12"/>
+  <rect x="20" y="45" width="36" height="6" rx="3" fill="#0a1218"/>
+  <rect x="21" y="46" width="34" height="4" rx="2" fill="#3ef0ff" opacity="0.85"/>
+  <circle cx="34" cy="48" r="9" fill="#071015" stroke="#5f86a3" stroke-width="1.5"/>
+  <circle cx="34" cy="48" r="6" fill="url(#core)"/>
+</svg>

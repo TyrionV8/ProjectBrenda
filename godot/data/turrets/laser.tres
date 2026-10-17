@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="TurretDef" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/art/turrets/laser_head.svg" id="1_vuvu6"]
+[ext_resource type="PackedScene" path="res://scenes/turrets/laser.tscn" id="2_e3rvc"]
+[ext_resource type="Script" path="res://src/core/turret_def.gd" id="3_eaur2"]
+[ext_resource type="Script" path="res://src/core/upgrade_def.gd" id="4_wge5u"]
+[ext_resource type="Texture2D" path="res://assets/art/icons/damage.svg" id="5_r5v8w"]
+[ext_resource type="Texture2D" path="res://assets/art/icons/beam_length.svg" id="6_0p5o1"]
+
+[sub_resource type="Resource" id="Resource_i533k"]
+script = ExtResource("4_wge5u")
+id = "damage"
+label = "Damage"
+description = "Stronger beam."
+stat = "dps"
+per_level = 6.0
+max_level = 50
+icon = ExtResource("5_r5v8w")
+
+[sub_resource type="Resource" id="Resource_admfi"]
+script = ExtResource("4_wge5u")
+id = "fire_distance"
+label = "Fire distance"
+description = "Longer beam."
+stat = "beam_length"
+per_level = 9.6
+max_level = 50
+icon = ExtResource("6_0p5o1")
+
+[resource]
+script = ExtResource("3_eaur2")
+id = "laser"
+display_name = "Laser Diode"
+description = "A continuous beam in a fixed direction. Choose where it points when you place it."
+cost = 15
+color = Color(1, 0.23921569, 0.43137255, 1)
+scene = ExtResource("2_e3rvc")
+icon = ExtResource("1_vuvu6")
+needs_direction = true
+base_stats = {
+"beam_length": 48.0,
+"dps": 4.5
+}
+upgrades = Array[ExtResource("4_wge5u")]([SubResource("Resource_i533k"), SubResource("Resource_admfi")])

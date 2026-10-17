@@ -1,0 +1,43 @@
+{
+ "title": "Level 2",
+ "start_money": 20,
+ "music": "music_level_2",
+ "path": [[5, -1], [5, 5], [3, 5], [3, 10], [6, 10], [6, 11], [15, 11], [15, 6], [11, 6], [11, 3], [17, 3]],
+ "components": [
+  {"type": "capacitor", "cell": [8, 1], "size": [2, 2]},
+  {"type": "chip", "cell": [18, 8], "size": [2, 2]},
+  {"type": "led", "cell": [8, 8], "color": "3dff6a", "size": [1, 1]},
+  {"type": "led", "cell": [9, 8], "color": "ffb43d", "size": [1, 1]},
+  {"type": "resistor", "cell": [1, 14], "size": [2, 1]},
+  {"type": "connector", "cell": [18, 13], "size": [2, 2]}
+ ],
+ "waves": [
+  [
+   {"enemy": "bug", "time": 0.0},
+   {"enemy": "bug", "time": 2.0},
+   {"enemy": "bug", "time": 4.0},
+   {"enemy": "spider", "time": 8.0},
+   {"enemy": "bug", "time": 13.0},
+   {"enemy": "bug", "time": 13.5},
+   {"enemy": "bug", "time": 14.0},
+   {"enemy": "bug", "time": 14.5},
+   {"enemy": "bug", "time": 15.0},
+   {"enemy": "bug", "time": 15.5},
+   {"enemy": "bug", "time": 16.0},
+   {"enemy": "bug", "time": 16.5},
+   {"enemy": "bug", "time": 17.0},
+   {"enemy": "bug", "time": 17.5},
+   {"enemy": "bug", "time": 18.0},
+   {"enemy": "bug", "time": 18.5},
+   {"enemy": "bug", "time": 19.0},
+   {"enemy": "bug", "time": 19.5},
+   {"enemy": "bug", "time": 20.0},
+   {"enemy": "bug", "time": 20.5},
+   {"enemy": "bug", "time": 21.0},
+   {"enemy": "bug", "time": 21.5},
+   {"enemy": "bug", "time": 22.0},
+   {"enemy": "bug", "time": 22.5},
+   {"enemy": "spider", "time": 28.0}
+  ]
+ ]
+}
