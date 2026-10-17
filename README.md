@@ -94,6 +94,14 @@ sprites, lines, particles and lights all share that grid. Keep new art at 1:1 in
   minions, and `_animation.gif` / `_bosses_animation.gif` lit/dark animation comparisons).
   The PNGs can also be edited by hand.
 
+**Interface typography.** Use the constants in `UiTheme`: Silkscreen sizes are multiples
+of 8 (16 for dense labels, 24 for a 3-pixel grid like the board, and 8 only for miniature
+component captions). Descriptions, tooltips and editor fields use VT323 in multiples of
+25. Its structural pixel is 80 of the font's 1000 units per em, so size 25 gives two screen
+pixels per structural pixel. Both fonts are imported without antialiasing, hinting or
+subpixel positioning, with oversampling 1. Upgrade cards and editor properties scroll
+when their text needs more room; do not shrink the fonts to make them fit.
+
 **Lighting.** LEDs (light-emitting diodes) are ordinary level components: `led` is a
 surface-mount device (SMD) and `led_5mm` is a through-hole dome. Their coloured lenses stay
 emissive while broad, gentle light pools illuminate the board. Damaged LEDs flicker softly;
@@ -162,4 +170,6 @@ go to `builds/` (ignored by git). Level files are JSON, so the presets include
 ## Credits
 
 * Music: Juhani Junkala, *Retro Game Music Pack* (CC0).
-* Fonts: Silkscreen and Share Tech Mono (SIL Open Font License, see `assets/fonts`).
+* Fonts: Silkscreen and VT323 (Open Font License 1.1, see `assets/fonts`). VT323 is by
+  Peter Hull / The VT323 Project Authors, copyright 2011; its full licence is
+  `assets/fonts/OFL-VT323.txt`. The original Share Tech Mono assets and licence are retained.

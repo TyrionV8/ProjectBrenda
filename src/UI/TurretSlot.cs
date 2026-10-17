@@ -7,6 +7,10 @@ namespace HardwareDefence.UI;
 /// <summary>Inventory slot for one turret type: preview, name, cost and hotkey.</summary>
 public partial class TurretSlot : Button
 {
+	// Layout knobs for the later nine-turret inventory compaction.
+	public const int SlotHeight = 92;
+	public const int TextLeft = 68;
+	public const int NameSize = UiTheme.PixelSmall;
 	public readonly TurretDef Def;
 	readonly int _hotkey;
 	readonly Texture2D _icon;
@@ -21,7 +25,7 @@ public partial class TurretSlot : Button
 		_icon = GD.Load<Texture2D>(def.Icon);
 		Flat = true;
 		FocusMode = FocusModeEnum.None;
-		CustomMinimumSize = new Vector2(186, 92);
+		CustomMinimumSize = new Vector2(186, SlotHeight);
 		TextureFilter = TextureFilterEnum.Nearest;
 		TooltipText = $"{def.Name}\n{def.Description}";
 		MouseEntered += () =>
@@ -75,17 +79,17 @@ public partial class TurretSlot : Button
 		else if (hovered)
 			border = new Color(Def.Color, 0.7f);
 		DrawStyleBox(UiTheme.Box(bg, border, 2, 8, 0, 0, new Color(0, 0, 0, 0.4f), 6), r);
-		var well = new Rect2(7, 7, 78, 78);
+		var well = new Rect2(7, 19, 54, 54);
 		DrawStyleBox(UiTheme.Box(new Color(0.01f, 0.03f, 0.05f, 1), new Color(1, 1, 1, 0.06f), 1, 8, 0, 0), well);
 		var mod = _affordable ? Colors.White : new Color(0.5f, 0.5f, 0.55f, 0.7f);
 		var size = _icon.GetSize() * View.PixelWorld.Scale;
 		DrawTextureRect(_icon, new Rect2((well.GetCenter() - size / 2).Floor(), size), false, mod);
 		var words = Def.Name.ToUpperInvariant().Split(' ', 2);
 		for (var i = 0; i < words.Length; i++)
-			DrawString(UiTheme.PixelFont, new Vector2(96, 24 + i * 15), words[i], HorizontalAlignment.Left, Size.X - 100, 11, _affordable ? UiTheme.TextColor : UiTheme.Dim);
-		DrawString(UiTheme.PixelBold, new Vector2(96, 72), $"${Def.Cost}", HorizontalAlignment.Left, -1, 22, _affordable ? UiTheme.Gold : UiTheme.Red);
-		DrawRect(new Rect2(96, 80, 40, 3), new Color(Def.Color, _affordable ? 0.9f : 0.3f));
+			DrawString(UiTheme.PixelFont, new Vector2(TextLeft, 22 + i * 19), words[i], HorizontalAlignment.Left, Size.X - TextLeft - 4, NameSize, _affordable ? UiTheme.TextColor : UiTheme.Dim);
+		DrawString(UiTheme.PixelBold, new Vector2(TextLeft, 72), $"${Def.Cost}", HorizontalAlignment.Left, -1, UiTheme.PixelNormal, _affordable ? UiTheme.Gold : UiTheme.Red);
+		DrawRect(new Rect2(TextLeft, 80, 40, 3), new Color(Def.Color, _affordable ? 0.9f : 0.3f));
 		DrawRect(new Rect2(Size.X - 26, Size.Y - 26, 18, 18), new Color(1, 1, 1, 0.08f));
-		DrawString(UiTheme.PixelFont, new Vector2(Size.X - 22, Size.Y - 12), _hotkey.ToString(), HorizontalAlignment.Left, -1, 13, UiTheme.Dim);
+		DrawString(UiTheme.PixelFont, new Vector2(Size.X - 22, Size.Y - 12), _hotkey.ToString(), HorizontalAlignment.Left, -1, UiTheme.PixelSmall, UiTheme.Dim);
 	}
 }

@@ -12,7 +12,7 @@ namespace HardwareDefence.Editor;
 /// </summary>
 public partial class WaveTimeline : Control
 {
-	const float LabelWidth = 170;
+	public const float LabelWidth = 280;
 	const float HeaderHeight = 30;
 	const float Snap = 0.25f;
 
@@ -138,8 +138,8 @@ public partial class WaveTimeline : Control
 			DrawRect(new Rect2(0, y, Size.X, LaneHeight), i % 2 == 0 ? new Color(1, 1, 1, 0.025f) : new Color(0, 0, 0, 0));
 			DrawLine(new Vector2(0, y), new Vector2(Size.X, y), new Color(UiTheme.Cyan, 0.12f));
 			var count = Spawns.Count(s => s.Enemy == Types[i].Id);
-			DrawString(font, new Vector2(54, y + LaneHeight / 2 - 2), Types[i].Name.ToUpperInvariant(), HorizontalAlignment.Left, LabelWidth - 58, 11, UiTheme.TextColor);
-			DrawString(font, new Vector2(54, y + LaneHeight / 2 + 14), $"x{count}  hp {Types[i].MaxHp}", HorizontalAlignment.Left, LabelWidth - 58, 10, count > 0 ? UiTheme.Gold : UiTheme.Dim);
+			DrawString(font, new Vector2(54, y + LaneHeight / 2 - 2), Types[i].Name.ToUpperInvariant(), HorizontalAlignment.Left, LabelWidth - 58, UiTheme.PixelSmall, UiTheme.TextColor);
+			DrawString(font, new Vector2(54, y + LaneHeight / 2 + 18), $"x{count}  hp {Types[i].MaxHp}", HorizontalAlignment.Left, LabelWidth - 58, UiTheme.PixelSmall, count > 0 ? UiTheme.Gold : UiTheme.Dim);
 		}
 		DrawLine(new Vector2(LabelWidth, 0), new Vector2(LabelWidth, Size.Y), new Color(UiTheme.Cyan, 0.4f), 2);
 		// Time ruler.
@@ -149,7 +149,7 @@ public partial class WaveTimeline : Control
 		{
 			var x = XAt(t);
 			DrawLine(new Vector2(x, HeaderHeight - 6), new Vector2(x, Size.Y), new Color(1, 1, 1, t % 30 == 0 ? 0.18f : 0.07f));
-			DrawString(font, new Vector2(x + 3, HeaderHeight - 10), $"{t:0}s", HorizontalAlignment.Left, -1, 11, UiTheme.Dim);
+			DrawString(font, new Vector2(x + 3, HeaderHeight - 10), $"{t:0}s", HorizontalAlignment.Left, -1, UiTheme.PixelSmall, UiTheme.Dim);
 		}
 		// Spawns.
 		foreach (var s in Spawns)
@@ -176,7 +176,7 @@ public partial class WaveTimeline : Control
 			DrawLine(new Vector2(x, HeaderHeight), new Vector2(x, Size.Y), new Color(UiTheme.Gold, 0.5f), 1);
 			var lane = LaneAt(_mouse.Y);
 			DrawRect(new Rect2(LabelWidth, HeaderHeight + lane * LaneHeight, Size.X - LabelWidth, LaneHeight), new Color(UiTheme.Gold, 0.05f));
-			DrawString(font, new Vector2(x + 4, HeaderHeight + 12), $"{t:0.00}s", HorizontalAlignment.Left, -1, 11, UiTheme.Gold);
+			DrawString(font, new Vector2(x + 4, HeaderHeight + 18), $"{t:0.00}s", HorizontalAlignment.Left, -1, UiTheme.PixelSmall, UiTheme.Gold);
 		}
 	}
 }

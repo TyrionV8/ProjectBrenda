@@ -112,7 +112,7 @@ public partial class LevelEditor : Control
 			box.AddChild(b);
 		}
 		var grid = new CheckBox { Text = "Grid", ButtonPressed = true };
-		grid.AddThemeFontSizeOverride("font_size", 14);
+		grid.AddThemeFontSizeOverride("font_size", UiTheme.PixelSmall);
 		grid.Toggled += on => _canvas.ShowGrid = on;
 		box.AddChild(grid);
 		var undo = Ui.HBox(4);
@@ -142,8 +142,13 @@ public partial class LevelEditor : Control
 		var left = Grid.Origin.X + Grid.Size.X;
 		var panel = new PanelContainer { ThemeTypeVariation = "SidePanel", Position = new Vector2(left, 0), Size = new Vector2(1366 - left, 768) };
 		AddChild(panel);
+		panel.AddThemeStyleboxOverride("panel", UiTheme.Box(new Color(0.02f, 0.05f, 0.09f, 0.96f), new Color(UiTheme.Cyan, 0.25f), 0, 0, 8, 12));
+		// Text remains at its native pixel size; long help/property panels scroll.
+		var scroll = new ScrollContainer { HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled };
+		panel.AddChild(scroll);
 		var box = Ui.VBox(6);
-		panel.AddChild(box);
+		box.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+		scroll.AddChild(box);
 		_file = Ui.Label("", "SmallHeader", HorizontalAlignment.Center);
 		_file.AutowrapMode = TextServer.AutowrapMode.Arbitrary;
 		box.AddChild(_file);
@@ -271,7 +276,7 @@ public partial class LevelEditor : Control
 	static Label Help(string text)
 	{
 		var l = Ui.Label(text, "DimLabel");
-		l.AddThemeFontSizeOverride("font_size", 14);
+		l.AddThemeFontSizeOverride("font_size", UiTheme.BodySize);
 		l.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 		l.CustomMinimumSize = new Vector2(170, 0);
 		return l;
@@ -313,15 +318,10 @@ public partial class LevelEditor : Control
 		}
 
 		_syncing = true;
-		var size = Ui.HBox(4);
-		size.AddChild(Ui.Label("Size", "DimLabel"));
-		_w = new SpinBox { MinValue = 1, MaxValue = 12, Value = c.Size[0], CustomMinimumSize = new Vector2(60, 0), SizeFlagsHorizontal = SizeFlags.ExpandFill };
-		_h = new SpinBox { MinValue = 1, MaxValue = 12, Value = c.Size[1], CustomMinimumSize = new Vector2(60, 0), SizeFlagsHorizontal = SizeFlags.ExpandFill };
+		_w = Field(_toolPanel, "Width", 1, 12, 1, c.Size[0]);
+		_h = Field(_toolPanel, "Height", 1, 12, 1, c.Size[1]);
 		_w.ValueChanged += v => Apply(d => d.Size = new[] { (int)v, d.Size[1] });
 		_h.ValueChanged += v => Apply(d => d.Size = new[] { d.Size[0], (int)v });
-		size.AddChild(_w);
-		size.AddChild(_h);
-		_toolPanel.AddChild(size);
 		_color = new OptionButton();
 		for (var i = 0; i < ComponentPresets.Colors.Length; i++)
 		{
@@ -407,7 +407,11 @@ public partial class LevelEditor : Control
 		box.AddChild(Ui.Label("FILL", "SmallHeader", HorizontalAlignment.Center));
 		var type = new OptionButton();
 		foreach (var e in Catalog.WaveEnemies)
-			type.AddItem(e.Name);
+		{
+			// The complete name remains in the tooltip; this caption fits the narrow editor column.
+			type.AddItem(e.Name == "Man-in-the-Middle" ? "Man in Middle" : e.Name);
+			type.SetItemTooltip(type.ItemCount - 1, e.Name);
+		}
 		box.AddChild(type);
 		var count = Field(box, "Count", 1, 60, 1, 8);
 		var every = Field(box, "Every (s)", 0.25, 20, 0.25, 1.5);

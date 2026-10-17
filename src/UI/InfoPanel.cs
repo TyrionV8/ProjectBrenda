@@ -36,10 +36,10 @@ public partial class InfoPanel : PanelContainer
 	{
 		var box = Ui.VBox(4);
 		AddChild(box);
-		box.AddChild(Ui.Label(_versus ? "TIME LEFT" : "LEVEL", "SmallHeader", HorizontalAlignment.Center));
+		box.AddChild(Ui.Label(_versus ? "TIME" : "LEVEL", "SmallHeader", HorizontalAlignment.Center));
 		_top = Ui.Label(_versus ? "5:00" : (_levelNumber > 0 ? _levelNumber.ToString() : "-"), "ValueLabel", HorizontalAlignment.Center);
 		if (_versus)
-			_top.AddThemeFontSizeOverride("font_size", 28);
+			_top.AddThemeFontSizeOverride("font_size", UiTheme.PixelNormal);
 		box.AddChild(_top);
 		box.AddChild(Ui.Spacer(6));
 		box.AddChild(Ui.Label(_versus ? "ATTACKER" : "WAVE", "SmallHeader", HorizontalAlignment.Center));
@@ -50,7 +50,7 @@ public partial class InfoPanel : PanelContainer
 			box.AddChild(_energyBar);
 		}
 		_middle = Ui.Label("1/1", "ValueLabel", HorizontalAlignment.Center);
-		_middle.AddThemeFontSizeOverride("font_size", _versus ? 15 : 28);
+		_middle.AddThemeFontSizeOverride("font_size", _versus ? UiTheme.PixelSmall : UiTheme.PixelNormal);
 		_middle.ClipText = true;
 		if (_versus)
 			_middle.AddThemeColorOverride("font_color", UiTheme.Magenta);
@@ -61,7 +61,7 @@ public partial class InfoPanel : PanelContainer
 		_status.CustomMinimumSize = new Vector2(0, 44);
 		box.AddChild(_status);
 		box.AddChild(Ui.Divider());
-		box.AddChild(Ui.Label(_versus ? "ON THE BOARD" : "INCOMING", "SmallHeader", HorizontalAlignment.Center));
+		box.AddChild(Ui.Label(_versus ? "ON BOARD" : "INCOMING", "SmallHeader", HorizontalAlignment.Center));
 		_queue = Ui.VBox(2);
 		box.AddChild(_queue);
 		box.AddChild(Ui.Spacer(0, true));
@@ -84,7 +84,7 @@ public partial class InfoPanel : PanelContainer
 			var t = Mathf.CeilToInt(s.TimeLeft);
 			_top.Text = $"{t / 60}:{t % 60:00}";
 			_top.AddThemeColorOverride("font_color", t <= 30 ? UiTheme.Gold : UiTheme.Cyan);
-			_middle.Text = $"{Mathf.FloorToInt(s.Energy)}  +{s.EnergyRate:0.0}/s";
+			_middle.Text = $"{Mathf.FloorToInt(s.Energy)}\n+{s.EnergyRate:0.0}/s";
 			_status.Text = $"BUGS\n{s.Bugs.Count}";
 			_energyBar.QueueRedraw();
 		}
@@ -94,12 +94,12 @@ public partial class InfoPanel : PanelContainer
 			switch (s.WaveState)
 			{
 				case "countdown":
-					_status.Text = $"NEXT WAVE\n{Mathf.Max(s.Countdown, 0):0.0}";
+					_status.Text = $"NEXT\n{Mathf.Max(s.Countdown, 0):0.0}";
 					_status.Modulate = UiTheme.Cyan;
 					break;
 				case "spawning":
 				case "waiting":
-					_status.Text = $"BUGS LEFT\n{s.Bugs.Count + s.Upcoming.Count}";
+					_status.Text = $"BUGS\n{s.Bugs.Count + s.Upcoming.Count}";
 					_status.Modulate = UiTheme.Red.Lerp(Colors.White, 0.3f);
 					break;
 				default:

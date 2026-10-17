@@ -46,7 +46,7 @@ public partial class LevelSelect : Control
 		var title = Ui.Label($"{index + 1}. {level.Title.ToUpperInvariant()}", "SmallHeader", HorizontalAlignment.Center);
 		title.AddThemeColorOverride("font_color", unlocked ? UiTheme.TextColor : UiTheme.Dim);
 		box.AddChild(title);
-		box.AddChild(new LevelPreview(level, !unlocked, new Vector2(252, 192)));
+		box.AddChild(new LevelPreview(level, !unlocked, new Vector2(252, 144)));
 		var stars = index < GameState.Stars.Count ? GameState.Stars[index] : 0;
 		var info = Ui.HBox(8);
 		info.Alignment = BoxContainer.AlignmentMode.Center;

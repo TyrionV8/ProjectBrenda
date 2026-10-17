@@ -14,24 +14,38 @@ public static class UiTheme
 	public static readonly Color Dim = new("7f9bb0");
 	public static readonly Color Panel = new(0.03f, 0.07f, 0.12f, 0.92f);
 
-	public static readonly Font BodyFont = GD.Load<Font>("res://assets/fonts/ShareTechMono-Regular.ttf");
+	// Silkscreen: 1000 units/em, a 125-unit pixel => screen pixel = font size / 8.
+	// VT323 (Google Fonts, measured with fontTools): 1000 units/em; structural
+	// pixels repeat every 80 units. Its CRT-like contours have small curved bulges,
+	// so the contour-coordinate gcd is NOT the structural pixel grid.
+	// Screen pixels per structural pixel = font size * 80 / 1000.
+	// Integer font sizes therefore use multiples of 25 (25 => 2 px, 50 => 4 px).
+	public const int PixelTiny = 8; // Only miniature component markings use the 1 px grid.
+	public const int PixelSmall = 16;
+	public const int PixelNormal = 24; // 3 screen pixels, like the board's art grid.
+	public const int PixelHeader = 32;
+	public const int PixelLarge = 48;
+	public const int PixelTitle = 64;
+	public const int BodySize = 25;
+	public static readonly Font BodyFont = GD.Load<Font>("res://assets/fonts/VT323-Regular.ttf");
 	public static readonly Font PixelFont = GD.Load<Font>("res://assets/fonts/Silkscreen-Regular.ttf");
 	public static readonly Font PixelBold = GD.Load<Font>("res://assets/fonts/Silkscreen-Bold.ttf");
 
 	public static Theme Build()
 	{
-		var t = new Theme { DefaultFont = BodyFont, DefaultFontSize = 20 };
+		var t = new Theme { DefaultFont = PixelFont, DefaultFontSize = PixelSmall };
 		t.SetColor("font_color", "Label", TextColor);
+		LabelVariation(t, "BodyLabel", BodyFont, BodySize, TextColor);
 
-		LabelVariation(t, "TitleLabel", PixelBold, 64, Cyan);
-		LabelVariation(t, "HeaderLabel", PixelBold, 28, TextColor);
-		LabelVariation(t, "SmallHeader", PixelFont, 14, Dim);
-		LabelVariation(t, "ValueLabel", PixelBold, 34, Cyan);
-		LabelVariation(t, "MoneyLabel", PixelBold, 34, Gold);
-		LabelVariation(t, "DimLabel", BodyFont, 18, Dim);
+		LabelVariation(t, "TitleLabel", PixelBold, PixelTitle, Cyan);
+		LabelVariation(t, "HeaderLabel", PixelBold, PixelHeader, TextColor);
+		LabelVariation(t, "SmallHeader", PixelFont, PixelSmall, Dim);
+		LabelVariation(t, "ValueLabel", PixelBold, PixelHeader, Cyan);
+		LabelVariation(t, "MoneyLabel", PixelBold, PixelHeader, Gold);
+		LabelVariation(t, "DimLabel", BodyFont, BodySize, Dim);
 
 		t.SetFont("font", "Button", PixelFont);
-		t.SetFontSize("font_size", "Button", 20);
+		t.SetFontSize("font_size", "Button", PixelSmall);
 		t.SetColor("font_color", "Button", TextColor);
 		t.SetColor("font_hover_color", "Button", Colors.White);
 		t.SetColor("font_pressed_color", "Button", new Color("061018"));
@@ -44,7 +58,7 @@ public static class UiTheme
 		t.SetStylebox("focus", "Button", Box(new Color(0, 0, 0, 0), new Color(1, 1, 1, 0.7f), 2, 6, 18, 10));
 
 		Variation(t, "BigButton", "Button");
-		t.SetFontSize("font_size", "BigButton", 26);
+		t.SetFontSize("font_size", "BigButton", PixelNormal);
 		t.SetStylebox("normal", "BigButton", Box(new Color(0.04f, 0.12f, 0.2f, 0.9f), new Color(Cyan, 0.5f), 2, 8, 28, 14));
 		t.SetStylebox("hover", "BigButton", Box(new Color(0.07f, 0.22f, 0.33f, 0.95f), Cyan, 2, 8, 28, 14, new Color(Cyan, 0.4f), 14));
 		t.SetStylebox("pressed", "BigButton", Box(Cyan, Cyan, 2, 8, 28, 14, new Color(Cyan, 0.5f), 18));
@@ -56,7 +70,7 @@ public static class UiTheme
 		t.SetStylebox("pressed", "DangerButton", Box(Red, Red, 2, 6, 18, 10));
 
 		Variation(t, "ToolButton", "Button");
-		t.SetFontSize("font_size", "ToolButton", 12);
+		t.SetFontSize("font_size", "ToolButton", PixelSmall);
 		t.SetStylebox("normal", "ToolButton", Box(new Color(0.04f, 0.1f, 0.16f, 0.9f), new Color(Cyan, 0.25f), 1, 4, 5, 6));
 		t.SetStylebox("hover", "ToolButton", Box(new Color(0.07f, 0.2f, 0.3f, 0.95f), Cyan, 1, 4, 5, 6));
 		t.SetStylebox("pressed", "ToolButton", Box(new Color(Cyan, 0.85f), Cyan, 1, 4, 5, 6));
@@ -82,7 +96,7 @@ public static class UiTheme
 		t.SetIcon("grabber_highlight", "HSlider", Dot(22, Colors.White));
 
 		t.SetFont("font", "CheckBox", PixelFont);
-		t.SetFontSize("font_size", "CheckBox", 18);
+		t.SetFontSize("font_size", "CheckBox", PixelSmall);
 		t.SetColor("font_color", "CheckBox", TextColor);
 		t.SetColor("font_hover_color", "CheckBox", Colors.White);
 		t.SetColor("font_pressed_color", "CheckBox", Cyan);
@@ -100,17 +114,22 @@ public static class UiTheme
 		t.SetStylebox("hover", "OptionButton", Box(new Color(0.07f, 0.22f, 0.33f, 0.95f), Cyan, 1, 4, 10, 6));
 		t.SetStylebox("pressed", "OptionButton", Box(new Color(0.07f, 0.22f, 0.33f, 0.95f), Cyan, 1, 4, 10, 6));
 		t.SetFont("font", "OptionButton", BodyFont);
-		t.SetFontSize("font_size", "OptionButton", 18);
+		t.SetFontSize("font_size", "OptionButton", BodySize);
 		t.SetStylebox("panel", "PopupMenu", Box(Panel, new Color(Cyan, 0.35f), 1, 4, 6, 6));
 		t.SetStylebox("panel", "TooltipPanel", Box(new Color(0.02f, 0.05f, 0.09f, 0.97f), new Color(Cyan, 0.5f), 1, 4, 10, 8));
 		t.SetColor("font_color", "TooltipLabel", TextColor);
-		t.SetFontSize("font_size", "TooltipLabel", 16);
+		foreach (var type in new[] { "LineEdit", "TextEdit", "PopupMenu", "TooltipLabel" })
+		{
+			t.SetFont("font", type, BodyFont);
+			t.SetFontSize("font_size", type, BodySize);
+		}
+		t.SetFontSize("font_size", "TooltipLabel", BodySize);
 		t.SetStylebox("panel", "TabContainer", Box(new Color(0.03f, 0.07f, 0.12f, 0.9f), new Color(Cyan, 0.25f), 1, 4, 10, 10));
 		t.SetStylebox("tab_selected", "TabContainer", Box(new Color(0.07f, 0.22f, 0.33f, 1), Cyan, 1, 4, 14, 6));
 		t.SetStylebox("tab_unselected", "TabContainer", Box(new Color(0.03f, 0.07f, 0.12f, 1), new Color(Cyan, 0.25f), 1, 4, 14, 6));
 		t.SetStylebox("tab_hovered", "TabContainer", Box(new Color(0.05f, 0.14f, 0.22f, 1), new Color(Cyan, 0.6f), 1, 4, 14, 6));
 		t.SetFont("font", "TabContainer", PixelFont);
-		t.SetFontSize("font_size", "TabContainer", 14);
+		t.SetFontSize("font_size", "TabContainer", PixelSmall);
 		return t;
 	}
 

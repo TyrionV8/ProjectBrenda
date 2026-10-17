@@ -20,7 +20,9 @@ public partial class LevelPreview : Control
 
 	public override void _Draw()
 	{
-		var k = Size.X / Grid.Size.X;
+		// Fit both dimensions: shrinking the selection cards must not paint over their captions.
+		var k = Mathf.Min(Size.X / Grid.Size.X, Size.Y / Grid.Size.Y);
+		DrawSetTransform(((Size - Grid.Size * k) / 2).Floor());
 		var theme = BoardTheme.Get(_level.Theme);
 		var board = new Rect2(Vector2.Zero, Grid.Size * k);
 		DrawRect(board, _locked ? new Color("1a2230") : theme.Center);

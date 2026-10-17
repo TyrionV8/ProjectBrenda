@@ -88,8 +88,7 @@ public partial class Hud : CanvasLayer
 		label.Modulate = UiTheme.Red;
 		CreateTween().TweenProperty(label, "modulate", Colors.White, 0.5f);
 		label.PivotOffset = label.Size / 2;
-		label.Scale = Vector2.One * 1.25f;
-		CreateTween().TweenProperty(label, "scale", Vector2.One, 0.25f).SetTrans(Tween.TransitionType.Back);
+
 	}
 
 	public void BugSent(EnemyDef def) => _bugSlots.Find(s => s.Def == def)?.Sent();
@@ -108,10 +107,9 @@ public partial class Hud : CanvasLayer
 	{
 		_banner.Text = text;
 		_bannerSub.Text = sub;
-		_banner.Scale = new Vector2(1.4f, 1.4f);
+		_banner.Scale = Vector2.One;
 		var tween = CreateTween().SetParallel();
 		tween.TweenProperty(_banner, "modulate:a", 1f, 0.25f);
-		tween.TweenProperty(_banner, "scale", Vector2.One, 0.35f).SetTrans(Tween.TransitionType.Back).SetEase(Tween.EaseType.Out);
 		tween.TweenProperty(_bannerSub, "modulate:a", 1f, 0.3f).SetDelay(0.15f);
 		tween.Chain().TweenInterval(1.1f);
 		tween.Chain().TweenProperty(_banner, "modulate:a", 0f, 0.4f);
@@ -158,7 +156,7 @@ public partial class Hud : CanvasLayer
 
 	Control BossBar()
 	{
-		var bar = new Control { CustomMinimumSize = new Vector2(0, 44), MouseFilter = Control.MouseFilterEnum.Ignore, Visible = false };
+		var bar = new Control { CustomMinimumSize = new Vector2(0, 64), MouseFilter = Control.MouseFilterEnum.Ignore, Visible = false };
 		bar.Draw += DrawBossBar;
 		return bar;
 	}
@@ -170,10 +168,15 @@ public partial class Hud : CanvasLayer
 		var size = _bossBar.Size;
 		var name = _bossDisguised ? "FREE_RAM.EXE" : (_boss.Title ?? _boss.Name).ToUpperInvariant();
 		var color = _bossDisguised ? UiTheme.Green : UiTheme.Red;
-		var fontSize = size.X > 300 ? 16 : 11;
-		_bossBar.DrawStringOutline(UiTheme.PixelBold, new Vector2(0, 14), name, HorizontalAlignment.Center, size.X, fontSize, 6, new Color(0, 0, 0, 0.9f));
-		_bossBar.DrawString(UiTheme.PixelBold, new Vector2(0, 14), name, HorizontalAlignment.Center, size.X, fontSize, color);
-		var bar = new Rect2(0, 22, size.X, 15);
+		var fontSize = UiTheme.PixelSmall;
+		var lines = size.X > 300 ? new[] { name } : Ui.WrapText(UiTheme.PixelBold, name.Replace('-', ' '), fontSize, size.X);
+		for (var i = 0; i < lines.Length; i++)
+		{
+			var baseline = new Vector2(0, 14 + i * 18);
+			_bossBar.DrawStringOutline(UiTheme.PixelBold, baseline, lines[i], HorizontalAlignment.Center, size.X, fontSize, 6, new Color(0, 0, 0, 0.9f));
+			_bossBar.DrawString(UiTheme.PixelBold, baseline, lines[i], HorizontalAlignment.Center, size.X, fontSize, color);
+		}
+		var bar = new Rect2(0, size.X > 300 ? 22 : 44, size.X, 15);
 		_bossBar.DrawRect(bar.Grow(3), new Color(0, 0, 0, 0.75f));
 		var segments = size.X > 300 ? 30 : 15;
 		var w = (bar.Size.X - (segments - 1) * 3) / segments;
@@ -200,12 +203,12 @@ public partial class Hud : CanvasLayer
 		var box = Ui.VBox(16);
 		panel.AddChild(box);
 		var t = Ui.Label(title, "TitleLabel", HorizontalAlignment.Center);
-		t.AddThemeFontSizeOverride("font_size", 44);
+		t.AddThemeFontSizeOverride("font_size", UiTheme.PixelLarge);
 		t.AddThemeColorOverride("font_color", titleColor);
 		box.AddChild(t);
 		if (stars > 0)
 			box.AddChild(new StarRow(stars, 46) { SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter });
-		var m = Ui.Label(message, "", HorizontalAlignment.Center);
+		var m = Ui.Label(message, "BodyLabel", HorizontalAlignment.Center);
 		m.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 		box.AddChild(m);
 		var row = Ui.HBox(16);
@@ -316,12 +319,12 @@ public partial class Hud : CanvasLayer
 		_cancel.Position = new Vector2(centerX - 100, 768 - 70);
 		_cancel.Visible = false;
 		AddChild(_cancel);
-		_hint = OverlayLabel("SmallHeader", 16, 24);
+		_hint = OverlayLabel("BodyLabel", 12, 40);
 		_hint.Visible = false;
 		_banner = OverlayLabel("TitleLabel", 250, 80);
 		_banner.PivotOffset = _banner.Size / 2;
 		_banner.Modulate = new Color(1, 1, 1, 0);
-		_bannerSub = OverlayLabel("HeaderLabel", 330, 60);
+		_bannerSub = OverlayLabel("BodyLabel", 330, 90);
 		_bannerSub.Modulate = new Color(1, 1, 1, 0);
 		_bannerSub.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 		if (_bossBar == null)
@@ -338,8 +341,8 @@ public partial class Hud : CanvasLayer
 		var panel = new PanelContainer();
 		var box = Ui.VBox(16);
 		panel.AddChild(box);
-		_waitingText = Ui.Label("", "HeaderLabel", HorizontalAlignment.Center);
-		_waitingText.AddThemeFontSizeOverride("font_size", 20);
+		_waitingText = Ui.Label("", "BodyLabel", HorizontalAlignment.Center);
+		_waitingText.AddThemeFontSizeOverride("font_size", UiTheme.BodySize);
 		box.AddChild(_waitingText);
 		var leave = Ui.Button("Leave", () => _screen.Leave(), "DangerButton");
 		leave.SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter;

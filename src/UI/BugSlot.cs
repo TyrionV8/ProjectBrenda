@@ -66,11 +66,15 @@ public partial class BugSlot : Button
 			bg = bg.Lightened(0.08f);
 		var border = ready ? new Color(UiTheme.Magenta, hovered ? 0.8f : 0.35f) : new Color(1, 1, 1, 0.1f);
 		DrawStyleBox(UiTheme.Box(bg, border, 2, 8, 0, 0, new Color(0, 0, 0, 0.4f), 6), new Rect2(Vector2.Zero, Size));
-		DrawString(UiTheme.PixelFont, new Vector2(60, 21), Def.Name.ToUpperInvariant(), HorizontalAlignment.Left, Size.X - 66, 11, ready ? UiTheme.TextColor : UiTheme.Dim);
-		DrawString(UiTheme.PixelBold, new Vector2(60, 45), Def.VersusCost.ToString(), HorizontalAlignment.Left, -1, 20, ready ? UiTheme.Magenta : UiTheme.Dim);
+		var name = Def.Name.ToUpperInvariant();
+		var lines = UiTheme.PixelFont.GetStringSize(name, fontSize: UiTheme.PixelSmall).X <= Size.X - 60
+			? new[] { name } : name.Split(' ', 2);
+		for (var i = 0; i < lines.Length; i++)
+			DrawString(UiTheme.PixelFont, new Vector2(54, 16 + i * 17), lines[i], HorizontalAlignment.Left, Size.X - 58, UiTheme.PixelSmall, ready ? UiTheme.TextColor : UiTheme.Dim);
+		DrawString(UiTheme.PixelBold, new Vector2(54, 53), Def.VersusCost.ToString(), HorizontalAlignment.Left, -1, UiTheme.PixelSmall, ready ? UiTheme.Magenta : UiTheme.Dim);
 		if (locked)
-			DrawString(UiTheme.PixelFont, new Vector2(108, 45), _blocked.Replace("Unlocks in ", ""), HorizontalAlignment.Left, -1, 13, UiTheme.Gold);
-		DrawString(UiTheme.PixelFont, new Vector2(Size.X - 18, Size.Y - 8), _hotkey.ToString(), HorizontalAlignment.Left, -1, 12, UiTheme.Dim);
+			DrawString(UiTheme.PixelFont, new Vector2(96, 53), _blocked.Replace("Unlocks in ", ""), HorizontalAlignment.Left, -1, UiTheme.PixelSmall, UiTheme.Gold);
+		DrawString(UiTheme.PixelFont, new Vector2(Size.X - 18, Size.Y - 8), _hotkey.ToString(), HorizontalAlignment.Left, -1, UiTheme.PixelSmall, UiTheme.Dim);
 		if (locked)
 			DrawRect(new Rect2(Vector2.Zero, Size), new Color(0, 0, 0, 0.35f));
 	}

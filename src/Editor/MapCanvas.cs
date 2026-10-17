@@ -348,8 +348,8 @@ public partial class MapCanvas : Node2D
 			_overlay.DrawCircle(p, 11, new Color(0, 0, 0, 0.7f));
 			_overlay.DrawArc(p, 11, 0, Mathf.Tau, 24, last ? HardwareDefence.UI.UiTheme.Cyan : i == 0 ? HardwareDefence.UI.UiTheme.Red : HardwareDefence.UI.UiTheme.Gold, 2, true);
 			var text = (i + 1).ToString();
-			var w = font.GetStringSize(text, HorizontalAlignment.Left, -1, 11).X;
-			_overlay.DrawString(font, p + new Vector2(-w / 2, 4), text, HorizontalAlignment.Left, -1, 11, Colors.White);
+			var w = font.GetStringSize(text, HorizontalAlignment.Left, -1, HardwareDefence.UI.UiTheme.PixelSmall).X;
+			_overlay.DrawString(font, p + new Vector2(-w / 2, 4), text, HorizontalAlignment.Left, -1, HardwareDefence.UI.UiTheme.PixelSmall, Colors.White);
 		}
 		if (!_inside)
 			return;

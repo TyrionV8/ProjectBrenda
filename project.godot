@@ -38,7 +38,7 @@ project/assembly_name="HardwareDefence"
 [gui]
 
 theme/custom="res://assets/ui/theme.tres"
-theme/custom_font="res://assets/fonts/ShareTechMono-Regular.ttf"
+theme/custom_font="res://assets/fonts/Silkscreen-Regular.ttf"
 
 [input]
 

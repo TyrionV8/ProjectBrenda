@@ -19,7 +19,7 @@ public partial class ComponentButton : Button
 		_sample = new ComponentData { Type = type, Size = new[] { kind.DefaultSize.X, kind.DefaultSize.Y }, Label = type == "label" ? "TEXT" : null };
 		Flat = true;
 		FocusMode = FocusModeEnum.None;
-		CustomMinimumSize = new Vector2(88, 70);
+		CustomMinimumSize = new Vector2(80, 70);
 		TooltipText = kind.Name;
 		TextureFilter = TextureFilterEnum.Nearest;
 	}
@@ -44,7 +44,15 @@ public partial class ComponentButton : Button
 		if (k >= 1)
 			k = Mathf.Floor(k);
 		DrawTextureRect(tex, new Rect2((new Vector2(5, 4) + (area - size * k) / 2).Floor(), size * k), false);
-		var name = ComponentTypes.Get(Type).Name.ToUpperInvariant();
-		DrawString(UiTheme.PixelFont, new Vector2(4, Size.Y - 5), name, HorizontalAlignment.Center, Size.X - 8, 8, UiTheme.TextColor);
+		// Compact captions stay readable at the native 1 px font grid; tooltip keeps the full name.
+		var name = Type switch
+		{
+			"capacitor" => "CAPACITOR",
+			"fingers" => "EDGE CONN.",
+			"label" => "TEXT",
+			"hole" => "MOUNT HOLE",
+			_ => ComponentTypes.Get(Type).Name.ToUpperInvariant(),
+		};
+		DrawString(UiTheme.PixelFont, new Vector2(4, Size.Y - 5), name, HorizontalAlignment.Center, Size.X - 8, UiTheme.PixelTiny, UiTheme.TextColor);
 	}
 }

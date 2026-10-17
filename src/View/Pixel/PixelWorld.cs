@@ -12,7 +12,7 @@ namespace HardwareDefence.View;
 public partial class PixelWorld : SubViewportContainer
 {
 	/// <summary>Screen pixels per art pixel.</summary>
-	public const int Scale = 3;
+	public new const int Scale = 3;
 
 	static Shader _upscale;
 

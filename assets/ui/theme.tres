@@ -1,7 +1,7 @@
-[gd_resource type="Theme" load_steps=51 format=3]
+[gd_resource type="Theme" format=3]
 
 [ext_resource type="FontFile" path="res://assets/fonts/Silkscreen-Regular.ttf" id="1_fenpc"]
-[ext_resource type="FontFile" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="2_omlnh"]
+[ext_resource type="FontFile" path="res://assets/fonts/VT323-Regular.ttf" id="1_omlnh"]
 [ext_resource type="FontFile" path="res://assets/fonts/Silkscreen-Bold.ttf" id="3_lvrds"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fenpc"]
@@ -642,20 +642,24 @@ corner_radius_bottom_left = 4
 shadow_color = Color(0, 0, 0, 0)
 
 [resource]
-default_font = ExtResource("2_omlnh")
-default_font_size = 20
+default_font = ExtResource("1_fenpc")
+default_font_size = 16
 BigButton/base_type = &"Button"
-BigButton/font_sizes/font_size = 26
+BigButton/font_sizes/font_size = 24
 BigButton/styles/disabled = SubResource("StyleBoxFlat_fenpc")
 BigButton/styles/hover = SubResource("StyleBoxFlat_omlnh")
 BigButton/styles/normal = SubResource("StyleBoxFlat_lvrds")
 BigButton/styles/pressed = SubResource("StyleBoxFlat_im0sm")
+BodyLabel/base_type = &"Label"
+BodyLabel/colors/font_color = Color(0.84705883, 0.9647059, 1, 1)
+BodyLabel/font_sizes/font_size = 25
+BodyLabel/fonts/font = ExtResource("1_omlnh")
 Button/colors/font_color = Color(0.84705883, 0.9647059, 1, 1)
 Button/colors/font_disabled_color = Color(0.5, 0.58, 0.65, 0.6)
 Button/colors/font_focus_color = Color(1, 1, 1, 1)
 Button/colors/font_hover_color = Color(1, 1, 1, 1)
 Button/colors/font_pressed_color = Color(0.023529412, 0.0627451, 0.09411765, 1)
-Button/font_sizes/font_size = 20
+Button/font_sizes/font_size = 16
 Button/fonts/font = ExtResource("1_fenpc")
 Button/styles/disabled = SubResource("StyleBoxFlat_7h6bm")
 Button/styles/focus = SubResource("StyleBoxFlat_86uey")
@@ -668,7 +672,7 @@ CheckBox/colors/font_color = Color(0.84705883, 0.9647059, 1, 1)
 CheckBox/colors/font_hover_color = Color(1, 1, 1, 1)
 CheckBox/colors/font_hover_pressed_color = Color(0.24313726, 0.9411765, 1, 1)
 CheckBox/colors/font_pressed_color = Color(0.24313726, 0.9411765, 1, 1)
-CheckBox/font_sizes/font_size = 18
+CheckBox/font_sizes/font_size = 16
 CheckBox/fonts/font = ExtResource("1_fenpc")
 CheckBox/icons/checked = SubResource("ImageTexture_urds4")
 CheckBox/icons/unchecked = SubResource("ImageTexture_5qnlr")
@@ -684,8 +688,8 @@ DangerButton/styles/normal = SubResource("StyleBoxFlat_yuyab")
 DangerButton/styles/pressed = SubResource("StyleBoxFlat_oam8o")
 DimLabel/base_type = &"Label"
 DimLabel/colors/font_color = Color(0.49803922, 0.60784316, 0.6901961, 1)
-DimLabel/font_sizes/font_size = 18
-DimLabel/fonts/font = ExtResource("2_omlnh")
+DimLabel/font_sizes/font_size = 25
+DimLabel/fonts/font = ExtResource("1_omlnh")
 HSlider/icons/grabber = SubResource("ImageTexture_tb1mf")
 HSlider/icons/grabber_highlight = SubResource("ImageTexture_y7wg7")
 HSlider/styles/grabber_area = SubResource("StyleBoxFlat_pk2vs")
@@ -693,36 +697,42 @@ HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_mw5fd")
 HSlider/styles/slider = SubResource("StyleBoxFlat_mkrm2")
 HeaderLabel/base_type = &"Label"
 HeaderLabel/colors/font_color = Color(0.84705883, 0.9647059, 1, 1)
-HeaderLabel/font_sizes/font_size = 28
+HeaderLabel/font_sizes/font_size = 32
 HeaderLabel/fonts/font = ExtResource("3_lvrds")
 Label/colors/font_color = Color(0.84705883, 0.9647059, 1, 1)
+LineEdit/font_sizes/font_size = 25
+LineEdit/fonts/font = ExtResource("1_omlnh")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_hvi5t")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_8h5op")
 MoneyLabel/base_type = &"Label"
 MoneyLabel/colors/font_color = Color(1, 0.827451, 0.3019608, 1)
-MoneyLabel/font_sizes/font_size = 34
+MoneyLabel/font_sizes/font_size = 32
 MoneyLabel/fonts/font = ExtResource("3_lvrds")
-OptionButton/font_sizes/font_size = 18
-OptionButton/fonts/font = ExtResource("2_omlnh")
+OptionButton/font_sizes/font_size = 25
+OptionButton/fonts/font = ExtResource("1_omlnh")
 OptionButton/styles/hover = SubResource("StyleBoxFlat_vets7")
 OptionButton/styles/normal = SubResource("StyleBoxFlat_73lq4")
 OptionButton/styles/pressed = SubResource("StyleBoxFlat_ftr7c")
 Panel/styles/panel = SubResource("StyleBoxFlat_cjkfm")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_cjkfm")
+PopupMenu/font_sizes/font_size = 25
+PopupMenu/fonts/font = ExtResource("1_omlnh")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_ko5j6")
 SidePanel/base_type = &"PanelContainer"
 SidePanel/styles/panel = SubResource("StyleBoxFlat_jof8y")
 SmallHeader/base_type = &"Label"
 SmallHeader/colors/font_color = Color(0.49803922, 0.60784316, 0.6901961, 1)
-SmallHeader/font_sizes/font_size = 14
+SmallHeader/font_sizes/font_size = 16
 SmallHeader/fonts/font = ExtResource("1_fenpc")
 SpinBox/styles/normal = SubResource("StyleBoxFlat_8h5op")
-TabContainer/font_sizes/font_size = 14
+TabContainer/font_sizes/font_size = 16
 TabContainer/fonts/font = ExtResource("1_fenpc")
 TabContainer/styles/panel = SubResource("StyleBoxFlat_vlrnd")
 TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_urtpa")
 TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_grl3q")
 TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_h3f68")
+TextEdit/font_sizes/font_size = 25
+TextEdit/fonts/font = ExtResource("1_omlnh")
 TitleLabel/base_type = &"Label"
 TitleLabel/colors/font_color = Color(0.24313726, 0.9411765, 1, 1)
 TitleLabel/font_sizes/font_size = 64
@@ -730,15 +740,16 @@ TitleLabel/fonts/font = ExtResource("3_lvrds")
 ToolButton/base_type = &"Button"
 ToolButton/colors/font_hover_pressed_color = Color(0.023529412, 0.0627451, 0.09411765, 1)
 ToolButton/colors/font_pressed_color = Color(0.023529412, 0.0627451, 0.09411765, 1)
-ToolButton/font_sizes/font_size = 12
+ToolButton/font_sizes/font_size = 16
 ToolButton/styles/disabled = SubResource("StyleBoxFlat_exavy")
 ToolButton/styles/hover = SubResource("StyleBoxFlat_n8k8s")
 ToolButton/styles/normal = SubResource("StyleBoxFlat_7xjk3")
 ToolButton/styles/pressed = SubResource("StyleBoxFlat_4agee")
 TooltipLabel/colors/font_color = Color(0.84705883, 0.9647059, 1, 1)
-TooltipLabel/font_sizes/font_size = 16
+TooltipLabel/font_sizes/font_size = 25
+TooltipLabel/fonts/font = ExtResource("1_omlnh")
 TooltipPanel/styles/panel = SubResource("StyleBoxFlat_vc3k2")
 ValueLabel/base_type = &"Label"
 ValueLabel/colors/font_color = Color(0.24313726, 0.9411765, 1, 1)
-ValueLabel/font_sizes/font_size = 34
+ValueLabel/font_sizes/font_size = 32
 ValueLabel/fonts/font = ExtResource("3_lvrds")

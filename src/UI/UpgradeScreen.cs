@@ -27,11 +27,11 @@ public partial class UpgradeScreen : Control
 
 		var header = Ui.HBox(16);
 		var title = Ui.Label("UPGRADES", "TitleLabel");
-		title.AddThemeFontSizeOverride("font_size", 52);
+		title.AddThemeFontSizeOverride("font_size", UiTheme.PixelLarge);
 		header.AddChild(title);
 		var next = Ui.Label($"next: {GameState.CurrentLevel + 1}. {level.Title.ToUpperInvariant()}", "HeaderLabel");
 		next.AddThemeColorOverride("font_color", UiTheme.Dim);
-		next.AddThemeFontSizeOverride("font_size", 22);
+		next.AddThemeFontSizeOverride("font_size", UiTheme.PixelSmall);
 		next.SizeFlagsVertical = SizeFlags.ShrinkEnd;
 		next.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		header.AddChild(next);
@@ -54,7 +54,10 @@ public partial class UpgradeScreen : Control
 
 		var cards = Ui.HBox(14);
 		cards.SizeFlagsVertical = SizeFlags.ExpandFill;
-		root.AddChild(cards);
+		var scroll = new ScrollContainer { HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled, SizeFlagsVertical = SizeFlags.ExpandFill };
+		cards.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+		scroll.AddChild(cards);
+		root.AddChild(scroll);
 		var list = new List<Control>();
 		foreach (var def in Catalog.Turrets)
 		{
@@ -96,12 +99,13 @@ public partial class UpgradeScreen : Control
 		box.AddChild(new TurretPreview(def) { SizeFlagsHorizontal = SizeFlags.ShrinkCenter });
 		var name = Ui.Label(def.Name.ToUpperInvariant(), "SmallHeader", HorizontalAlignment.Center);
 		name.AddThemeColorOverride("font_color", def.Color);
-		name.AddThemeFontSizeOverride("font_size", 15);
+		name.AddThemeFontSizeOverride("font_size", UiTheme.PixelSmall);
+		name.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 		box.AddChild(name);
 		var desc = Ui.Label(def.Description, "DimLabel", HorizontalAlignment.Center);
-		desc.AddThemeFontSizeOverride("font_size", 14);
+		desc.AddThemeFontSizeOverride("font_size", UiTheme.BodySize);
 		desc.AutowrapMode = TextServer.AutowrapMode.WordSmart;
-		desc.CustomMinimumSize = new Vector2(200, 54);
+		desc.CustomMinimumSize = new Vector2(200, 140);
 		box.AddChild(desc);
 		foreach (var up in def.Upgrades)
 		{

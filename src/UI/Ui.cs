@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using HardwareDefence.Autoload;
 using Godot;
 
@@ -22,7 +23,7 @@ public static class Ui
 			if (b.Disabled)
 				return;
 			Audio.Ui("hover");
-			Pop(b, 1.04f);
+			Pop(b, 1); // Keep pixel fonts on an integer scale on hover.
 		};
 		b.MouseExited += () => Pop(b, 1);
 		b.Resized += () => b.PivotOffset = b.Size / 2;
@@ -35,6 +36,27 @@ public static class Ui
 		if (variation != "")
 			l.ThemeTypeVariation = variation;
 		return l;
+	}
+
+	/// <summary>Wrap captions by measured glyph width while retaining their native pixel size.</summary>
+	public static string[] WrapText(Font font, string text, int size, float width)
+	{
+		var lines = new List<string>();
+		var line = "";
+		foreach (var word in text.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+		{
+			var next = line.Length == 0 ? word : $"{line} {word}";
+			if (line.Length > 0 && font.GetStringSize(next, fontSize: size).X > width)
+			{
+				lines.Add(line);
+				line = word;
+			}
+			else
+				line = next;
+		}
+		if (line.Length > 0)
+			lines.Add(line);
+		return lines.ToArray();
 	}
 
 	public static VBoxContainer VBox(int separation = 12)

@@ -101,7 +101,8 @@ public partial class VersusMenu : Control
 		text.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		text.AddChild(Ui.Label(title.ToUpperInvariant(), "SmallHeader"));
 		var h = Ui.Label(hint, "DimLabel");
-		h.AddThemeFontSizeOverride("font_size", 15);
+		h.AutowrapMode = TextServer.AutowrapMode.WordSmart;
+		h.AddThemeFontSizeOverride("font_size", UiTheme.BodySize);
 		text.AddChild(h);
 		row.AddChild(text);
 		row.AddChild(action);
