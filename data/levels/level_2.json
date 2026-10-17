@@ -157,7 +157,20 @@
   {"type": "smd", "cell": [0, 1], "size": [1, 1]},
   {"type": "capacitor", "cell": [7, 4], "size": [1, 1]},
   {"type": "smd", "cell": [7, 1], "size": [1, 1]},
-  {"type": "crystal", "cell": [17, 12], "size": [2, 1]}
+  {"type": "crystal", "cell": [17, 12], "size": [2, 1]},
+  {"type": "led_5mm", "cell": [10, 7], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led", "cell": [18, 10], "size": [1, 1], "color": "ffe0aa"},
+  {"type": "led", "cell": [2, 10], "size": [1, 1], "color": "3dff6a"},
+  {"type": "led_5mm", "cell": [5, 12], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led_5mm", "cell": [17, 8], "size": [1, 1], "color": "3dff6a"},
+  {"type": "led_5mm", "cell": [9, 10], "size": [1, 1], "color": "3dff6a"},
+  {"type": "led", "cell": [5, 7], "size": [1, 1], "color": "ffe0aa"},
+  {"type": "led_5mm", "cell": [12, 10], "size": [1, 1], "color": "6ca8ff"},
+  {"type": "led_5mm", "cell": [12, 1], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led", "cell": [6, 9], "size": [1, 1], "color": "6ca8ff"},
+  {"type": "led", "cell": [16, 10], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led_5mm", "cell": [6, 3], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led", "cell": [2, 12], "size": [1, 1], "color": "ffb43d"}
  ],
  "waves": [
   [

@@ -86,10 +86,19 @@ sprites, lines, particles and lights all share that grid. Keep new art at 1:1 in
 * `tools/sprites/make_sprites.py` generates the sprite sheets from the designs next to it
   (`--preview FILE` writes a zoomed contact sheet). The PNGs can also be edited by hand.
 
-**Lighting.** The board is dark; LEDs along the route (one every 3 cells, alternating sides,
-derived from the route so every player agrees on them) light it with wide pools of light.
-Bugs chew them as they pass, and the board goes darker as they burn out. Big lit surfaces
-(board, route) are drawn in tiles because a 2D light reaches at most 16 lights per item.
+**Lighting.** LEDs (light-emitting diodes) are ordinary level components: `led` is a
+surface-mount device (SMD) and `led_5mm` is a through-hole dome. Their coloured lenses stay
+emissive while broad, gentle light pools illuminate the board. Damaged LEDs flicker softly;
+destroyed LEDs turn off, reducing ambient light according to the fraction still alive.
+Restoring an LED restores its light. Both packages occupy a cell, count towards board
+integrity and award component energy to the versus attacker when destroyed.
+
+The built-in levels store their irregular route-side positions in JSON.
+`python3 tools/place_leds.py` appends a deterministic mix of both packages, preserving
+existing components and turret space; `--check` reports a shortfall without writing files.
+The editor can move or recolour them. Lights are visual only and do not change combat.
+Big lit surfaces (board, route) are drawn in tiles because a 2D light reaches at most 16
+lights per item; the white board uses gentler lighting.
 
 The 8 bugs: Glitch, Spider, Termite (weak, eats the board fast), Beetle, Armored Worm,
 Roach (fast), Runner and Brute.

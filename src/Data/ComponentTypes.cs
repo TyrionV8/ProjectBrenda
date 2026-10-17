@@ -23,7 +23,8 @@ public static class ComponentTypes
 		["capacitor"] = new("capacitor", "Electrolytic capacitor", new(1, 1), 8),
 		["smd"] = new("smd", "SMD passives", new(1, 1), 4),
 		["resistor"] = new("resistor", "Resistor", new(2, 1), 5),
-		["led"] = new("led", "LED", new(1, 1), 3),
+		["led"] = new("led", "SMD LED", new(1, 1), 3),
+		["led_5mm"] = new("led_5mm", "5 mm LED", new(1, 1), 3),
 		["crystal"] = new("crystal", "Crystal", new(2, 1), 6),
 		["inductor"] = new("inductor", "Choke", new(1, 1), 10),
 		["mosfet"] = new("mosfet", "MOSFET", new(1, 1), 8),
@@ -40,6 +41,24 @@ public static class ComponentTypes
 		["hole"] = new("hole", "Mounting hole", new(1, 1), 0, Blocks: true, Chewable: false),
 		["label"] = new("label", "Silkscreen text", new(3, 1), 0, Blocks: false, Chewable: false),
 	};
+
+	/// <summary>Both packages emit light and otherwise behave like ordinary components.</summary>
+	public static bool IsLed(string type) => type is "led" or "led_5mm";
+
+	/// <summary>Fraction of LED components still alive, shared by simulation and snapshot rendering.</summary>
+	public static float LightFraction(IEnumerable<(string Type, bool Alive)> components)
+	{
+		var total = 0;
+		var alive = 0;
+		foreach (var component in components)
+		{
+			if (!IsLed(component.Type))
+				continue;
+			total++;
+			alive += component.Alive ? 1 : 0;
+		}
+		return total == 0 ? 1 : (float)alive / total;
+	}
 
 	public static ComponentType Get(string id) => All.TryGetValue(id, out var t) ? t : All["chip"];
 }

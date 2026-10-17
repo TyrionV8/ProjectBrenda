@@ -68,55 +68,6 @@ public sealed class LevelData
 		return new Vector2(Mathf.Clamp(p.X, 0, Grid.Size.X), Mathf.Clamp(p.Y, 0, Grid.Size.Y));
 	}
 
-	/// <summary>Distance between the LEDs along the route (they alternate sides).</summary>
-	public const float LedSpacing = Grid.Cell * 3;
-	/// <summary>How far an LED sits from the middle of the route.</summary>
-	public const float LedOffset = 18;
-
-	/// <summary>
-	/// The little LEDs that light the route, in board pixels: one every <see cref="LedSpacing"/>
-	/// along the route, alternating sides, skipping corners, the CPU and anything off the board
-	/// or on top of another part of the route. Derived from the route, so every player and the
-	/// simulation agree on them.
-	/// </summary>
-	public List<Vector2> PathLeds(int cols = Grid.Cols, int rows = Grid.Rows)
-	{
-		var leds = new List<Vector2>();
-		var points = PathPoints();
-		if (points.Length < 2)
-			return leds;
-		var cpu = Grid.CellCenter(CpuCell);
-		var size = new Vector2(cols, rows) * Grid.Cell;
-		var k = 0;
-		var travelled = 0f;
-		var next = LedSpacing / 2;
-		for (var i = 1; i < points.Length; i++)
-		{
-			var a = points[i - 1];
-			var b = points[i];
-			var length = a.DistanceTo(b);
-			var dir = length > 0 ? (b - a) / length : Vector2.Right;
-			for (; next <= travelled + length; next += LedSpacing, k++)
-			{
-				var pos = a + dir * (next - travelled) + dir.Orthogonal() * (k % 2 == 0 ? LedOffset : -LedOffset);
-				if (pos.X < 6 || pos.Y < 6 || pos.X > size.X - 6 || pos.Y > size.Y - 6)
-					continue;
-				if (Mathf.Max(Mathf.Abs(pos.X - cpu.X), Mathf.Abs(pos.Y - cpu.Y)) < Grid.Cell * 1.6f)
-					continue;
-				var clear = true;
-				for (var j = 1; j < points.Length && clear; j++)
-				{
-					var closest = Geometry2D.GetClosestPointToSegment(pos, points[j - 1], points[j]);
-					clear = closest.DistanceTo(pos) >= LedOffset - 1 && (j == points.Length - 1 || points[j].DistanceTo(pos) >= 26);
-				}
-				if (clear)
-					leds.Add(pos);
-			}
-			travelled += length;
-		}
-		return leds;
-	}
-
 	/// <summary>Every board cell the route passes through.</summary>
 	public List<Vector2I> PathCells()
 	{

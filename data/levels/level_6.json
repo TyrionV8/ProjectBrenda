@@ -112,7 +112,23 @@
   {"type": "crystal", "cell": [1, 4], "size": [2, 1]},
   {"type": "inductor", "cell": [7, 15], "size": [1, 1]},
   {"type": "smd", "cell": [9, 15], "size": [1, 1]},
-  {"type": "smd", "cell": [10, 15], "size": [1, 1]}
+  {"type": "smd", "cell": [10, 15], "size": [1, 1]},
+  {"type": "led_5mm", "cell": [9, 7], "size": [1, 1], "color": "ffe0aa"},
+  {"type": "led", "cell": [8, 12], "size": [1, 1], "color": "6ca8ff"},
+  {"type": "led_5mm", "cell": [18, 9], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led_5mm", "cell": [15, 4], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led_5mm", "cell": [16, 3], "size": [1, 1], "color": "ffe0aa"},
+  {"type": "led_5mm", "cell": [5, 5], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led_5mm", "cell": [6, 3], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led_5mm", "cell": [10, 9], "size": [1, 1], "color": "6ca8ff"},
+  {"type": "led_5mm", "cell": [20, 14], "size": [1, 1], "color": "6ca8ff"},
+  {"type": "led_5mm", "cell": [0, 11], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led", "cell": [13, 2], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led_5mm", "cell": [16, 8], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led_5mm", "cell": [7, 10], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led", "cell": [11, 15], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led_5mm", "cell": [2, 13], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led_5mm", "cell": [16, 13], "size": [1, 1], "color": "ffe0aa"}
  ],
  "waves": [
   [

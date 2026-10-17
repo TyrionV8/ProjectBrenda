@@ -113,7 +113,15 @@
   {"type": "smd", "cell": [0, 0], "size": [1, 1]},
   {"type": "smd", "cell": [13, 6], "size": [1, 1]},
   {"type": "smd", "cell": [20, 0], "size": [1, 1]},
-  {"type": "smd", "cell": [14, 6], "size": [1, 1]}
+  {"type": "smd", "cell": [14, 6], "size": [1, 1]},
+  {"type": "led_5mm", "cell": [3, 1], "size": [1, 1], "color": "b4ff9a"},
+  {"type": "led", "cell": [3, 13], "size": [1, 1], "color": "3dff6a"},
+  {"type": "led_5mm", "cell": [3, 10], "size": [1, 1], "color": "3dff6a"},
+  {"type": "led", "cell": [14, 10], "size": [1, 1], "color": "ffe0aa"},
+  {"type": "led", "cell": [14, 7], "size": [1, 1], "color": "ffe0aa"},
+  {"type": "led", "cell": [0, 3], "size": [1, 1], "color": "3dff6a"},
+  {"type": "led", "cell": [16, 13], "size": [1, 1], "color": "b4ff9a"},
+  {"type": "led_5mm", "cell": [1, 12], "size": [1, 1], "color": "3dff6a"}
  ],
  "waves": [
   [

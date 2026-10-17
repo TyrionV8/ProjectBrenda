@@ -33,7 +33,7 @@ public static class ComponentArt
 		"capacitor" => c.Color != null ? new Color(c.Color) : new Color("1e3f7a"),
 		"connector" => new Color("d9d2c3"),
 		"resistor" => new Color("d8c39a"),
-		"led" => c.Color != null ? new Color(c.Color) : new Color("ff3344"),
+		"led" or "led_5mm" => c.Color != null ? new Color(c.Color) : new Color("ff3344"),
 		"crystal" or "shield" or "battery" or "port" => Silver,
 		"heatsink" => c.Color != null ? new Color(c.Color) : new Color("3d4c5c"),
 		"fingers" => Gold,
@@ -80,6 +80,7 @@ public static class ComponentArt
 			case "smd": Smd(art, rng); break;
 			case "resistor": Resistor(art, seed); break;
 			case "led": Led(art, c.Color); break;
+			case "led_5mm": Led5mm(art, c.Color); break;
 			case "crystal": Crystal(art, c.Label); break;
 			case "inductor": Inductor(art, c.Label); break;
 			case "mosfet": Mosfet(art); break;
@@ -373,19 +374,67 @@ public static class ComponentArt
 		}
 	}
 
+	// SMD (surface-mount device): flat ceramic package, two solder pads and a square lens.
 	static void Led(PixelCanvas a, string color)
 	{
 		var col = color != null ? new Color(color) : new Color("ff3344");
 		var cx = a.Width / 2;
 		var cy = a.Height / 2;
-		a.Rect(cx - 7, cy - 3, 3, 6, Gold);
-		a.Rect(cx + 4, cy - 3, 3, 6, Gold);
-		a.Rect(cx - 5, cy - 4, 10, 8, new Color("e8e2d4"));
-		a.HLine(cx - 5, cx + 4, cy + 3, new Color("b8b0a0"));
-		a.Disc(cx, cy, 3, col.Darkened(0.4f));
-		a.Disc(cx, cy, 2.2f, col);
-		a.Set(cx - 1, cy - 2, col.Lightened(0.75f));
-		a.Set(cx + 3, cy - 4, new Color("4ad04a"));
+		a.Rect(cx - 7, cy - 3, 3, 6, SilverDark);
+		a.Rect(cx + 4, cy - 3, 3, 6, SilverDark);
+		a.HLine(cx - 7, cx - 5, cy - 3, SilverLight);
+		a.HLine(cx + 4, cx + 6, cy - 3, SilverLight);
+		a.Rect(cx - 5, cy - 4, 10, 8, new Color("d8d2c4"));
+		a.HLine(cx - 5, cx + 4, cy + 3, new Color("8e887c"));
+		a.Rect(cx - 3, cy - 3, 6, 6, col.Darkened(0.65f));
+		a.Rect(cx - 2, cy - 2, 4, 4, col);
+		a.Rect(cx - 2, cy - 2, 2, 1, col.Lightened(0.75f));
+		// Cathode marking on the ceramic, separate from the coloured lens.
+		a.VLine(cx + 3, cy - 2, cy + 1, new Color("4e6558"));
+	}
+
+	// Through-hole 5 mm LED, seen from above: leads/pads, circular rim, dome and reflection.
+	static void Led5mm(PixelCanvas a, string color)
+	{
+		var col = color != null ? new Color(color) : new Color("ff3344");
+		var cx = a.Width / 2;
+		var cy = a.Height / 2;
+		a.Rect(cx - 1, cy - 7, 3, 3, Silver);
+		a.Rect(cx - 1, cy + 4, 3, 3, SilverDark);
+		a.Set(cx, cy - 7, SilverLight);
+		a.Set(cx, cy + 6, SilverLight);
+		a.Disc(cx, cy, 5.5f, col.Darkened(0.75f));
+		a.Ring(cx, cy, 4.8f, 1, col.Darkened(0.25f));
+		a.Disc(cx, cy - 1, 3.6f, col.Darkened(0.1f));
+		a.Rect(cx - 2, cy - 3, 2, 2, col.Lightened(0.75f));
+		a.Set(cx - 3, cy - 1, col.Lightened(0.35f));
+		// Flat cathode edge gives the dome a recognisable package silhouette.
+		a.VLine(cx + 5, cy - 2, cy + 2, col.Darkened(0.6f));
+	}
+
+	/// <summary>Only the lens emits through the darkness; pads and package still receive light.</summary>
+	public static ImageTexture LedLens(ComponentData data)
+	{
+		var key = $"lens|{data.Type}|{data.Color}";
+		if (Cache.TryGetValue(key, out var texture))
+			return texture;
+		var a = new PixelCanvas(C, C);
+		var col = MainColor(data);
+		var cx = C / 2;
+		var cy = C / 2;
+		if (data.Type == "led_5mm")
+		{
+			a.Disc(cx, cy - 1, 2.6f, col);
+			a.Rect(cx - 2, cy - 3, 2, 2, col.Lightened(0.75f));
+		}
+		else
+		{
+			a.Rect(cx - 2, cy - 2, 4, 4, col);
+			a.Rect(cx - 2, cy - 2, 2, 1, col.Lightened(0.75f));
+		}
+		texture = a.ToTexture();
+		Cache[key] = texture;
+		return texture;
 	}
 
 	static void Crystal(PixelCanvas a, string label)

@@ -112,7 +112,23 @@
   {"type": "capacitor", "cell": [6, 10], "size": [1, 1], "color": "e0a93c"},
   {"type": "smd", "cell": [10, 14], "size": [1, 1]},
   {"type": "smd", "cell": [2, 6], "size": [1, 1]},
-  {"type": "smd", "cell": [4, 0], "size": [1, 1]}
+  {"type": "smd", "cell": [4, 0], "size": [1, 1]},
+  {"type": "led_5mm", "cell": [13, 3], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led", "cell": [5, 9], "size": [1, 1], "color": "ffe0aa"},
+  {"type": "led", "cell": [3, 2], "size": [1, 1], "color": "ffc79a"},
+  {"type": "led", "cell": [6, 13], "size": [1, 1], "color": "ffc79a"},
+  {"type": "led_5mm", "cell": [19, 11], "size": [1, 1], "color": "ffe0aa"},
+  {"type": "led", "cell": [7, 1], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led", "cell": [7, 4], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led_5mm", "cell": [8, 5], "size": [1, 1], "color": "ffe0aa"},
+  {"type": "led_5mm", "cell": [14, 8], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led", "cell": [15, 12], "size": [1, 1], "color": "ffe0aa"},
+  {"type": "led_5mm", "cell": [17, 6], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led", "cell": [14, 10], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led_5mm", "cell": [9, 8], "size": [1, 1], "color": "ffc79a"},
+  {"type": "led", "cell": [12, 7], "size": [1, 1], "color": "ffe0aa"},
+  {"type": "led_5mm", "cell": [0, 0], "size": [1, 1], "color": "ffe0aa"},
+  {"type": "led_5mm", "cell": [2, 5], "size": [1, 1], "color": "ffe0aa"}
  ],
  "waves": [
   [

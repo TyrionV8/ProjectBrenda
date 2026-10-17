@@ -19,8 +19,6 @@ public partial class BoardView : Node2D
 	public int Cols = Grid.Cols;
 	public int Rows = Grid.Rows;
 	public readonly List<ComponentView> Components = new();
-	/// <summary>The LEDs along the route, in the order of LevelData.PathLeds (and of the simulation).</summary>
-	public readonly List<PathLedView> Leds = new();
 
 	bool _showGrid;
 	public bool ShowGrid
@@ -37,7 +35,6 @@ public partial class BoardView : Node2D
 	Node2D _background;
 	Node2D _grid;
 	Node2D _componentLayer;
-	Node2D _ledLayer;
 	int _seed;
 
 	public Vector2 BoardSize => new Vector2(Cols, Rows) * Grid.Cell;
@@ -85,31 +82,13 @@ public partial class BoardView : Node2D
 			_componentLayer.AddChild(view);
 			Components.Add(view);
 		}
-		RebuildLeds();
-	}
-
-	/// <summary>Recreate the route LEDs (after the route changes).</summary>
-	public void RebuildLeds()
-	{
-		_ledLayer?.QueueFree();
-		Leds.Clear();
-		_ledLayer = new Node2D { ZIndex = 1 };
-		AddChild(_ledLayer);
-		if (Level == null || Level.Path.Count < 2)
-			return;
-		foreach (var pos in Level.PathLeds(Cols, Rows))
-		{
-			var led = new PathLedView(pos, Theme.Led, Theme.LedEnergy);
-			_ledLayer.AddChild(led);
-			Leds.Add(led);
-		}
 	}
 
 	public void RefreshBackground()
 	{
 		Theme = BoardTheme.Get(Level?.Theme ?? "blue");
 		PaintBackground();
-		RebuildLeds();
+		RebuildComponents();
 	}
 
 	/// <summary>Random PCB routing in art pixels: straight runs with 45 degree jogs, ending on vias.</summary>

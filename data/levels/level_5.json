@@ -93,7 +93,24 @@
   {"type": "inductor", "cell": [0, 9], "size": [1, 1]},
   {"type": "resistor", "cell": [8, 0], "size": [2, 1]},
   {"type": "capacitor", "cell": [7, 8], "size": [1, 1], "color": "1d2026"},
-  {"type": "smd", "cell": [2, 1], "size": [1, 1]}
+  {"type": "smd", "cell": [2, 1], "size": [1, 1]},
+  {"type": "led_5mm", "cell": [4, 13], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led", "cell": [8, 5], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led", "cell": [4, 0], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led_5mm", "cell": [1, 9], "size": [1, 1], "color": "6ca8ff"},
+  {"type": "led_5mm", "cell": [5, 10], "size": [1, 1], "color": "6ca8ff"},
+  {"type": "led_5mm", "cell": [17, 11], "size": [1, 1], "color": "c8dcff"},
+  {"type": "led_5mm", "cell": [14, 9], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led_5mm", "cell": [3, 12], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led_5mm", "cell": [8, 7], "size": [1, 1], "color": "6ca8ff"},
+  {"type": "led_5mm", "cell": [13, 2], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led", "cell": [3, 6], "size": [1, 1], "color": "c8dcff"},
+  {"type": "led_5mm", "cell": [10, 0], "size": [1, 1], "color": "c8dcff"},
+  {"type": "led", "cell": [14, 5], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led", "cell": [14, 0], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led", "cell": [18, 12], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led", "cell": [7, 13], "size": [1, 1], "color": "6ca8ff"},
+  {"type": "led_5mm", "cell": [12, 6], "size": [1, 1], "color": "ffb43d"}
  ],
  "waves": [
   [

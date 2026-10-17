@@ -19,9 +19,10 @@ public partial class ComponentView : Node2D
 	Sprite2D _sprite;
 	CpuParticles2D _smoke;
 	Sprite2D _ledGlow;
+	Sprite2D _ledLens;
 	PointLight2D _ledLight;
 	float _phase = GD.Randf() * Mathf.Tau;
-	readonly float _blinkSpeed = (float)GD.RandRange(0.6, 2.2);
+	float LedEnergy => 0.45f * _theme.LedEnergy;
 
 	public Vector2 Size => new Vector2(Data.Size[0], Data.Size[1]) * Grid.Cell;
 	public Rect2 Rect => new(Position, Size);
@@ -42,16 +43,22 @@ public partial class ComponentView : Node2D
 			Position = -Vector2.One * ComponentArt.Pad * Px,
 		};
 		AddChild(_sprite);
-		if (Data.Type != "led")
+		if (!ComponentTypes.IsLed(Data.Type))
 		{
 			SetProcess(false);
 			return;
 		}
 		var color = Data.Color != null ? new Color(Data.Color) : new Color("ff3344");
-		_ledGlow = FxUtil.GlowSprite(color, 0.9f);
+		_ledLens = new Sprite2D
+		{
+			Texture = ComponentArt.LedLens(Data), Scale = Vector2.One * Px,
+			Position = Size / 2, Material = FxUtil.Unshaded,
+		};
+		AddChild(_ledLens);
+		_ledGlow = FxUtil.GlowSprite(color, 0.3f);
 		_ledGlow.Position = Size / 2;
 		AddChild(_ledGlow);
-		_ledLight = FxUtil.Light(color, 0.9f, 0.45f);
+		_ledLight = FxUtil.Light(color, LedEnergy, 2.3f, FxUtil.WideLightTexture);
 		_ledLight.Position = Size / 2;
 		AddChild(_ledLight);
 	}
@@ -72,12 +79,12 @@ public partial class ComponentView : Node2D
 			AddSmoke();
 		if (_smoke != null)
 			_smoke.Amount = _destroyed ? 6 : 4;
-		if (_destroyed && _ledLight != null)
+		if (!smoking && _smoke != null)
 		{
-			_ledLight.Energy = 0;
-			_ledGlow.Visible = false;
-			SetProcess(false);
+			_smoke.QueueFree();
+			_smoke = null;
 		}
+		RefreshLight();
 	}
 
 	public void Restore()
@@ -87,6 +94,16 @@ public partial class ComponentView : Node2D
 		_smoke?.QueueFree();
 		_smoke = null;
 		Repaint();
+		RefreshLight();
+	}
+
+	void RefreshLight()
+	{
+		if (_ledLight == null)
+			return;
+		_ledLight.Visible = _ledGlow.Visible = _ledLens.Visible = !_destroyed;
+		_ledLight.Energy = _destroyed ? 0 : LedEnergy;
+		SetProcess(!_destroyed);
 	}
 
 	void Repaint()
@@ -118,10 +135,16 @@ public partial class ComponentView : Node2D
 
 	public override void _Process(double delta)
 	{
-		_phase += (float)delta * _blinkSpeed;
-		var on = (_phase % 7f) < 6.6f ? 0.55f + 0.45f * Mathf.Sin(_phase) : 0.15f;
-		on *= Mathf.Lerp(0.3f, 1, _ratio);
-		_ledGlow.Modulate = new Color(_ledGlow.Modulate, on);
-		_ledLight.Energy = on * 0.9f;
+		_phase += (float)delta;
+		// Healthy LEDs stay steady. Damage adds a gentle, local stutter; light never moves.
+		var on = 1f;
+		if (_ratio < 0.999f)
+		{
+			var wave = 0.5f + 0.5f * Mathf.Sin(_phase * (6 + 10 * (1 - _ratio)));
+			on = Mathf.Lerp(0.45f + 0.35f * _ratio, 1, wave);
+		}
+		_ledGlow.Modulate = new Color(_ledGlow.Modulate, 0.65f * on);
+		_ledLens.Modulate = new Color(1, 1, 1, 0.65f + 0.35f * on);
+		_ledLight.Energy = on * LedEnergy;
 	}
 }

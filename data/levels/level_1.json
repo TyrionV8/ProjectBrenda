@@ -125,7 +125,14 @@
   {"type": "smd", "cell": [15, 11], "size": [1, 1]},
   {"type": "smd", "cell": [9, 13], "size": [1, 1]},
   {"type": "mosfet", "cell": [8, 13], "size": [1, 1]},
-  {"type": "crystal", "cell": [8, 15], "size": [2, 1]}
+  {"type": "crystal", "cell": [8, 15], "size": [2, 1]},
+  {"type": "led_5mm", "cell": [5, 8], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led_5mm", "cell": [13, 8], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led", "cell": [9, 1], "size": [1, 1], "color": "ffb43d"},
+  {"type": "led", "cell": [10, 6], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led_5mm", "cell": [6, 1], "size": [1, 1], "color": "ffe0aa"},
+  {"type": "led_5mm", "cell": [6, 6], "size": [1, 1], "color": "3ef0ff"},
+  {"type": "led", "cell": [8, 7], "size": [1, 1], "color": "6ca8ff"}
  ],
  "waves": [
   [

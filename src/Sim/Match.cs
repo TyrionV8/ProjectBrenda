@@ -35,8 +35,6 @@ public sealed partial class Match
 	public const float StepTime = 1f / 60f;
 	/// <summary>How far past their body bugs can reach to chew a component.</summary>
 	public const float ChewReach = 16f;
-	/// <summary>HP of each LED along the route.</summary>
-	public const float PathLedHp = 2f;
 
 	public readonly LevelData Level;
 	public readonly MatchMode Mode;
@@ -90,35 +88,10 @@ public sealed partial class Match
 				Index = i, Data = data, Rect = Grid.CellRect(data.CellV, data.SizeV), MaxHp = hp, Hp = hp,
 			});
 		}
-		// The LEDs along the route come after the level's components (same order for every player).
-		foreach (var pos in level.PathLeds())
-		{
-			var cell = Grid.ToCell(pos);
-			Components.Add(new BoardComponent
-			{
-				Index = Components.Count, Data = new ComponentData { Type = "path_led", Cell = new[] { cell.X, cell.Y } },
-				Rect = new Rect2(pos - Vector2.One * 6, Vector2.One * 12), MaxHp = PathLedHp, Hp = PathLedHp, Light = true,
-			});
-		}
 	}
 
-	/// <summary>Share of the lights (route LEDs and LED components) still working, 1 when there are none.</summary>
-	public float LightLevel
-	{
-		get
-		{
-			var total = 0;
-			var alive = 0;
-			foreach (var c in Components)
-			{
-				if (!c.Light && c.Data.Type != "led")
-					continue;
-				total++;
-				alive += c.Destroyed ? 0 : 1;
-			}
-			return total == 0 ? 1 : (float)alive / total;
-		}
-	}
+	/// <summary>Share of LED components still working, 1 when there are none.</summary>
+	public float LightLevel => ComponentTypes.LightFraction(Components.Select(c => (c.Data.Type, !c.Destroyed)));
 
 	public float TimeLeft => Mode == MatchMode.Versus ? Mathf.Max(Rules.Duration - Time, 0) : 0;
 	public float EnergyRate => Rules.EnergyRate + Rules.EnergyRateGrowth * Time;
@@ -129,8 +102,8 @@ public sealed partial class Match
 	{
 		get
 		{
-			var max = Components.Where(c => !c.Light).Sum(c => c.MaxHp);
-			return max <= 0 ? 1 : Components.Where(c => !c.Light).Sum(c => c.Destroyed ? 0 : c.Hp) / max;
+			var max = Components.Sum(c => c.MaxHp);
+			return max <= 0 ? 1 : Components.Sum(c => c.Destroyed ? 0 : c.Hp) / max;
 		}
 	}
 
@@ -359,7 +332,7 @@ public sealed partial class Match
 			target.Hp = 0;
 			target.Destroyed = true;
 			b.ChewTarget = -1;
-			if (Mode == MatchMode.Versus && !target.Light)
+			if (Mode == MatchMode.Versus)
 				Energy = Mathf.Min(Energy + target.MaxHp * Rules.ComponentEnergy, Rules.EnergyCap);
 			Events.Add(new SimEvent(EventKind.ComponentDestroyed, target.Index, target.Rect.GetCenter(), target.MaxHp, target.Data.Type));
 		}

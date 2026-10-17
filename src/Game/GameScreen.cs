@@ -297,28 +297,15 @@ public partial class GameScreen : Node2D
 	void SyncComponents(Snapshot snap, float dt)
 	{
 		var count = Mathf.Min(snap.Components.Count, _board.Components.Count);
-		var lights = 0;
-		var lit = 0;
 		for (var i = 0; i < count; i++)
 		{
 			var c = _board.Components[i];
 			var kind = c.Data.Kind;
 			c.SetHp(snap.Components[i], kind.HpPerCell * c.Data.Size[0] * c.Data.Size[1]);
-			if (c.Data.Type != "led")
-				continue;
-			lights++;
-			lit += snap.Components[i] < 0 ? 0 : 1;
 		}
-		// The route LEDs follow the level's components in the snapshot.
-		for (var i = 0; i < _board.Leds.Count && count + i < snap.Components.Count; i++)
-		{
-			var hp = snap.Components[count + i];
-			_board.Leds[i].SetHp(hp, Match.PathLedHp);
-			lights++;
-			lit += hp < 0 ? 0 : 1;
-		}
-		// The board gets darker as its lights burn out.
-		var level = lights == 0 ? 1 : (float)lit / lights;
+		// The same fraction is used by Match.LightLevel and by remote snapshots.
+		var level = ComponentTypes.LightFraction(_board.Components.Take(count)
+			.Select((c, i) => (c.Data.Type, snap.Components[i] >= 0)));
 		_lightLevel = Mathf.MoveToward(_lightLevel, level, dt * 0.5f);
 		_ambient.Color = AmbientDark.Lerp(AmbientLit, _lightLevel);
 	}
@@ -436,19 +423,10 @@ public partial class GameScreen : Node2D
 					_fx.ComponentDestroyed(c.Rect, ComponentArt.MainColor(c.Data));
 					Audio.Play("explode", "SFX", -9);
 				}
-				else if (e.Id - _board.Components.Count < _board.Leds.Count)
-				{
-					var led = _board.Leds[e.Id - _board.Components.Count];
-					_fx.Sparks(led.Position, led.Color, 10, 110, 0.35f, 0.4f);
-					_fx.LightFlash(led.Position, led.Color, 2, 0.8f, 0.3f);
-					Audio.Play("crunch", "SFX", -8, 0.3f);
-				}
 				break;
 			case EventKind.Chew:
 				if (e.Id < _board.Components.Count)
 					_fx.Debris(e.Pos, ComponentArt.MainColor(_board.Components[e.Id].Data), 3, 50);
-				else if (e.Id - _board.Components.Count < _board.Leds.Count)
-					_fx.Debris(e.Pos, new Color("d8d2c4"), 2, 40);
 				Audio.Play("crunch", "SFX", -14, 0.2f);
 				break;
 			case EventKind.WaveCountdown:

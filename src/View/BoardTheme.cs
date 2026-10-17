@@ -2,7 +2,7 @@ using Godot;
 
 namespace HardwareDefence.View;
 
-/// <summary>Solder mask colours for each PCB theme, and the colour of the LEDs along the route.</summary>
+/// <summary>Solder mask colours for each PCB theme, and the default LED tint/energy.</summary>
 public sealed record BoardTheme(Color Center, Color Edge, Color Decor, Color Silk, Color Led, float LedEnergy = 1)
 {
 	public static BoardTheme Get(string name) => name switch
