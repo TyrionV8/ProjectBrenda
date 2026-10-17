@@ -7,8 +7,6 @@ namespace HardwareDefence.UI;
 /// <summary>Title screen.</summary>
 public partial class MainMenu : Control
 {
-	const string Instagram = "https://www.instagram.com/atlas_gamedev/";
-
 	Button _newGame;
 	bool _confirmReset;
 
@@ -57,12 +55,8 @@ public partial class MainMenu : Control
 		buttons.AddChild(row);
 
 		var footer = Ui.VBox(2);
-		footer.Position = new Vector2(1366 - 330, 768 - 96);
+		footer.Position = new Vector2(1366 - 330, 768 - 56);
 		footer.CustomMinimumSize = new Vector2(300, 0);
-		var insta = Ui.Button("@atlas_gamedev", () => OS.ShellOpen(Instagram));
-		insta.Flat = true;
-		insta.Alignment = HorizontalAlignment.Right;
-		footer.AddChild(insta);
 		footer.AddChild(Ui.Label("prototype - godot .net", "DimLabel", HorizontalAlignment.Right));
 		AddChild(footer);
 
