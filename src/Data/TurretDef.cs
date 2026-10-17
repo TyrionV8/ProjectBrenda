@@ -13,6 +13,8 @@ public sealed class UpgradeDef
 	public string Stat { get; set; }
 	public float PerLevel { get; set; }
 	public int MaxLevel { get; set; } = 15;
+	public int Price { get; set; } = 5;
+	public int PriceStep { get; set; } = 10;
 	public string Icon { get; set; }
 }
 
@@ -25,6 +27,8 @@ public sealed class TurretDef
 	/// <summary>Which simulation behaviour drives it: blaster, mortar, burst, laser or freezer.</summary>
 	public string Behavior { get; set; }
 	public int Cost { get; set; }
+	/// <summary>Campaign purchase price; zero means available from the beginning.</summary>
+	public int UnlockPrice { get; set; }
 	[JsonPropertyName("color")] public string ColorHex { get; set; } = "ffffff";
 	public string Icon { get; set; }
 	public bool NeedsDirection { get; set; }

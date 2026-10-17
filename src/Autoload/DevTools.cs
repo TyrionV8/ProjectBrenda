@@ -184,6 +184,10 @@ public partial class DevTools : Node
 	/// <summary>Errors in an awaited task would otherwise vanish and leave the game running.</summary>
 	async Task CaptureOrQuit(string[] shots, string outDir)
 	{
+		// These two preparations buy upgrades / complete a campaign level. Isolate their
+		// entire lifetime, including result callbacks and capture failures.
+		using var captureSave = shots.Any(shot => shot.Split(':')[0] is "upgrades" or "campaignwin")
+			? GameState.UseTemporarySave() : null;
 		try
 		{
 			await Capture(shots, outDir);
@@ -218,7 +222,8 @@ public partial class DevTools : Node
 					await Goto("res://scenes/level_select.tscn", 1.5f);
 					break;
 				case "upgrades":
-					GameState.Points = 9;
+					GameState.Reset();
+					GameState.Balance = 420;
 					for (var i = 0; i < 4; i++)
 						GameState.Buy(Catalog.Turrets[i], Catalog.Turrets[i].Upgrades[0]);
 					await Goto("res://scenes/upgrade_screen.tscn", 1.5f);
@@ -252,23 +257,30 @@ public partial class DevTools : Node
 				case "game":
 				case "attack":
 				case "win":
+				case "campaignwin":
 					var attacker = parts[0] == "attack";
 					var lvl = Catalog.Levels[Math.Min(level, Catalog.Levels.Count - 1)];
-					GameSession.Current = attacker ? GameSession.Kind.Versus : GameSession.Kind.Custom;
+					var campaignWin = parts[0] == "campaignwin";
+					if (campaignWin)
+					{
+						GameState.Reset();
+						GameState.CurrentLevel = Math.Min(level, Catalog.Levels.Count - 1);
+					}
+					GameSession.Current = campaignWin ? GameSession.Kind.Campaign : attacker ? GameSession.Kind.Versus : GameSession.Kind.Custom;
 					GameSession.CreateFeed = () =>
 					{
-						var feed = new LocalFeed(lvl, attacker ? MatchMode.Versus : MatchMode.Campaign, attacker ? PlayerSide.Attacker : PlayerSide.Defender, false)
+						var feed = new LocalFeed(lvl, attacker ? MatchMode.Versus : MatchMode.Campaign, attacker ? PlayerSide.Attacker : PlayerSide.Defender, campaignWin)
 						{
 							DefenderBot = new DefenderBot(), AttackerBot = attacker ? new AttackerBot(5) : null,
 						};
-						feed.Match.Money += attacker ? 0 : 60;
+						feed.Match.Money += attacker || campaignWin ? 0 : 60;
 						return feed;
 					};
 					await Goto(GameSession.GameScene, 0.3f);
 					while (GetTree().CurrentScene is not GameScreen)
 						await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 					var screen = (GameScreen)GetTree().CurrentScene;
-					if (parts[0] == "win")
+					if (parts[0] is "win" or "campaignwin")
 					{
 						Engine.TimeScale = 4;
 						while (screen.Feed.Current.MatchState == MatchState.Playing)

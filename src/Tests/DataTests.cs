@@ -69,26 +69,27 @@ public sealed class DataTests : TestSuite
 	[Test]
 	public void SaveRoundTripAndPoints()
 	{
+		using var save = new EconomyTests.SaveScope();
 		GameState.Reset();
 		var mortar = Catalog.Turret("mortar");
-		GameState.Points = 2;
-		Check(GameState.Buy(mortar, mortar.FindUpgrade("bomb_area")), "buy 1");
-		Check(GameState.Buy(mortar, mortar.FindUpgrade("bomb_area")), "buy 2");
-		Check(!GameState.Buy(mortar, mortar.FindUpgrade("bomb_area")), "no points left");
+		var upgrade = mortar.FindUpgrade("bomb_area");
+		GameState.Balance = upgrade.Price * 2 + upgrade.PriceStep;
+		Check(GameState.Buy(mortar, upgrade), "buy 1");
+		Check(GameState.Buy(mortar, upgrade), "buy 2");
+		Check(!GameState.Buy(mortar, upgrade), "no balance left");
 		GameState.CurrentLevel = 0;
-		Check(!GameState.CompleteCurrentLevel(2), "not finished");
-		CheckEq(GameState.Points, GameState.PointsPerLevel, "points after first clear");
+		Check(!GameState.CompleteCurrentLevel(2, 75), "not finished");
+		CheckEq(GameState.Balance, 75, "first clear remaining money");
 		GameState.CurrentLevel = 0;
-		GameState.CompleteCurrentLevel(3);
-		CheckEq(GameState.Points, GameState.PointsPerLevel, "no points for replays");
+		GameState.CompleteCurrentLevel(3, 60);
+		CheckEq(GameState.Balance, 75, "no money for worse replays");
 		CheckEq(GameState.Stars[0], 3, "best stars kept");
 		GameState.Reset();
 		Check(GameState.Load(), "load");
 		CheckEq(GameState.UpgradeLevel("mortar", "bomb_area"), 2, "upgrade saved");
+		CheckEq(GameState.Balance, 75, "balance saved");
 		Check(GameState.Unlocked[1], "level 2 unlocked");
 		CheckEq(GameState.CurrentLevel, 1, "continue from last unlocked");
-		DirAccess.RemoveAbsolute(GameState.SavePath);
-		GameState.Reset();
 	}
 
 	[Test]

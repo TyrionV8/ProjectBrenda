@@ -467,10 +467,12 @@ public partial class GameScreen : Node2D
 		switch (GameSession.Current)
 		{
 			case GameSession.Kind.Campaign:
-				var before = GameState.Points;
-				var finished = GameState.CompleteCurrentLevel(snap.Stars);
-				var gained = GameState.Points - before;
-				var message = integrity + (gained > 0 ? $"\n+{gained} upgrade points" : "");
+				var clearedLevel = GameState.CurrentLevel;
+				var before = GameState.Balance;
+				var finished = GameState.CompleteCurrentLevel(snap.Stars, snap.Money);
+				var gained = GameState.Balance - before;
+				var record = GameState.BestRemainingMoney[clearedLevel];
+				var message = integrity + $"\nRemaining: ${snap.Money}  |  record: ${record}\n+${gained} for upgrades  |  balance: ${GameState.Balance}";
 				if (finished)
 					Hud.ShowResult("ALL CIRCUITS SECURED", UiTheme.Green, message, snap.Stars, ("Continue", () => Transition.Go("res://scenes/end_screen.tscn")));
 				else

@@ -30,11 +30,18 @@ public partial class UpgradeRow : Button
 			QueueRedraw();
 		};
 		MouseExited += QueueRedraw;
-		GameState.Changed += QueueRedraw;
+		GameState.Changed += Refresh;
+		Refresh();
 		SetProcess(false);
 	}
 
-	public override void _ExitTree() => GameState.Changed -= QueueRedraw;
+	public override void _ExitTree() => GameState.Changed -= Refresh;
+
+	void Refresh()
+	{
+		Disabled = !GameState.CanBuy(Turret, Upgrade);
+		QueueRedraw();
+	}
 
 	public void Bought()
 	{
@@ -71,7 +78,7 @@ public partial class UpgradeRow : Button
 		var filled = (float)level / Upgrade.MaxLevel * blocks;
 		for (var i = 0; i < blocks; i++)
 			DrawRect(new Rect2(bar.Position.X + i * bw, bar.Position.Y, bw - 1.5f, bar.Size.Y), i < filled ? Turret.Color : new Color(1, 1, 1, 0.08f));
-		DrawString(UiTheme.PixelFont, new Vector2(48, 70), maxed ? "MAX" : $"{level}/{Upgrade.MaxLevel}", HorizontalAlignment.Left, -1, UiTheme.PixelSmall, maxed ? UiTheme.Gold : UiTheme.Dim);
+		DrawString(UiTheme.PixelFont, new Vector2(48, 70), maxed ? "MAX" : $"{level}/{Upgrade.MaxLevel}  ${GameState.NextUpgradePrice(Turret, Upgrade)}", HorizontalAlignment.Left, -1, UiTheme.PixelSmall, maxed ? UiTheme.Gold : UiTheme.Dim);
 		var plus = new Rect2(Size.X - 40, 40, 32, 32);
 		var plusColor = canBuy ? Turret.Color : new Color(0.4f, 0.45f, 0.5f, 0.4f);
 		DrawRect(plus, new Color(plusColor, 0.15f));

@@ -6,10 +6,11 @@ using Godot;
 
 namespace HardwareDefence.UI;
 
-/// <summary>Spend upgrade points between levels, then start the next level.</summary>
+/// <summary>Spend campaign money between levels, then start the next level.</summary>
 public partial class UpgradeScreen : Control
 {
-	Label _points;
+	Label _balance;
+	readonly List<(TurretDef Def, TurretPreview Preview, Button Unlock)> _cards = new();
 	Label _details;
 
 	public override void _Ready()
@@ -45,14 +46,16 @@ public partial class UpgradeScreen : Control
 			StretchMode = TextureRect.StretchModeEnum.Scale, SizeFlagsVertical = SizeFlags.ShrinkCenter,
 		});
 		var col = Ui.VBox(0);
-		col.AddChild(Ui.Label("POINTS", "SmallHeader"));
-		_points = Ui.Label("0", "MoneyLabel");
-		col.AddChild(_points);
+		col.AddChild(Ui.Label("BALANCE", "SmallHeader"));
+		_balance = Ui.Label("$0", "MoneyLabel");
+		col.AddChild(_balance);
 		pointsRow.AddChild(col);
 		header.AddChild(pointsBox);
 		root.AddChild(header);
 
-		var cards = Ui.HBox(14);
+		var cards = new GridContainer { Columns = 3 };
+		cards.AddThemeConstantOverride("h_separation", 14);
+		cards.AddThemeConstantOverride("v_separation", 14);
 		cards.SizeFlagsVertical = SizeFlags.ExpandFill;
 		var scroll = new ScrollContainer { HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled, SizeFlagsVertical = SizeFlags.ExpandFill };
 		cards.SizeFlagsHorizontal = SizeFlags.ExpandFill;
@@ -69,7 +72,7 @@ public partial class UpgradeScreen : Control
 
 		var footer = Ui.HBox(16);
 		footer.AddChild(Ui.Button("Main Menu", () => Transition.Go(GameSession.MenuScene), "BigButton"));
-		_details = Ui.Label("Hover an upgrade to see what it does. Click + to buy it.", "DimLabel");
+		_details = Ui.Label("Spend your best remaining cash from each campaign level. Click + to buy.", "DimLabel");
 		_details.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		_details.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 		_details.VerticalAlignment = VerticalAlignment.Center;
@@ -89,24 +92,48 @@ public partial class UpgradeScreen : Control
 
 	public override void _ExitTree() => GameState.Changed -= Refresh;
 
-	void Refresh() => _points.Text = GameState.Points.ToString();
+	void Refresh()
+	{
+		_balance.Text = $"${GameState.Balance}";
+		foreach (var (def, preview, unlock) in _cards)
+		{
+			var available = GameState.IsTurretAvailable(def);
+			preview.Modulate = available ? Colors.White : new Color(0.28f, 0.32f, 0.36f);
+			unlock.Visible = !available;
+			unlock.Disabled = !GameState.CanUnlock(def);
+		}
+	}
 
 	Control Card(TurretDef def)
 	{
-		var panel = new PanelContainer { ThemeTypeVariation = "CardPanel" };
+		var panel = new PanelContainer { ThemeTypeVariation = "CardPanel", CustomMinimumSize = new Vector2(400, 0) };
 		var box = Ui.VBox(8);
 		panel.AddChild(box);
-		box.AddChild(new TurretPreview(def) { SizeFlagsHorizontal = SizeFlags.ShrinkCenter });
+		var intro = Ui.HBox(10);
+		var preview = new TurretPreview(def) { SizeFlagsHorizontal = SizeFlags.ShrinkCenter };
+		intro.AddChild(preview);
+		var info = Ui.VBox(8);
+		info.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+		intro.AddChild(info);
+		box.AddChild(intro);
 		var name = Ui.Label(def.Name.ToUpperInvariant(), "SmallHeader", HorizontalAlignment.Center);
 		name.AddThemeColorOverride("font_color", def.Color);
 		name.AddThemeFontSizeOverride("font_size", UiTheme.PixelSmall);
 		name.AutowrapMode = TextServer.AutowrapMode.WordSmart;
-		box.AddChild(name);
+		info.AddChild(name);
 		var desc = Ui.Label(def.Description, "DimLabel", HorizontalAlignment.Center);
 		desc.AddThemeFontSizeOverride("font_size", UiTheme.BodySize);
 		desc.AutowrapMode = TextServer.AutowrapMode.WordSmart;
-		desc.CustomMinimumSize = new Vector2(200, 140);
-		box.AddChild(desc);
+		desc.CustomMinimumSize = new Vector2(240, 100);
+		info.AddChild(desc);
+		var unlock = Ui.Button($"Unlock ${def.UnlockPrice}", () =>
+		{
+			if (GameState.Unlock(def)) Audio.Ui("upgrade");
+			else Audio.Play("error", "UI");
+		});
+		unlock.TooltipText = $"Locked turret. Buy once for ${def.UnlockPrice}; upgrades are sold separately.";
+		box.AddChild(unlock);
+		_cards.Add((def, preview, unlock));
 		foreach (var up in def.Upgrades)
 		{
 			var row = new UpgradeRow(def, up);
@@ -123,7 +150,6 @@ public partial class UpgradeScreen : Control
 		{
 			Audio.Ui("upgrade");
 			row.Bought();
-			GameState.Save();
 		}
 		else
 			Audio.Play("error", "UI");
@@ -139,7 +165,7 @@ public partial class UpgradeScreen : Control
 		if (level < row.Upgrade.MaxLevel)
 		{
 			var limits = row.Turret.Limits.GetValueOrDefault(row.Upgrade.Stat) ?? new[] { float.MinValue, float.MaxValue };
-			text += $"  ->  {Format(row.Upgrade.Stat, Mathf.Clamp(current + row.Upgrade.PerLevel, limits[0], limits[1]))}";
+			text += $"  ->  {Format(row.Upgrade.Stat, Mathf.Clamp(current + row.Upgrade.PerLevel, limits[0], limits[1]))}  |  ${GameState.NextUpgradePrice(row.Turret, row.Upgrade)}";
 		}
 		_details.Text = text;
 		_details.AddThemeColorOverride("font_color", UiTheme.TextColor);

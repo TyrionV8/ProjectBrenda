@@ -20,8 +20,13 @@ click a bug (or `1`–`9`) to send it.
 
 ## Modes
 
-* **Campaign** — 8 boards (Dev Board → Server Board). Clearing a level gives upgrade points
-  the first time and 1–3 stars depending on how much of the board survived.
+* **Campaign** — 8 boards (Dev Board → Server Board). A victory earns 1–3 stars from board
+  integrity and credits the remaining match money to the upgrade balance. Each board keeps
+  its best remaining-money result: a worse replay gives no credit, a better replay gives
+  only the difference. Spend this balance on progressively priced upgrades and, when their
+  gameplay definitions are available, permanent counter-turret unlocks. Each match still
+  begins with that level's normal starting money; defeat, custom levels and versus give
+  no campaign credit.
 * **Versus** — one player defends and hosts, the other spends energy to send bugs. Play
   against the built-in AI, host a match or join one. Online play uses a small WebSocket/JSON
   protocol that AIs can use too: see [docs/PROTOCOL.md](docs/PROTOCOL.md) and
@@ -60,7 +65,10 @@ the network — which is what makes versus, AIs and headless tests share the sam
 
 * **Turrets** (`data/turrets.json`): `stats` + `upgrades`; each upgrade adds `per_level` to a
   stat per level bought, `limits` clamp the result. Seconds and pixels (the prototype ran at
-  30 steps per second; values were converted).
+  30 steps per second; values were converted). Upgrades cost `price + price_step * levels`
+  where `levels` is the number already bought. Optional `unlock_price` requires a permanent
+  purchase before upgrades become available. Initial auxiliary upgrades start at $5 and
+  rise by $10 per bought level; damage, density and freezing start at $30 and rise by $15.
 * **Bugs** (`data/enemies.json`): HP, speed, reward, size, effect colours, how fast they chew
   components, and their versus cost/unlock time. Each bug's art is the sprite sheet
   `assets/sprites/bugs/ID.png` (see *Art* below).
@@ -147,6 +155,11 @@ Bosses are announced, get a health bar in the HUD and cost more CPU when they ge
 (`cpu_damage`). Only Kernel Panic can be sent in versus.
 
 Saves: `user://save.json` (campaign), `user://settings.cfg`, `user://levels/` (custom levels).
+Campaign save version 3 stores `balance`, `best_remaining_money`, `unlocked_turrets`,
+`upgrades`, `stars` and unlocked levels. Version 2 points become money at 20 per point;
+existing upgrades and stars are retained. New campaigns start with a zero upgrade balance.
+Purchases and victory records persist before notifying the interface; the file is written
+completely to a temporary path before replacing the previous save.
 
 ## Developer commands
 
@@ -161,11 +174,19 @@ godot --headless --path . -- --balance
 godot --headless --path . -- --server --level=3 --defender=bot --attacker=remote
 
 # screenshots (needs a display; xvfb-run works); boss:N:SECONDS drops level N's boss on the board
-godot --path . -- --capture=menu,levels,game:5,attack:5,editor:7,waves:7,boss:6:6 --out=/tmp/shots
+godot --path . -- --capture=game:5:20 --out=/tmp/shots
+
+# actual campaign victory and its cash record (the win:N mode remains a custom level)
+godot --path . -- --capture=campaignwin:1 --out=/tmp/shots
 
 # regenerate assets/ui/theme.tres after changing src/UI/UiTheme.cs
 godot --headless --path . -- --build-theme
 ```
+
+Run one screenshot mode per process, except `game:1:5,pause` for the pause overlay.
+The `upgrades` and `campaignwin` capture preparations use their own disposable campaign
+save and never replace the player's normal save. For the full test suite, use isolated
+user-data directories: some general tests intentionally write campaign files.
 
 ## Exporting
 
