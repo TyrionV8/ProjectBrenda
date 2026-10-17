@@ -132,72 +132,73 @@
  ],
  "waves": [
   [
-   {"enemy": "bug", "time": 0.0},
-   {"enemy": "bug", "time": 1.5},
-   {"enemy": "bug", "time": 3.0},
-   {"enemy": "bug", "time": 4.5},
+   {"enemy": "spider", "time": 0.0},
+   {"enemy": "bug", "time": 2.0},
+   {"enemy": "spider", "time": 4.0},
    {"enemy": "bug", "time": 6.0},
-   {"enemy": "bug", "time": 7.5},
-   {"enemy": "bug", "time": 9.0},
-   {"enemy": "bug", "time": 10.5}
-  ],
-  [
-   {"enemy": "bug", "time": 0},
-   {"enemy": "bug", "time": 1},
-   {"enemy": "bug", "time": 2},
-   {"enemy": "bug", "time": 3},
-   {"enemy": "bug", "time": 4},
-   {"enemy": "bug", "time": 5},
-   {"enemy": "bug", "time": 6},
-   {"enemy": "bug", "time": 7},
-   {"enemy": "spider", "time": 10.0},
-   {"enemy": "spider", "time": 11.5},
-   {"enemy": "spider", "time": 13.0},
-   {"enemy": "spider", "time": 14.5}
+   {"enemy": "spider", "time": 8.0}
   ],
   [
    {"enemy": "spider", "time": 0.0},
-   {"enemy": "spider", "time": 1.2},
-   {"enemy": "spider", "time": 2.4},
-   {"enemy": "spider", "time": 3.6},
-   {"enemy": "spider", "time": 4.8},
+   {"enemy": "spider", "time": 2.0},
+   {"enemy": "bug", "time": 4.0},
    {"enemy": "spider", "time": 6.0},
-   {"enemy": "beetle", "time": 9},
-   {"enemy": "beetle", "time": 12},
-   {"enemy": "bug", "time": 14.0},
-   {"enemy": "termite", "time": 14.6},
-   {"enemy": "bug", "time": 15.2},
-   {"enemy": "termite", "time": 15.8},
-   {"enemy": "bug", "time": 16.4},
-   {"enemy": "termite", "time": 17.0},
-   {"enemy": "bug", "time": 17.6},
-   {"enemy": "termite", "time": 18.2}
+   {"enemy": "spider", "time": 8.0}
   ],
   [
-   {"enemy": "beetle", "time": 0.0},
-   {"enemy": "beetle", "time": 2.5},
+   {"enemy": "termite", "time": 0.0},
+   {"enemy": "spider", "time": 2.0},
    {"enemy": "spider", "time": 4.0},
-   {"enemy": "spider", "time": 4.8},
-   {"enemy": "beetle", "time": 5.0},
-   {"enemy": "spider", "time": 5.6},
-   {"enemy": "spider", "time": 6.4},
-   {"enemy": "spider", "time": 7.2},
+   {"enemy": "termite", "time": 6.0},
+   {"enemy": "termite", "time": 8.0},
+   {"enemy": "termite", "time": 10.0}
+  ],
+  [
+   {"enemy": "spider", "time": 0.0},
+   {"enemy": "termite", "time": 1.75},
+   {"enemy": "spider", "time": 3.5},
+   {"enemy": "spider", "time": 5.25},
+   {"enemy": "spider", "time": 7.0},
+   {"enemy": "termite", "time": 8.75}
+  ],
+  [
+   {"enemy": "termite", "time": 0.0},
+   {"enemy": "termite", "time": 1.75},
+   {"enemy": "spider", "time": 3.5},
+   {"enemy": "beetle", "time": 5.25},
+   {"enemy": "spider", "time": 7.0},
+   {"enemy": "termite", "time": 8.75},
+   {"enemy": "beetle", "time": 10.5}
+  ],
+  [
+   {"enemy": "termite", "time": 0.0},
+   {"enemy": "termite", "time": 1.75},
+   {"enemy": "spider", "time": 3.5},
+   {"enemy": "termite", "time": 5.25},
+   {"enemy": "termite", "time": 7.0},
+   {"enemy": "beetle", "time": 8.75},
+   {"enemy": "beetle", "time": 10.5}
+  ],
+  [
+   {"enemy": "termite", "time": 0.0},
+   {"enemy": "termite", "time": 1.5},
+   {"enemy": "roach", "time": 3.0},
+   {"enemy": "termite", "time": 4.5},
+   {"enemy": "termite", "time": 6.0},
    {"enemy": "beetle", "time": 7.5},
-   {"enemy": "spider", "time": 8.0},
-   {"enemy": "spider", "time": 8.8},
-   {"enemy": "spider", "time": 9.6},
-   {"enemy": "beetle", "time": 10.0},
-   {"enemy": "bug", "time": 12.0},
-   {"enemy": "termite", "time": 12.5},
-   {"enemy": "bug", "time": 13.0},
-   {"enemy": "termite", "time": 13.5},
-   {"enemy": "bug", "time": 14.0},
-   {"enemy": "bug", "time": 14.5},
-   {"enemy": "termite", "time": 15.0},
-   {"enemy": "bug", "time": 15.5},
-   {"enemy": "termite", "time": 16.0},
-   {"enemy": "bug", "time": 16.5},
-   {"enemy": "ddos", "time": 19.5}
+   {"enemy": "roach", "time": 9.0},
+   {"enemy": "roach", "time": 10.5}
+  ],
+  [
+   {"enemy": "termite", "time": 0.0},
+   {"enemy": "beetle", "time": 1.5},
+   {"enemy": "spider", "time": 3.0},
+   {"enemy": "termite", "time": 4.5},
+   {"enemy": "beetle", "time": 6.0},
+   {"enemy": "roach", "time": 7.5},
+   {"enemy": "roach", "time": 9.0},
+   {"enemy": "roach", "time": 10.5},
+   {"enemy": "ddos", "time": 27.0}
   ]
  ]
 }

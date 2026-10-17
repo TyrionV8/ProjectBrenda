@@ -12,7 +12,7 @@ namespace HardwareDefence.Sim;
 /// </summary>
 public sealed class DefenderBot
 {
-	public string[] Plan = { "blaster", "burst", "blaster", "freezer", "mortar", "burst", "laser" };
+	public string[] Plan = { "burst", "burst", "burst", "freezer", "mortar", "burst", "burst" };
 	public float Interval = 0.4f;
 	int _next;
 	float _timer;
@@ -30,11 +30,15 @@ public sealed class DefenderBot
 		if (_next >= 7 && counter != null && !m.Turrets.Any(t => t.Def.Id == counter.Id))
 		{
 			// Save a bounded budget instead of spending every small reward on another gun.
-			if (m.Money < counter.Cost + 10) return;
+			var bossActive = m.Bugs.Any(b => !b.Gone && b.Def.Boss);
+			if (m.Money < counter.Cost + (bossActive ? 0 : 10)) return;
 			var counterCell = BestCell(m, counter);
 			if (counterCell.X >= 0 && m.Build(counter, counterCell)) return;
 		}
-		var def = Catalog.Turret(Plan[_next % Plan.Length]);
+		// After the complete opening, add damage rather than repeatedly buying
+		// freezers whose slowing effect does not stack.
+		var planned = _next < Plan.Length ? Plan[_next] : (_next % 3 == 0 ? "mortar" : "burst");
+		var def = Catalog.Turret(planned);
 		if (m.Money < def.Cost)
 			return;
 		var cell = BestCell(m, def);
@@ -45,7 +49,12 @@ public sealed class DefenderBot
 	static TurretDef CounterFor(Match m)
 	{
 		var boss = m.Bugs.FirstOrDefault(b => !b.Gone && b.Def.Boss)?.Def
-			?? m.Waves.Upcoming().Select(s => Catalog.Enemy(s.Enemy)).FirstOrDefault(b => b?.Boss == true);
+			?? m.Waves.Upcoming().Select(s => Catalog.Enemy(s.Enemy)).FirstOrDefault(b => b?.Boss == true)
+			// Campaign bosses are public in the wave list. Budget for support before the
+			// final wave, rather than arriving $1 short and waiting for the boss reward.
+			?? (m.Mode == MatchMode.Campaign
+				? m.Level.Waves.SelectMany(w => w).Select(s => Catalog.Enemy(s.Enemy)).FirstOrDefault(b => b?.Boss == true)
+				: null);
 		return Catalog.Turret(boss?.Ability switch
 		{
 			"trojan" or "rootkit" => "antivirus",
@@ -70,7 +79,7 @@ public sealed class DefenderBot
 					continue;
 				var center = Grid.CellCenter(cell);
 				var score = points.Count(p => center.DistanceTo(p) <= reach);
-				if (def.Behavior is "backup" or "firewall")
+				if (def.Behavior is "backup" or "firewall" or "antivirus")
 					score += m.Turrets.Count(t => center.DistanceTo(t.Pos) <= reach) * 8;
 				// Prefer covering the end of the route, where bugs are about to hit the CPU.
 				if (score > bestScore)

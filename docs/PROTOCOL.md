@@ -70,7 +70,7 @@ blocking components or on the 3 × 3 cells around the CPU.
 | `state` | `playing`, `defender_won` or `attacker_won`. |
 | `money` | Defender's money. |
 | `energy`, `energy_rate` | Attacker's energy and its regeneration per second. |
-| `cpu_hp` | 10 at the start; the attacker wins at 0. |
+| `cpu_hp` | 10 at the start; the attacker wins at 0 in the same simulation step. Boss escape damage is 5/7/9 on boards 1–3 and 10 on boards 4–8, including Kernel Panic sent in versus. Packets cause zero damage; other minions retain their ordinary damage. |
 | `time_left` | Seconds until the defender wins. |
 | `integrity` | Share of component HP still standing. Components take chewing damage only during a bug's detour, never automatically from passing bugs on the route. |
 | `bugs` | `[{id, type, x, y, angle, hp, slowed, chewing, off_route, progress, cloaked, exposed, revealed}]` — `x`, `y` and `angle` are the real position/direction. `off_route` is true while approaching a component, chewing, or returning. `progress` stays frozen at the exit point until the bug returns exactly there. `chewing` is true only for actual chewing, not travel; `cloaked`: a rootkit hiding (can't be targeted or hurt); `exposed`: revealed by an active scanner in range, making effective `cloaked` false without resetting its internal cloak cycle; `revealed`: a trojan permanently without its disguise. |

@@ -8,7 +8,7 @@ namespace HardwareDefence.Tests;
 /// <summary>Plays the simulation headless — no rendering, so whole levels take milliseconds.</summary>
 public sealed class SimTests : TestSuite
 {
-	public static Match Play(LevelData level, bool bot, float limit = 900)
+	public static Match Play(LevelData level, bool bot, float limit = 4800)
 	{
 		var m = new Match(level);
 		var defender = bot ? new DefenderBot() : null;
@@ -16,6 +16,7 @@ public sealed class SimTests : TestSuite
 		{
 			m.Step(Match.StepTime);
 			defender?.Step(m, Match.StepTime);
+			m.Events.Clear();
 		}
 		return m;
 	}
@@ -35,7 +36,7 @@ public sealed class SimTests : TestSuite
 		{
 			var m = Play(Catalog.Levels[i], true);
 			Check(m.State == MatchState.DefenderWon, $"level {i + 1} not cleared (cpu {m.CpuHp})");
-			notes.Add($"L{i + 1}: cpu {m.CpuHp} board {m.BoardIntegrity:P0} {m.Stars}*");
+			notes.Add($"L{i + 1}: cpu {m.CpuHp} board {m.BoardIntegrity:P0} {m.Stars}* time {m.Time:0.0}s money {m.Money} upgrades 0");
 		}
 		Note = string.Join(" | ", notes);
 	}

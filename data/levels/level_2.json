@@ -174,32 +174,39 @@
  ],
  "waves": [
   [
+   {"enemy": "spider", "time": 0.0},
+   {"enemy": "bug", "time": 2.0},
+   {"enemy": "spider", "time": 4.0},
+   {"enemy": "spider", "time": 6.0},
+   {"enemy": "spider", "time": 8.0}
+  ],
+  [
    {"enemy": "bug", "time": 0.0},
    {"enemy": "bug", "time": 2.0},
-   {"enemy": "bug", "time": 4.0},
+   {"enemy": "spider", "time": 4.0},
+   {"enemy": "spider", "time": 6.0},
    {"enemy": "spider", "time": 8.0},
-   {"enemy": "bug", "time": 13.0},
-   {"enemy": "bug", "time": 13.5},
-   {"enemy": "bug", "time": 14.0},
-   {"enemy": "bug", "time": 14.5},
-   {"enemy": "bug", "time": 15.0},
-   {"enemy": "bug", "time": 15.5},
-   {"enemy": "bug", "time": 16.0},
-   {"enemy": "bug", "time": 16.5},
-   {"enemy": "bug", "time": 17.0},
-   {"enemy": "bug", "time": 17.5},
-   {"enemy": "bug", "time": 18.0},
-   {"enemy": "bug", "time": 18.5},
-   {"enemy": "bug", "time": 19.0},
-   {"enemy": "bug", "time": 19.5},
-   {"enemy": "bug", "time": 20.0},
-   {"enemy": "bug", "time": 20.5},
-   {"enemy": "bug", "time": 21.0},
-   {"enemy": "bug", "time": 21.5},
-   {"enemy": "bug", "time": 22.0},
-   {"enemy": "bug", "time": 22.5},
-   {"enemy": "spider", "time": 28.0},
-   {"enemy": "keylogger", "time": 31.0}
+   {"enemy": "spider", "time": 10.0}
+  ],
+  [
+   {"enemy": "termite", "time": 0.0},
+   {"enemy": "spider", "time": 1.75},
+   {"enemy": "spider", "time": 3.5},
+   {"enemy": "bug", "time": 5.25},
+   {"enemy": "spider", "time": 7.0},
+   {"enemy": "termite", "time": 8.75},
+   {"enemy": "termite", "time": 10.5}
+  ],
+  [
+   {"enemy": "termite", "time": 0.0},
+   {"enemy": "termite", "time": 1.5},
+   {"enemy": "termite", "time": 3.0},
+   {"enemy": "termite", "time": 4.5},
+   {"enemy": "spider", "time": 6.0},
+   {"enemy": "termite", "time": 7.5},
+   {"enemy": "bug", "time": 9.0},
+   {"enemy": "termite", "time": 10.5},
+   {"enemy": "keylogger", "time": 27.0}
   ]
  ]
 }

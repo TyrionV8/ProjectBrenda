@@ -21,7 +21,8 @@ click a bug (or `1`–`9`) to send it.
 
 ## Modes
 
-* **Campaign** — 8 boards (Dev Board → Server Board). A victory earns 1–3 stars from board
+* **Campaign** — 8 boards (Dev Board → Server Board), with **3, 4, 6, 8, 11, 15, 20 and
+  25 waves** respectively. A victory earns 1–3 stars from board
   integrity and credits the remaining match money to the upgrade balance. Each board keeps
   its best remaining-money result: a worse replay gives no credit, a better replay gives
   only the difference. Spend this balance on progressively priced upgrades and permanent
@@ -99,6 +100,15 @@ point before continuing. It stays targetable and affected by slowing throughout 
 Bosses and DDoS packets never detour. Match-local seeded randomness keeps identical runs
 reproducible; the `Match` constructor accepts an optional seed.
 
+`python3 tools/make_waves.py` deterministically regenerates only the eight boards' wave
+lists, preserving their routes, components, lighting and other data. `--check` verifies
+them without writing files; regeneration replaces manual edits to those wave lists.
+Each group contains 5–8 ordinary bugs, spaced 1.5–2 seconds
+apart, and later boards introduce more species. The boss is the last spawn of the last
+wave, with 15 extra seconds of preparation. Waves wait for their previous creatures to
+leave the board, so additional waves do not form one continuous queue. See
+[`tools/README.md`](tools/README.md) for generation and measured population checks.
+
 ### Counter-turrets
 
 The five original weapons are always available. Unlock these four supports permanently
@@ -115,8 +125,10 @@ the simulation and remote build commands accept all definitions.
 
 All four can be locked by bosses; their external support is inactive until recovery.
 Range and ability upgrades use the auxiliary $5 + $10-per-level price progression.
-The defender bot reserves money after establishing its weapons, then buys the matching
-support for an active/current-wave boss. Nine compact inventory entries leave room for
+The defender bot reserves money after seven weapons for the public campaign boss, while
+prioritizing a boss already active or in the current wave. It buys urgent support at the
+actual construction price, expands with damaging weapons after its opening freezer, and
+uses normal match funds. Nine compact inventory entries leave room for
 the boss health bar and footer at 1366×768.
 
 ### Art
@@ -194,8 +206,17 @@ Every level ends with a boss that plays out a real kind of attack (`ability` in
 | 7 ATX Motherboard | Worm | Forks copies of itself at 2/3 and 1/3 health. |
 | 8 Server Board | Kernel Panic | Blue-screens the board: every turret freezes for a moment. |
 
-Bosses are announced, get a health bar in the HUD and cost more CPU when they get through
-(`cpu_damage`). Only Kernel Panic can be sent in versus.
+Bosses are announced and get a health bar in the HUD. Their escape damage (`cpu_damage`)
+is **5, 7 and 9** on boards 1–3; on boards 4–8 it is **10**, causing immediate defeat in
+that simulation step. Only Kernel Panic can be sent in versus, where its escape is also
+lethal. DDoS packets still deal zero CPU damage; other minions keep their ordinary damage.
+
+The reference bot clears all eight boards without free upgrades or extra match money.
+The final board takes about 29 simulated minutes in that run; victory, live-population
+measurements and remaining cash are regression evidence, not a fine difficulty target.
+Fine balance remains deferred. Man-in-the-Middle now has 65 health (from 75); Rootkit has
+90 (from 120) and speed 20 (from 22), to keep those encounters winnable under the new
+escape consequences. Ordinary enemies and rewards retain their existing values.
 
 Each boss also has a short arrival vignette inside the board, without pausing play:
 Trojan's fake download, Keylogger's typed login, Man-in-the-Middle's tapped network,
