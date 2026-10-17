@@ -11,3 +11,6 @@ export_credentials.cfg
 bin/
 obj/
 *.user
+
+# Multi-agent planning notes (local only)
+/planejamento/
