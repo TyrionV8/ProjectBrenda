@@ -225,7 +225,8 @@
    {"enemy": "termite", "time": 19.6},
    {"enemy": "bug", "time": 19.9},
    {"enemy": "bug", "time": 20.2},
-   {"enemy": "bug", "time": 20.5}
+   {"enemy": "bug", "time": 20.5},
+   {"enemy": "ransomware", "time": 23.5}
   ]
  ]
 }

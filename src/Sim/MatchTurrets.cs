@@ -8,6 +8,12 @@ public sealed partial class Match
 {
 	void StepTurret(Turret t, float dt)
 	{
+		if (t.Locked > 0)
+		{
+			// Encrypted or crashed: no aiming, no shooting.
+			t.Locked = Mathf.Max(t.Locked - dt, 0);
+			return;
+		}
 		switch (t.Def.Behavior)
 		{
 			case "blaster":
@@ -126,7 +132,7 @@ public sealed partial class Match
 		var dps = t.Stat("dps");
 		foreach (var b in Bugs)
 		{
-			if (b.Gone)
+			if (!b.Targetable)
 				continue;
 			var closest = Geometry2D.GetClosestPointToSegment(b.Pos, from, to);
 			if (closest.DistanceTo(b.Pos) <= b.Radius + BeamWidth * 0.5f)
@@ -184,10 +190,15 @@ public sealed partial class Match
 		var step = p.Vel * dt;
 		p.Pos += step;
 		p.Travelled += step.Length();
+		if (Intercepted(p, p.Pos))
+		{
+			p.Done = true;
+			return;
+		}
 		// Test the whole segment travelled this step so fast shots can't skip over a bug.
 		foreach (var b in Bugs)
 		{
-			if (b.Gone)
+			if (!b.Targetable)
 				continue;
 			var hit = Geometry2D.GetClosestPointToSegment(b.Pos, from, p.Pos);
 			if (hit.DistanceTo(b.Pos) <= b.Radius + p.Size)
@@ -206,6 +217,11 @@ public sealed partial class Match
 	void StepBomb(Projectile p, float dt)
 	{
 		p.T += dt / p.Duration;
+		if (p.T >= 1 && Intercepted(p, p.Target))
+		{
+			p.Done = true;
+			return;
+		}
 		if (p.T >= 1)
 		{
 			foreach (var b in Bugs)
@@ -223,6 +239,8 @@ public sealed partial class Match
 	{
 		p.Phase += dt;
 		var target = p.TargetId != 0 ? FindBug(p.TargetId) : null;
+		if (target is { Cloaked: true })
+			target = null;
 		if (target == null)
 		{
 			target = Nearest(p.Pos, p.SearchRange);

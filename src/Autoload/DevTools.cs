@@ -14,7 +14,7 @@ namespace HardwareDefence.Autoload;
 /// <summary>
 /// Developer entry points, only active with command-line user arguments:
 ///   godot --headless --path . -- --test                    run all [Test] methods
-///   godot --path . -- --capture=menu,game:1 --out=DIR      save screenshots
+///   godot --path . -- --capture=menu,game:1 --out=DIR      save screenshots (also boss:LEVEL:SECONDS[:ROUTE_SHARE])
 ///   godot --headless --path . -- --build-theme             regenerate assets/ui/theme.tres
 ///   godot --headless --path . -- --balance                 bot vs bot versus report (data/versus.json)
 ///   godot --headless --path . -- --server [--level=N] [--port=7777] [--defender=remote|bot] [--attacker=remote|bot]
@@ -202,7 +202,7 @@ public partial class DevTools : Node
 		{
 			var parts = shot.Split(':');
 			var level = parts.Length > 1 ? int.Parse(parts[1]) - 1 : 0;
-			var wait = parts.Length > 2 ? float.Parse(parts[2]) : 10;
+			var wait = parts.Length > 2 ? float.Parse(parts[2], System.Globalization.CultureInfo.InvariantCulture) : 10;
 			switch (parts[0])
 			{
 				case "menu":
@@ -282,6 +282,26 @@ public partial class DevTools : Node
 						if (!attacker)
 							screen.Build.Select(Catalog.Turrets[0]);
 					}
+					break;
+				case "boss":
+					// The level's boss walking onto a defended board, then a shot after `wait` seconds.
+					var bossLevel = Catalog.Levels[Math.Min(level, Catalog.Levels.Count - 1)];
+					var bossId = bossLevel.Waves.SelectMany(w => w).Select(s => s.Enemy).FirstOrDefault(id => Catalog.Enemy(id)?.Boss == true);
+					LocalFeed bossFeed = null;
+					GameSession.Current = GameSession.Kind.Custom;
+					GameSession.CreateFeed = () =>
+					{
+						bossFeed = new LocalFeed(bossLevel, MatchMode.Campaign, PlayerSide.Defender, false) { DefenderBot = new DefenderBot() };
+						bossFeed.Match.Money += 150;
+						return bossFeed;
+					};
+					await Goto(GameSession.GameScene, 0.3f);
+					while (GetTree().CurrentScene is not GameScreen)
+						await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+					await Wait(1.5f);
+					if (bossId != null)
+						bossFeed.Match.SpawnBug(bossId, bossFeed.Match.Path.Length * (parts.Length > 3 ? float.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture) : 0.3f));
+					await Wait(wait);
 					break;
 				case "pause":
 					(GetTree().CurrentScene as GameScreen)?.OpenMenu();

@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 import icons  # noqa: E402
 import turrets  # noqa: E402
+from bosses import BOSSES  # noqa: E402
 from bugs import BUGS, FRAMES  # noqa: E402
 from pixel import sheet  # noqa: E402
 
@@ -24,7 +25,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 def build_bugs():
     out = {}
-    for bug in BUGS:
+    for bug in BUGS + BOSSES:
         frames = [bug.frame(f) for f in range(FRAMES)]
         img = sheet([[f[0] for f in frames], [f[1] for f in frames]])
         path = os.path.join(ROOT, "assets", "sprites", "bugs", f"{bug.id}.png")
@@ -34,12 +35,12 @@ def build_bugs():
     return out
 
 
-def preview(images, path, zoom=10):
+def preview(images, path, zoom=10, designs=BUGS):
     """Big frames (walk 0, walk 2, chew 0 with the glow added) on board and copper colours,
     then the same sprites at game scale (x3)."""
     pad = 3
     cells = []
-    for bug in BUGS:
+    for bug in designs:
         img = images[bug.id]
         fw, fh = bug.w, bug.h
         for col, bgc in ((0, (16, 44, 74, 255)), (2, (16, 44, 74, 255)), (4, (196, 140, 60, 255))):
@@ -52,9 +53,9 @@ def preview(images, path, zoom=10):
     big_w = max(t.width for _, _, t in cells) * 3 * zoom + pad * 4 * zoom
     rows = [cells[i:i + 3] for i in range(0, len(cells), 3)]
     big_h = sum(max(t.height for _, _, t in r) * zoom + pad * zoom for r in rows)
-    small = Image.new("RGBA", (sum(b.w * 3 + 6 for b in BUGS) + 6, 100), (16, 44, 74, 255))
+    small = Image.new("RGBA", (sum(b.w * 3 + 6 for b in designs) + 6, 100), (16, 44, 74, 255))
     x = 6
-    for bug in BUGS:
+    for bug in designs:
         f = images[bug.id].crop((0, 0, bug.w, bug.h))
         small.alpha_composite(f.resize((bug.w * 3, bug.h * 3), Image.NEAREST), (x, 8))
         x += bug.w * 3 + 6
@@ -89,6 +90,7 @@ if __name__ == "__main__":
     if "--preview" in sys.argv:
         out = sys.argv[sys.argv.index("--preview") + 1]
         preview(images, out)
+        preview(images, out.replace(".png", "_bosses.png"), designs=BOSSES)
         preview_row(list(turret_images.values()), out.replace(".png", "_turrets.png"), 10)
         preview_row(list(icon_images.values()), out.replace(".png", "_icons.png"), 8, (40, 40, 48, 255))
     print(f"wrote {len(images)} bug sheets, {len(turret_images)} turret images, {len(icon_images)} icons")

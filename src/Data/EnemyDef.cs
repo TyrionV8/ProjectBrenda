@@ -25,6 +25,34 @@ public sealed class EnemyDef
 	public int VersusCost { get; set; } = 10;
 	/// <summary>Versus mode: seconds into the match before it can be sent.</summary>
 	public float VersusUnlock { get; set; }
+	/// <summary>CPU health lost when it gets through.</summary>
+	public int CpuDamage { get; set; } = 1;
+
+	/// <summary>A level boss: announced, shown with a health bar, and has an <see cref="Ability"/>.</summary>
+	public bool Boss { get; set; }
+	/// <summary>Only spawned by a boss (hidden from the editor and versus).</summary>
+	public bool Minion { get; set; }
+	/// <summary>Short name shown when the boss arrives, like a process name.</summary>
+	public string Title { get; set; }
+	/// <summary>One line about what it does (boss warning, tooltips).</summary>
+	public string Blurb { get; set; }
+	/// <summary>
+	/// The hacker attack it performs: trojan, keylogger, mitm, ddos, rootkit, ransomware,
+	/// worm or panic (see Match.StepAbility). Tuned with the four fields below.
+	/// </summary>
+	public string Ability { get; set; }
+	/// <summary>Seconds between uses (rootkit: seconds visible).</summary>
+	public float AbilityEvery { get; set; } = 5;
+	/// <summary>How long the effect lasts (rootkit: seconds hidden).</summary>
+	public float AbilityTime { get; set; } = 2;
+	/// <summary>Reach of the effect in board pixels.</summary>
+	public float AbilityRadius { get; set; } = 100;
+	/// <summary>Bug type it releases (trojan payload, ddos packets, worm copies) and how many at a time.</summary>
+	public string Spawn { get; set; }
+	public int SpawnCount { get; set; } = 1;
+
+	/// <summary>Can the attacker send it in versus mode.</summary>
+	[JsonIgnore] public bool InVersus => VersusCost > 0 && !Minion;
 
 	[JsonIgnore] public Color Shell => new(ShellColor);
 	[JsonIgnore] public Color Accent => new(AccentColor);

@@ -61,6 +61,8 @@ public sealed partial class Match
 	readonly Dictionary<int, Bug> _bugById = new();
 	readonly Dictionary<int, Projectile> _projById = new();
 	int _nextId = 1;
+	/// <summary>Bugs released by bosses during a step, added once the step's loops are done.</summary>
+	readonly List<(string Enemy, float Progress)> _spawnQueue = new();
 	float _income;
 	float _lastSend = -99;
 	float _stepAccumulator;
@@ -180,6 +182,9 @@ public sealed partial class Match
 			StepProjectile(p, dt);
 		foreach (var b in Bugs)
 			StepBug(b, dt);
+		foreach (var (enemy, progress) in _spawnQueue)
+			SpawnBug(enemy, progress);
+		_spawnQueue.Clear();
 
 		Projectiles.RemoveAll(p =>
 		{
@@ -246,6 +251,8 @@ public sealed partial class Match
 			return "The match is over";
 		if (def == null)
 			return "Unknown bug";
+		if (!def.InVersus)
+			return "Not available in versus";
 		if (Time < def.VersusUnlock)
 			return $"Unlocks in {Mathf.CeilToInt(def.VersusUnlock - Time)}s";
 		if (Energy < def.VersusCost)
@@ -265,7 +272,8 @@ public sealed partial class Match
 		return true;
 	}
 
-	public Bug SpawnBug(string enemyId)
+	/// <param name="progress">Where along the route it appears (bosses release bugs where they are).</param>
+	public Bug SpawnBug(string enemyId, float progress = 0)
 	{
 		var def = Catalog.Enemy(enemyId);
 		if (def == null)
@@ -273,7 +281,12 @@ public sealed partial class Match
 			GD.PushError($"Unknown enemy '{enemyId}'");
 			return null;
 		}
-		var bug = new Bug { Id = _nextId++, Def = def, Hp = def.MaxHp, Pos = Path.Sample(0), Angle = Path.AngleAt(0) };
+		progress = Mathf.Clamp(progress, 0, Path.Length);
+		var bug = new Bug
+		{
+			Id = _nextId++, Def = def, Hp = def.MaxHp, Progress = progress, Pos = Path.Sample(progress), Angle = Path.AngleAt(progress),
+			AbilityTimer = def.AbilityEvery,
+		};
 		Bugs.Add(bug);
 		_bugById[bug.Id] = bug;
 		Events.Add(new SimEvent(EventKind.BugSpawned, bug.Id, bug.Pos, Type: def.Id));
@@ -296,14 +309,19 @@ public sealed partial class Match
 		if (b.Progress >= Path.Length)
 		{
 			b.Escaped = true;
-			CpuHp = Mathf.Max(CpuHp - 1, 0);
 			Events.Add(new SimEvent(EventKind.BugEscaped, b.Id, b.Pos, Type: b.Def.Id));
+			// DDoS packets just clog things up; everything else hurts the CPU.
+			if (b.Def.CpuDamage <= 0)
+				return;
+			CpuHp = Mathf.Max(CpuHp - b.Def.CpuDamage, 0);
 			Events.Add(new SimEvent(EventKind.CpuHit, Value: CpuHp, Pos: Path.Sample(Path.Length)));
 			return;
 		}
 		b.Pos = Path.Sample(b.Progress);
 		b.Angle = Path.AngleAt(b.Progress);
 		Chew(b, dt);
+		if (!string.IsNullOrEmpty(b.Def.Ability))
+			StepAbility(b, dt);
 	}
 
 	void Chew(Bug b, float dt)
@@ -349,20 +367,28 @@ public sealed partial class Match
 
 	public void DamageBug(Bug b, float amount)
 	{
-		if (b.Gone)
+		if (!b.Targetable)
 			return;
 		b.Hp -= amount;
+		OnBossHurt(b);
 		if (b.Hp > 0)
 			return;
 		b.Dead = true;
 		Money += Mode == MatchMode.Versus ? Mathf.RoundToInt(b.Def.Reward * Rules.KillRewardFactor) : b.Def.Reward;
 		Events.Add(new SimEvent(EventKind.BugDied, b.Id, b.Pos, b.Def.Reward, b.Def.Id));
+		if (b.Def.Ability == "trojan")
+		{
+			// The payload spills out where the horse fell.
+			for (var i = 0; i < b.Def.SpawnCount; i++)
+				_spawnQueue.Add((b.Def.Spawn, b.Progress - i * 9));
+			Events.Add(new SimEvent(EventKind.BossAbility, b.Id, b.Pos, b.Def.SpawnCount, "payload"));
+		}
 	}
 
 	// ---------------------------------------------------------------- targeting helpers
 
 	public IEnumerable<Bug> BugsInRange(Vector2 from, float range) =>
-		Bugs.Where(b => !b.Gone && from.DistanceTo(b.Pos) <= range + b.Radius * 0.5f);
+		Bugs.Where(b => b.Targetable && from.DistanceTo(b.Pos) <= range + b.Radius * 0.5f);
 
 	/// <summary>The bug closest to the CPU within range.</summary>
 	public Bug FurthestInRange(Vector2 from, float range)
@@ -380,7 +406,7 @@ public sealed partial class Match
 		var bestD = maxRange;
 		foreach (var b in Bugs)
 		{
-			if (b.Gone)
+			if (!b.Targetable)
 				continue;
 			var d = from.DistanceTo(b.Pos);
 			if (d <= bestD)

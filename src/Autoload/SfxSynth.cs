@@ -25,7 +25,47 @@ public static class SfxSynth
 		["freeze"] = Freeze(),
 		["crunch"] = Crunch(),
 		["send"] = Sweep(300, 900, 0.09f, Wave.Triangle, 0.35f),
+		// Bosses.
+		["alarm"] = Arpeggio(new[] { 880f, 622.3f, 880f, 622.3f, 880f, 622.3f }, 0.13f, Wave.Square, 0.28f),
+		["glitch"] = Glitch(),
+		["steal"] = Sweep(1400, 380, 0.12f, Wave.Square, 0.18f),
+		["lock"] = Arpeggio(new[] { 196f, 0f, 146.8f }, 0.05f, Wave.Square, 0.35f),
+		["crash"] = Crash(),
 	};
+
+	/// <summary>Bit-crushed blips at random pitches, with gaps: a data glitch.</summary>
+	static AudioStreamWav Glitch()
+	{
+		var n = (int)(Rate * 0.35f);
+		var data = new float[n];
+		double phase = 0;
+		var freq = 800f;
+		for (var i = 0; i < n; i++)
+		{
+			if (i % 600 == 0)
+				freq = 200 + (float)Rng.NextDouble() * 2400;
+			phase += freq / Rate;
+			var t = (float)i / n;
+			var gate = (i / 900) % 3 == 1 ? 0 : 1;
+			data[i] = Osc(Wave.Square, phase) * gate * (1 - t) * 0.22f;
+		}
+		return ToWav(data);
+	}
+
+	/// <summary>A power-down: falling square tone over noise.</summary>
+	static AudioStreamWav Crash()
+	{
+		var n = (int)(Rate * 0.9f);
+		var data = new float[n];
+		double phase = 0;
+		for (var i = 0; i < n; i++)
+		{
+			var t = (float)i / n;
+			phase += Mathf.Lerp(520, 35, Mathf.Sqrt(t)) / Rate;
+			data[i] = (Osc(Wave.Square, phase) * 0.6f + Noise() * 0.4f) * (1 - t) * 0.32f;
+		}
+		return ToWav(data);
+	}
 
 	enum Wave
 	{

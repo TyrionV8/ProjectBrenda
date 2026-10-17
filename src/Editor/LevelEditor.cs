@@ -406,7 +406,7 @@ public partial class LevelEditor : Control
 		box.AddChild(Ui.Divider());
 		box.AddChild(Ui.Label("FILL", "SmallHeader", HorizontalAlignment.Center));
 		var type = new OptionButton();
-		foreach (var e in Catalog.EnemyList)
+		foreach (var e in Catalog.WaveEnemies)
 			type.AddItem(e.Name);
 		box.AddChild(type);
 		var count = Field(box, "Count", 1, 60, 1, 8);
@@ -416,7 +416,7 @@ public partial class LevelEditor : Control
 		{
 			var wave = l.Waves[_timeline.Wave];
 			for (var i = 0; i < (int)count.Value; i++)
-				wave.Add(new SpawnData { Enemy = Catalog.EnemyList[type.Selected].Id, Time = (float)(from.Value + i * every.Value) });
+				wave.Add(new SpawnData { Enemy = Catalog.WaveEnemies[type.Selected].Id, Time = (float)(from.Value + i * every.Value) });
 			wave.Sort((a, b) => a.Time.CompareTo(b.Time));
 		}), "ToolButton"));
 		box.AddChild(Ui.Spacer(0, true));

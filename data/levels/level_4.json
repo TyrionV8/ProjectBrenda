@@ -180,7 +180,8 @@
    {"enemy": "termite", "time": 15.0},
    {"enemy": "bug", "time": 15.5},
    {"enemy": "termite", "time": 16.0},
-   {"enemy": "bug", "time": 16.5}
+   {"enemy": "bug", "time": 16.5},
+   {"enemy": "ddos", "time": 19.5}
   ]
  ]
 }

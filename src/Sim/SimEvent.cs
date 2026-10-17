@@ -18,6 +18,8 @@ public enum EventKind
 	WaveCountdown,
 	WaveStarted,
 	MatchEnded,
+	/// <summary>A boss used its ability. Id = bug, Type = what happened (see Match.StepAbility).</summary>
+	BossAbility,
 }
 
 /// <summary>

@@ -92,7 +92,26 @@ Bugs chew them as they pass, and the board goes darker as they burn out. Big lit
 (board, route) are drawn in tiles because a 2D light reaches at most 16 lights per item.
 
 The 8 bugs: Glitch, Spider, Termite (weak, eats the board fast), Beetle, Armored Worm,
-Roach (fast), Runner and Brute, plus the boss.
+Roach (fast), Runner and Brute.
+
+### Bosses
+
+Every level ends with a boss that plays out a real kind of attack (`ability` in
+`data/enemies.json`, logic in `Sim/MatchBosses.cs`, effects in `View/BossFx.cs`):
+
+| Level | Boss | Attack |
+|---|---|---|
+| 1 Dev Board | Trojan Horse | Arrives disguised as `FREE_RAM.EXE`; below half health it's found out, and when killed it drops a payload of bugs. |
+| 2 Keyboard | Keylogger | Pulls keystrokes off the keys and steals $1 a second while alive. |
+| 3 Wi-Fi Router | Man-in-the-Middle | Taps the turrets around it and intercepts half the shots fired near it. |
+| 4 Sound Card | DDoS Botnet | Floods the route with junk packets that soak up fire (they don't hurt the CPU). |
+| 5 Graphics Card | Rootkit | Hides every few seconds: turrets can't see or hurt it. |
+| 6 Laptop | Ransomware | Encrypts nearby turrets (padlock, scrambled hex): they can't fire for a while. |
+| 7 ATX Motherboard | Worm | Forks copies of itself at 2/3 and 1/3 health. |
+| 8 Server Board | Kernel Panic | Blue-screens the board: every turret freezes for a moment. |
+
+Bosses are announced, get a health bar in the HUD and cost more CPU when they get through
+(`cpu_damage`). Only Kernel Panic can be sent in versus.
 
 Saves: `user://save.json` (campaign), `user://settings.cfg`, `user://levels/` (custom levels).
 
@@ -108,8 +127,8 @@ godot --headless --path . -- --balance
 # dedicated versus server (see docs/PROTOCOL.md)
 godot --headless --path . -- --server --level=3 --defender=bot --attacker=remote
 
-# screenshots (needs a display; xvfb-run works)
-godot --path . -- --capture=menu,levels,game:5,attack:5,editor:7,waves:7 --out=/tmp/shots
+# screenshots (needs a display; xvfb-run works); boss:N:SECONDS drops level N's boss on the board
+godot --path . -- --capture=menu,levels,game:5,attack:5,editor:7,waves:7,boss:6:6 --out=/tmp/shots
 
 # regenerate assets/ui/theme.tres after changing src/UI/UiTheme.cs
 godot --headless --path . -- --build-theme

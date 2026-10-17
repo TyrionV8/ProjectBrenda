@@ -22,7 +22,7 @@ public partial class WaveTimeline : Control
 	(int Wave, SpawnData Spawn)? _drag;
 	Vector2 _mouse;
 
-	static IReadOnlyList<EnemyDef> Types => Catalog.EnemyList;
+	static IReadOnlyList<EnemyDef> Types => Catalog.WaveEnemies;
 	float LaneHeight => (Size.Y - HeaderHeight) / Types.Count;
 	List<SpawnData> Spawns => Wave < EditorState.Level.Waves.Count ? EditorState.Level.Waves[Wave] : new List<SpawnData>();
 
@@ -32,7 +32,7 @@ public partial class WaveTimeline : Control
 		MouseFilter = MouseFilterEnum.Stop;
 		for (var i = 0; i < Types.Count; i++)
 		{
-			var icon = new BugIcon(Types[i], 40);
+			var icon = new BugIcon(Types[i], 36);
 			AddChild(icon);
 		}
 		Resized += Layout;
@@ -43,7 +43,7 @@ public partial class WaveTimeline : Control
 	{
 		var icons = GetChildren().OfType<BugIcon>().ToList();
 		for (var i = 0; i < icons.Count; i++)
-			icons[i].Position = new Vector2(8, HeaderHeight + i * LaneHeight + (LaneHeight - 40) / 2);
+			icons[i].Position = new Vector2(8, HeaderHeight + i * LaneHeight + (LaneHeight - 36) / 2);
 		QueueRedraw();
 	}
 

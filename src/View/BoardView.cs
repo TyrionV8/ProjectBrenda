@@ -99,7 +99,7 @@ public partial class BoardView : Node2D
 			return;
 		foreach (var pos in Level.PathLeds(Cols, Rows))
 		{
-			var led = new PathLedView(pos, Theme.Led);
+			var led = new PathLedView(pos, Theme.Led, Theme.LedEnergy);
 			_ledLayer.AddChild(led);
 			Leds.Add(led);
 		}

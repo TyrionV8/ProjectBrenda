@@ -36,6 +36,7 @@ public partial class GameScreen : Node2D
 	Node2D _bugLayer;
 	Node2D _projectileLayer;
 	Fx _fx;
+	BossFx _bossFx;
 	PauseMenu _pause;
 	HashSet<Vector2I> _blocked;
 	readonly Dictionary<int, BugView> _bugs = new();
@@ -81,6 +82,14 @@ public partial class GameScreen : Node2D
 		_board.AddChild(_projectileLayer);
 		_board.AddChild(_fx);
 		_fx.ShakeRequested += amount => _shake = Mathf.Max(_shake, amount);
+		_bossFx = new BossFx { Fx = _fx, Board = _board, RouteLength = new PathLine(level.PathPoints()).Length };
+		_board.AddChild(_bossFx);
+		_bossFx.Revealed += () =>
+		{
+			Hud.ShowBanner("INTRUSION DETECTED", "TROJAN.EXE  -  it was a trojan! Kill it before it drops its payload.");
+			Audio.Play("alarm", "SFX", -2, 0);
+			PostFx.PulseDamage(0.35f);
+		};
 		Build = new BuildController { Screen = this };
 		_board.AddChild(Build);
 
@@ -122,6 +131,7 @@ public partial class GameScreen : Node2D
 		if (snap == null)
 			return;
 		SyncBugs(snap, dt);
+		_bossFx.Sync(snap, dt);
 		SyncTurrets(snap);
 		SyncProjectiles(snap, dt);
 		SyncComponents(snap, dt);
@@ -163,8 +173,8 @@ public partial class GameScreen : Node2D
 			var k = (int)key.Keycode - (int)Key.Key1;
 			if (Feed.LocalSide == PlayerSide.Defender && k >= 0 && k < Catalog.Turrets.Count)
 				Build.Select(Catalog.Turrets[k]);
-			else if (Feed.LocalSide == PlayerSide.Attacker && k >= 0 && k < Catalog.EnemyList.Count)
-				SendBug(Catalog.EnemyList[k]);
+			else if (Feed.LocalSide == PlayerSide.Attacker && k >= 0 && k < Catalog.VersusEnemies.Count)
+				SendBug(Catalog.VersusEnemies[k]);
 		}
 	}
 
@@ -329,6 +339,8 @@ public partial class GameScreen : Node2D
 			var to = view.Position + dir * (24 + view.Stats.GetValueOrDefault("beam_length"));
 			foreach (var b in snap.Bugs)
 			{
+				if (b.Cloaked)
+					continue;
 				var pos = new Vector2(b.X, b.Y);
 				var def = Catalog.Enemy(b.Type);
 				if (def == null || Geometry2D.GetClosestPointToSegment(pos, from, to).DistanceTo(pos) > def.Radius + Match.BeamWidth * 0.5f)
@@ -346,6 +358,26 @@ public partial class GameScreen : Node2D
 	{
 		switch (e.Kind)
 		{
+			case EventKind.BugSpawned:
+				if (Catalog.Enemy(e.Type) is { Boss: true } boss)
+				{
+					Hud.ShowBossWarning(boss);
+					Audio.Play(boss.Ability == "trojan" ? "upgrade" : "alarm", "SFX", -2, 0);
+					PostFx.PulseDamage(0.35f);
+					_fx.Shake(3);
+				}
+				break;
+			case EventKind.BossAbility:
+				if (e.Type is "encrypt" or "panic")
+					foreach (var t in _turrets.Values)
+						if (e.Type == "panic" || t.Position.DistanceTo(e.Pos) <= e.Value)
+							t.LockKind = e.Type;
+				if (e.Type == "steal")
+					Hud.FlashMoney();
+				var sound = _bossFx.OnAbility(e);
+				if (sound != null)
+					Audio.Play(sound, "SFX", -4, 0.1f);
+				break;
 			case EventKind.BugDied:
 				var def = Catalog.Enemy(e.Type);
 				if (def != null)

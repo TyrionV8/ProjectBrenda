@@ -16,6 +16,7 @@ public partial class BugBody : Node2D
 	static readonly Dictionary<string, Texture2D> Sheets = new();
 
 	public readonly EnemyDef Def;
+	Texture2D _sheet;
 	/// <summary>Distance walked (world units); drives the walk cycle.</summary>
 	public float Gait;
 	public bool Chewing;
@@ -27,21 +28,51 @@ public partial class BugBody : Node2D
 
 	public BugBody(EnemyDef def) => Def = def;
 
-	public static Texture2D Sheet(EnemyDef def)
+	public static Texture2D Sheet(EnemyDef def) => Sheet(def.Id);
+
+	static Texture2D Sheet(string id)
 	{
-		if (Sheets.TryGetValue(def.Id, out var tex))
+		if (Sheets.TryGetValue(id, out var tex))
 			return tex;
-		var path = $"res://assets/sprites/bugs/{def.Id}.png";
+		var path = $"res://assets/sprites/bugs/{id}.png";
 		tex = GD.Load<Texture2D>(ResourceLoader.Exists(path) ? path : "res://assets/sprites/bugs/bug.png");
-		Sheets[def.Id] = tex;
+		Sheets[id] = tex;
 		return tex;
 	}
 
 	/// <summary>Size of one frame in art pixels.</summary>
-	public static Vector2I FrameSize(EnemyDef def)
+	public static Vector2I FrameSize(EnemyDef def) => FrameSize(Sheet(def));
+
+	static Vector2I FrameSize(Texture2D sheet)
 	{
-		var size = Sheet(def).GetSize();
+		var size = sheet.GetSize();
 		return new Vector2I((int)size.X / Frames, (int)size.Y / 2);
+	}
+
+	/// <summary>Size of the frame being shown (the trojan's disguise is smaller).</summary>
+	public Vector2I CurrentFrameSize => FrameSize(_sheet ?? Sheet(Def));
+
+	/// <summary>The trojan arrives disguised; this swaps between the disguise and its real look.</summary>
+	public void SetDisguised(bool disguised)
+	{
+		var sheet = disguised ? Sheet(Def.Id + "_disguise") : Sheet(Def);
+		if (sheet == _sheet || _sprite == null)
+			return;
+		_sheet = sheet;
+		var offset = PixelWorld.OddOffset(FrameSize(sheet));
+		foreach (var layer in new[] { _shadow, _sprite, _glow })
+		{
+			layer.Texture = sheet;
+			layer.Offset = offset;
+		}
+	}
+
+	/// <summary>Rootkit hiding: the sprite breaks up into flickering pixels (0 = solid).</summary>
+	public void SetCloak(float amount)
+	{
+		((ShaderMaterial)_sprite.Material).SetShaderParameter("dissolve", amount);
+		_shadow.Visible = amount < 0.5f;
+		_glow.Modulate = new Color(1, 1, 1, 1 - amount * 0.8f);
 	}
 
 	/// <summary>Direction the bug faces (radians); drawn snapped to 90 degrees.</summary>
@@ -60,7 +91,7 @@ public partial class BugBody : Node2D
 
 	public override void _Ready()
 	{
-		var sheet = Sheet(Def);
+		var sheet = _sheet = Sheet(Def);
 		var offset = PixelWorld.OddOffset(FrameSize(Def));
 		Sprite2D Layer(int frame, Material material) => new()
 		{

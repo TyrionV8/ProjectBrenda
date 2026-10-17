@@ -21,6 +21,15 @@ public static class Catalog
 
 	public static IReadOnlyDictionary<string, EnemyDef> Enemies => _enemies ??= EnemyList.ToDictionary(e => e.Id);
 
+	/// <summary>Bugs the attacker can send in versus (hotkeys 1-9 follow this order).</summary>
+	public static IReadOnlyList<EnemyDef> VersusEnemies => _versusEnemies ??= EnemyList.Where(e => e.InVersus).ToList();
+
+	/// <summary>Bugs a level's waves can use (everything but the minions bosses release).</summary>
+	public static IReadOnlyList<EnemyDef> WaveEnemies => _waveEnemies ??= EnemyList.Where(e => !e.Minion).ToList();
+
+	static List<EnemyDef> _versusEnemies;
+	static List<EnemyDef> _waveEnemies;
+
 	public static IReadOnlyList<LevelData> Levels
 	{
 		get

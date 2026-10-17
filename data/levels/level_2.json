@@ -185,7 +185,8 @@
    {"enemy": "bug", "time": 21.5},
    {"enemy": "bug", "time": 22.0},
    {"enemy": "bug", "time": 22.5},
-   {"enemy": "spider", "time": 28.0}
+   {"enemy": "spider", "time": 28.0},
+   {"enemy": "keylogger", "time": 31.0}
   ]
  ]
 }

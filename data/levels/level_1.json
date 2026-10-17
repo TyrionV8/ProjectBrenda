@@ -165,7 +165,8 @@
    {"enemy": "bug", "time": 32.0},
    {"enemy": "bug", "time": 34.0},
    {"enemy": "bug", "time": 36.0},
-   {"enemy": "bug", "time": 38.0}
+   {"enemy": "bug", "time": 38.0},
+   {"enemy": "trojan", "time": 41.0}
   ]
  ]
 }

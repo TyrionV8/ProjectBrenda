@@ -18,6 +18,7 @@ public partial class BugView : Node2D
 	Vector2 _lastPos;
 	bool _placed;
 	float _angle;
+	float _cloak;
 
 	public BugView(EnemyDef def, int id)
 	{
@@ -52,6 +53,13 @@ public partial class BugView : Node2D
 		_body.Chewing = s.Chewing;
 		_body.Animate(moved, delta);
 		_body.SetFrozen(s.Slowed ? 1 : 0);
+		if (Def.Ability == "trojan")
+			_body.SetDisguised(!s.Revealed);
+		if (Def.Ability == "rootkit")
+		{
+			_cloak = Mathf.MoveToward(_cloak, s.Cloaked ? 0.9f : 0, delta * 4);
+			_body.SetCloak(_cloak);
+		}
 		if (s.Hp < _hp - 0.001f)
 		{
 			_flash = 0.8f;
@@ -75,7 +83,7 @@ public partial class BugView : Node2D
 	{
 		if (!_barVisible)
 			return;
-		var frame = BugBody.FrameSize(Def);
+		var frame = _body.CurrentFrameSize;
 		var segments = Def.MaxHp <= 12 ? (int)Def.MaxHp : 10;
 		var wanted = Mathf.Max(frame.X - 2, 9);
 		segments = Mathf.Clamp(segments, 1, (wanted + 1) / 2);

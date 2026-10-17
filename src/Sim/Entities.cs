@@ -20,10 +20,20 @@ public sealed class Bug
 	/// <summary>Index of the component being chewed, or -1.</summary>
 	public int ChewTarget = -1;
 	public float ChewFxTimer;
+	/// <summary>Boss abilities: time until the next use (or until the rootkit changes state).</summary>
+	public float AbilityTimer;
+	/// <summary>Rootkit: hidden, so turrets can't aim at or damage it.</summary>
+	public bool Cloaked;
+	/// <summary>Trojan: its disguise is off.</summary>
+	public bool Revealed;
+	/// <summary>Worm: copies made so far.</summary>
+	public int Forks;
 
 	public float Radius => Def.Radius;
 	public bool Slowed => SlowTime > 0;
 	public bool Gone => Dead || Escaped;
+	/// <summary>Turrets can aim at it and hurt it.</summary>
+	public bool Targetable => !Gone && !Cloaked;
 
 	public void ApplySlow(float factor, float duration)
 	{
@@ -49,6 +59,8 @@ public sealed class Turret
 	public bool Alternate;
 	public readonly int[] Orbs = new int[4];
 	public int NextSlot;
+	/// <summary>Seconds left encrypted (ransomware) or crashed (kernel panic): it can't fire.</summary>
+	public float Locked;
 
 	public float Stat(string name) => Stats.GetValueOrDefault(name);
 	public float Range => Def.Behavior == "laser" ? 0 : Stat("range");
@@ -66,6 +78,8 @@ public sealed class Projectile
 {
 	public int Id;
 	public ProjectileKind Kind;
+	/// <summary>Already checked by a man-in-the-middle (each shot gets one chance to be intercepted).</summary>
+	public bool Screened;
 	/// <summary>Turret type that fired it (for colours).</summary>
 	public string Source;
 	public Vector2 Pos;

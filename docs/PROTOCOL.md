@@ -68,8 +68,8 @@ blocking components or on the 3 × 3 cells around the CPU.
 | `cpu_hp` | 10 at the start; the attacker wins at 0. |
 | `time_left` | Seconds until the defender wins. |
 | `integrity` | Share of component HP still standing (bugs chew components next to the route). |
-| `bugs` | `[{id, type, x, y, angle, hp, slowed, chewing, progress}]` — `progress` is the distance walked along the route. |
-| `turrets` | `[{id, type, cell, direction, head}]` |
+| `bugs` | `[{id, type, x, y, angle, hp, slowed, chewing, progress, cloaked, revealed}]` — `progress` is the distance walked along the route; `cloaked`: a rootkit hiding (can't be targeted or hurt); `revealed`: a trojan without its disguise. |
+| `turrets` | `[{id, type, cell, direction, head, locked}]` — `locked`: encrypted (ransomware) or crashed (kernel panic), it can't fire. |
 | `projectiles` | `[{id, kind (bullet/bomb/orb), source, x, y, h, a}]` |
 | `components` | Remaining HP of each `level.components[i]` (-1 = destroyed), followed by the LEDs along the route (2 HP each; their positions come from the route, see `LevelData.PathLeds`). LEDs don't count for `integrity` and give no energy. |
 
@@ -78,7 +78,9 @@ blocking components or on the 3 × 3 cells around the CPU.
 `state.events` lists what happened since the previous update: `{kind, id, x, y, value, type}`.
 Kinds: `bug_spawned`, `bug_died` (value = reward), `bug_escaped`, `turret_built`,
 `turret_fired`, `bullet_hit`, `explosion` (value = radius), `orb_popped`, `cpu_hit`
-(value = CPU HP left), `component_destroyed` (id = component index), `chew`, `match_ended`.
+(value = CPU HP left), `component_destroyed` (id = component index), `chew`, `match_ended`,
+`boss_ability` (id = the boss, type = what it did: `steal`, `intercept`, `flood`, `cloak`,
+`uncloak`, `encrypt` (value = radius), `panic`, `reveal`, `payload`, `fork`).
 
 ## Rules
 
@@ -86,7 +88,8 @@ Kinds: `bug_spawned`, `bug_died` (value = reward), `bug_escaped`, `turret_built`
 
 * The attacker starts with `start_energy`, earns `energy_rate + energy_rate_growth * time`
   per second (up to `energy_cap`) and `component_energy` per HP of every component its bugs
-  destroy. Each enemy has a `versus_cost` and is locked until `versus_unlock` seconds.
+  destroy. Each enemy has a `versus_cost` and is locked until `versus_unlock` seconds;
+  enemies with `versus_cost` 0 (the level bosses and their minions) can't be sent.
   Bugs can be sent at most every `send_interval` seconds.
 * The defender starts with the level's money plus `defender_bonus_money`, earns
   `defender_income` per second and `kill_reward_factor` of each kill's reward.

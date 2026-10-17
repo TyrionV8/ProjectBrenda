@@ -23,10 +23,13 @@ public partial class PathLedView : Node2D
 	bool _dead;
 	float _t = GD.Randf() * 10;
 
-	public PathLedView(Vector2 pos, Color color)
+	readonly float _energy;
+
+	public PathLedView(Vector2 pos, Color color, float energy = 1)
 	{
 		Position = pos;
 		_color = color;
+		_energy = Energy * energy;
 	}
 
 	public bool Dead => _dead;
@@ -67,7 +70,7 @@ public partial class PathLedView : Node2D
 		AddChild(_glow);
 		// A wide, gentle pool of light (about 5 cells of radius). Neighbours overlap, so each one
 		// is dim on its own; losing a few leaves a dark patch on the board.
-		_light = FxUtil.Light(_color, Energy, 2.3f, FxUtil.WideLightTexture);
+		_light = FxUtil.Light(_color, _energy, 2.3f, FxUtil.WideLightTexture);
 		AddChild(_light);
 	}
 
@@ -90,7 +93,7 @@ public partial class PathLedView : Node2D
 		var on = 1f;
 		if (_ratio < 0.999f)
 			on = Mathf.PosMod(_t * (6 + 10 * (1 - _ratio)), 1) < 0.3f + 0.6f * _ratio ? 1 : 0.25f;
-		_light.Energy = Energy * on;
+		_light.Energy = _energy * on;
 		_lens.Modulate = new Color(1, 1, 1, 0.4f + 0.6f * on);
 		_glow.Modulate = new Color(_color, 0.7f * on);
 	}

@@ -28,6 +28,10 @@ public partial class Hud : CanvasLayer
 	Control _waiting;
 	Label _waitingText;
 	Control _overlay;
+	Control _bossBar;
+	EnemyDef _boss;
+	float _bossHp;
+	bool _bossDisguised;
 
 	public Hud(GameScreen screen) => _screen = screen;
 
@@ -49,6 +53,7 @@ public partial class Hud : CanvasLayer
 	public void Apply(Snapshot s)
 	{
 		_info.Apply(s);
+		UpdateBossBar(s);
 		if (Attacker)
 		{
 			_energy.Text = Mathf.FloorToInt(s.Energy).ToString();
@@ -113,6 +118,74 @@ public partial class Hud : CanvasLayer
 		tween.Parallel().TweenProperty(_bannerSub, "modulate:a", 0f, 0.4f);
 	}
 
+	/// <summary>A boss just got onto the board.</summary>
+	public void ShowBossWarning(EnemyDef def)
+	{
+		if (def.Ability == "trojan")
+		{
+			ShowBanner("NEW DOWNLOAD", "FREE_RAM.EXE  -  totally safe, double the RAM for free!");
+			return;
+		}
+		ShowBanner("INTRUSION DETECTED", $"{def.Title ?? def.Name}  -  {def.Blurb}");
+		_banner.AddThemeColorOverride("font_color", UiTheme.Red);
+		GetTree().CreateTimer(2.2).Timeout += () => _banner.RemoveThemeColorOverride("font_color");
+	}
+
+	/// <summary>The first boss on the board, with its health, at the top of the board.</summary>
+	void UpdateBossBar(Snapshot s)
+	{
+		EnemyDef boss = null;
+		var hp = 0f;
+		var disguised = false;
+		foreach (var b in s.Bugs)
+		{
+			var def = Catalog.Enemy(b.Type);
+			if (def is not { Boss: true })
+				continue;
+			boss = def;
+			hp = b.Hp;
+			disguised = def.Ability == "trojan" && !b.Revealed;
+			break;
+		}
+		if (boss == _boss && Mathf.IsEqualApprox(hp, _bossHp) && disguised == _bossDisguised)
+			return;
+		_boss = boss;
+		_bossHp = hp;
+		_bossDisguised = disguised;
+		_bossBar.Visible = boss != null;
+		_bossBar.QueueRedraw();
+	}
+
+	Control BossBar()
+	{
+		var bar = new Control { CustomMinimumSize = new Vector2(0, 44), MouseFilter = Control.MouseFilterEnum.Ignore, Visible = false };
+		bar.Draw += DrawBossBar;
+		return bar;
+	}
+
+	void DrawBossBar()
+	{
+		if (_boss == null)
+			return;
+		var size = _bossBar.Size;
+		var name = _bossDisguised ? "FREE_RAM.EXE" : (_boss.Title ?? _boss.Name).ToUpperInvariant();
+		var color = _bossDisguised ? UiTheme.Green : UiTheme.Red;
+		var fontSize = size.X > 300 ? 16 : 11;
+		_bossBar.DrawStringOutline(UiTheme.PixelBold, new Vector2(0, 14), name, HorizontalAlignment.Center, size.X, fontSize, 6, new Color(0, 0, 0, 0.9f));
+		_bossBar.DrawString(UiTheme.PixelBold, new Vector2(0, 14), name, HorizontalAlignment.Center, size.X, fontSize, color);
+		var bar = new Rect2(0, 22, size.X, 15);
+		_bossBar.DrawRect(bar.Grow(3), new Color(0, 0, 0, 0.75f));
+		var segments = size.X > 300 ? 30 : 15;
+		var w = (bar.Size.X - (segments - 1) * 3) / segments;
+		var filled = Mathf.Clamp(_bossHp / _boss.MaxHp, 0, 1) * segments;
+		for (var i = 0; i < segments; i++)
+		{
+			var r = new Rect2(bar.Position.X + i * (w + 3), bar.Position.Y, w, bar.Size.Y);
+			var on = _bossDisguised ? UiTheme.Green : UiTheme.Red.Lerp(new Color("ffb347"), (float)i / segments);
+			_bossBar.DrawRect(r, i < filled ? on : new Color(1, 1, 1, 0.08f));
+		}
+	}
+
 	/// <summary>Result panel with a title, a message, optional stars and buttons.</summary>
 	public void ShowResult(string title, Color titleColor, string message, int stars, params (string Text, Action Action)[] buttons)
 	{
@@ -168,6 +241,9 @@ public partial class Hud : CanvasLayer
 			box.AddChild(slot);
 			_turretSlots.Add(slot);
 		}
+		box.AddChild(Ui.Spacer(4));
+		_bossBar = BossBar();
+		box.AddChild(_bossBar);
 		box.AddChild(Ui.Spacer(0, true));
 		box.AddChild(BottomRow());
 	}
@@ -182,9 +258,9 @@ public partial class Hud : CanvasLayer
 		_energy.AddThemeColorOverride("font_color", UiTheme.Magenta);
 		box.AddChild(IconRow("res://assets/sprites/icons/damage.png", UiTheme.Magenta, _energy));
 		box.AddChild(Ui.Divider());
-		for (var i = 0; i < Catalog.EnemyList.Count; i++)
+		for (var i = 0; i < Catalog.VersusEnemies.Count; i++)
 		{
-			var def = Catalog.EnemyList[i];
+			var def = Catalog.VersusEnemies[i];
 			var slot = new BugSlot(def, i + 1);
 			slot.Pressed += () => _screen.SendBug(def);
 			box.AddChild(slot);
@@ -245,8 +321,17 @@ public partial class Hud : CanvasLayer
 		_banner = OverlayLabel("TitleLabel", 250, 80);
 		_banner.PivotOffset = _banner.Size / 2;
 		_banner.Modulate = new Color(1, 1, 1, 0);
-		_bannerSub = OverlayLabel("HeaderLabel", 330, 40);
+		_bannerSub = OverlayLabel("HeaderLabel", 330, 60);
 		_bannerSub.Modulate = new Color(1, 1, 1, 0);
+		_bannerSub.AutowrapMode = TextServer.AutowrapMode.WordSmart;
+		if (_bossBar == null)
+		{
+			// The attacker's column is full of bugs: the bar goes on top of the board.
+			_bossBar = BossBar();
+			_bossBar.Position = new Vector2(Grid.Origin.X + Grid.Size.X / 2 - 210, 48);
+			_bossBar.Size = new Vector2(420, 40);
+			AddChild(_bossBar);
+		}
 		_waiting = new Control { Visible = false };
 		_waiting.SetAnchorsPreset(Control.LayoutPreset.FullRect);
 		_waiting.AddChild(Ui.Dim(0.75f));

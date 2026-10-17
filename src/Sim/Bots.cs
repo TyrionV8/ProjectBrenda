@@ -116,7 +116,7 @@ public sealed class AttackerBot
 
 	void PlanWave(Match m)
 	{
-		var unlocked = Catalog.EnemyList.Where(e => m.Time >= e.VersusUnlock).OrderByDescending(e => e.VersusCost).ToList();
+		var unlocked = Catalog.VersusEnemies.Where(e => m.Time >= e.VersusUnlock).OrderByDescending(e => e.VersusCost).ToList();
 		var energy = m.Energy;
 		// Spend about two thirds on the heavy hitters and the rest on a swarm.
 		var heavy = unlocked.Take(Math.Min(2, unlocked.Count)).ToList();

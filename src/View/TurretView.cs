@@ -32,6 +32,10 @@ public partial class TurretView : Node2D
 	PointLight2D _beamLight;
 	float _t = GD.Randf() * 10;
 	bool _showRange;
+	bool _locked;
+	Node2D _lock;
+	/// <summary>What locked it: "encrypt" (ransomware) or "panic" (kernel panic).</summary>
+	public string LockKind = "encrypt";
 	/// <summary>Bugs currently burning in the laser (for sparks), board-local.</summary>
 	public readonly List<Vector2> BeamHits = new();
 
@@ -102,10 +106,67 @@ public partial class TurretView : Node2D
 
 	public void Apply(TurretSnap s)
 	{
+		SetLocked(s.Locked);
 		if (Mathf.IsEqualApprox(s.Head, _head))
 			return;
 		_head = s.Head;
 		_barrels.QueueRedraw();
+	}
+
+	/// <summary>Encrypted or crashed by a boss: dimmed, beam off, a padlock (or a crash sign) on top.</summary>
+	void SetLocked(bool locked)
+	{
+		if (locked == _locked)
+			return;
+		_locked = locked;
+		if (_lock == null)
+		{
+			_lock = new Node2D { Material = FxUtil.Unshaded, ZIndex = 4 };
+			_lock.Draw += DrawLock;
+			AddChild(_lock);
+		}
+		_lock.Visible = locked;
+		var dim = locked ? new Color(0.45f, 0.45f, 0.5f) : Colors.White;
+		_headSprite.Modulate = _headGlow.Modulate = dim;
+		_barrels.Modulate = dim;
+		if (_beam != null)
+			_beam.Visible = _beamLight.Visible = !locked;
+		_light.Energy = locked ? 0.3f : 1;
+	}
+
+	static readonly string[] PadlockArt =
+	{
+		"..###..",
+		".#...#.",
+		".#...#.",
+		"#######",
+		"###.###",
+		"###.###",
+		"#######",
+	};
+
+	void DrawLock()
+	{
+		var blink = Mathf.PosMod(_t * 3, 1) < 0.7f;
+		if (LockKind == "panic")
+		{
+			// Crashed: a blinking warning sign and a few dead pixels.
+			if (blink)
+				MicroFont.DrawOutlined(_lock, new Vector2(0, -2 * Px), "!", new Color("ff4d5e"), new Color(0, 0, 0, 0.9f));
+			var rng = new RandomNumberGenerator { Seed = (ulong)(Mathf.FloorToInt(_t * 10) + Id * 31) };
+			for (var i = 0; i < 4; i++)
+				_lock.DrawRect(new Rect2(new Vector2(rng.RandiRange(-7, 6), rng.RandiRange(-7, 6)) * Px, Vector2.One * Px), new Color("3f6fff"));
+			return;
+		}
+		// Encrypted: a gold padlock and scrambled hex underneath.
+		var gold = new Color("f0c040");
+		for (var y = 0; y < PadlockArt.Length; y++)
+			for (var x = 0; x < PadlockArt[y].Length; x++)
+				if (PadlockArt[y][x] == '#')
+					_lock.DrawRect(new Rect2(new Vector2(x - 3.5f, y - 9) * Px, Vector2.One * Px), y >= 3 ? gold : new Color("c9d0d8"));
+		var rnd = new RandomNumberGenerator { Seed = (ulong)(Mathf.FloorToInt(_t * 8) + Id * 17) };
+		var hex = $"{rnd.RandiRange(0, 255):X2}{rnd.RandiRange(0, 255):X2}";
+		MicroFont.DrawOutlined(_lock, new Vector2(0, 5 * Px), hex, new Color("ff4d5e"), new Color(0, 0, 0, 0.9f));
 	}
 
 	public void Fired()
@@ -127,6 +188,8 @@ public partial class TurretView : Node2D
 			_barrels.QueueRedraw();
 		}
 		_beam?.QueueRedraw();
+		if (_locked)
+			_lock.QueueRedraw();
 	}
 
 	/// <summary>A straight barrel from the centre, in art pixels: thickness, length, colours.</summary>

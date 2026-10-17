@@ -105,7 +105,7 @@ public partial class Fx : Node2D
 		Sparks(pos, def.Eye.Lerp(Colors.White, 0.3f), (int)(6 + 4 * big), 110 * big, 0.35f, 0.45f);
 		GlowFlash(pos, def.Shell.Lerp(Colors.White, 0.4f), 0.6f * big, 0.2f);
 		FloatingText(pos + new Vector2(0, -def.Radius), $"+{def.Reward}", new Color("ffd34d"));
-		if (def.Style == "boss")
+		if (def.Boss)
 		{
 			Shockwave(pos, 90, def.Eye, 0.6f);
 			LightFlash(pos, def.Eye, 2, 1.4f, 0.6f);

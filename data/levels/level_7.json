@@ -234,7 +234,8 @@
    {"enemy": "spider", "time": 17.6},
    {"enemy": "spider", "time": 17.9},
    {"enemy": "spider", "time": 18.2},
-   {"enemy": "spider", "time": 18.5}
+   {"enemy": "spider", "time": 18.5},
+   {"enemy": "worm", "time": 21.5}
   ]
  ]
 }

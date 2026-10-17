@@ -171,7 +171,8 @@
    {"enemy": "spider", "time": 17.0},
    {"enemy": "spider", "time": 17.5},
    {"enemy": "spider", "time": 18.0},
-   {"enemy": "spider", "time": 18.5}
+   {"enemy": "spider", "time": 18.5},
+   {"enemy": "rootkit", "time": 21.5}
   ]
  ]
 }

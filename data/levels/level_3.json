@@ -128,7 +128,8 @@
    {"enemy": "bug", "time": 6.5},
    {"enemy": "bug", "time": 7.5},
    {"enemy": "termite", "time": 8.0},
-   {"enemy": "bug", "time": 9.0}
+   {"enemy": "bug", "time": 9.0},
+   {"enemy": "mitm", "time": 12.0}
   ]
  ]
 }
