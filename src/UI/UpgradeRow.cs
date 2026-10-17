@@ -22,6 +22,7 @@ public partial class UpgradeRow : Button
 		Flat = true;
 		FocusMode = FocusModeEnum.None;
 		CustomMinimumSize = new Vector2(0, 52);
+		TextureFilter = TextureFilterEnum.Nearest;
 		MouseEntered += () =>
 		{
 			Audio.Ui("hover");
@@ -60,7 +61,7 @@ public partial class UpgradeRow : Button
 			bg = bg.Lightened(0.08f);
 		DrawRect(new Rect2(Vector2.Zero, Size), bg);
 		DrawRect(new Rect2(Vector2.Zero, Size), new Color(Turret.Color, hovered ? 0.55f : 0.18f), false, 1.5f);
-		DrawTextureRect(_icon, new Rect2(8, 10, 32, 32), false, level > 0 ? Turret.Color : new Color(Turret.Color, 0.5f));
+		DrawTextureRect(_icon, new Rect2(9, 11, 30, 30), false, level > 0 ? Turret.Color : new Color(Turret.Color, 0.5f));
 		DrawString(UiTheme.PixelFont, new Vector2(48, 22), Upgrade.Label.ToUpperInvariant(), HorizontalAlignment.Left, Size.X - 90, 12, UiTheme.TextColor);
 		var bar = new Rect2(48, 31, Size.X - 96, 9);
 		var blocks = Mathf.Min(Upgrade.MaxLevel, 25);

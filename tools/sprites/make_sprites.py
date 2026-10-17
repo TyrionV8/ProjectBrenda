@@ -14,6 +14,8 @@ from PIL import Image
 
 sys.path.insert(0, os.path.dirname(__file__))
 
+import icons  # noqa: E402
+import turrets  # noqa: E402
 from bugs import BUGS, FRAMES  # noqa: E402
 from pixel import sheet  # noqa: E402
 
@@ -68,8 +70,25 @@ def preview(images, path, zoom=10):
     out.save(path)
 
 
+def preview_row(images, path, zoom=6, bg=(16, 44, 74, 255)):
+    """Images side by side, zoomed."""
+    w = sum(i.width + 2 for i in images) + 2
+    h = max(i.height for i in images) + 4
+    out = Image.new("RGBA", (w, h), bg)
+    x = 2
+    for img in images:
+        out.alpha_composite(img, (x, 2))
+        x += img.width + 2
+    out.resize((w * zoom, h * zoom), Image.NEAREST).save(path)
+
+
 if __name__ == "__main__":
     images = build_bugs()
+    turret_images = turrets.build(os.path.join(ROOT, "assets", "sprites", "turrets"))
+    icon_images = icons.build(os.path.join(ROOT, "assets", "sprites", "icons"))
     if "--preview" in sys.argv:
-        preview(images, sys.argv[sys.argv.index("--preview") + 1])
-    print(f"wrote {len(images)} bug sheets")
+        out = sys.argv[sys.argv.index("--preview") + 1]
+        preview(images, out)
+        preview_row(list(turret_images.values()), out.replace(".png", "_turrets.png"), 10)
+        preview_row(list(icon_images.values()), out.replace(".png", "_icons.png"), 8, (40, 40, 48, 255))
+    print(f"wrote {len(images)} bug sheets, {len(turret_images)} turret images, {len(icon_images)} icons")

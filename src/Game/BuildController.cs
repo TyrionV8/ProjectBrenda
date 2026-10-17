@@ -12,8 +12,6 @@ namespace HardwareDefence.Game;
 /// </summary>
 public partial class BuildController : Node2D
 {
-	static readonly Texture2D Socket = GD.Load<Texture2D>("res://assets/art/turrets/socket.svg");
-
 	public GameScreen Screen;
 	public TurretDef Selected { get; private set; }
 	public bool Aiming { get; private set; }
@@ -31,7 +29,6 @@ public partial class BuildController : Node2D
 	{
 		Material = View.FxUtil.Unshaded;
 		ZIndex = 10;
-		TextureFilter = TextureFilterEnum.Linear;
 	}
 
 	public void Select(TurretDef def)
@@ -189,10 +186,8 @@ public partial class BuildController : Node2D
 			DrawCircle(center, range, new Color(color, 0.06f));
 			DrawArc(center, range, 0, Mathf.Tau, 64, new Color(color, 0.5f), View.PixelWorld.Scale);
 		}
-		DrawSetTransform(center, 0, Vector2.One * 0.5f);
-		DrawTexture(Socket, -Socket.GetSize() / 2, new Color(1, 1, 1, 0.55f));
 		var icon = GD.Load<Texture2D>(Selected.Icon);
-		DrawSetTransform(center, Aiming ? _aimDir : 0, Vector2.One * 0.5f);
+		DrawSetTransform(center, Selected.NeedsDirection ? _aimDir : 0, Vector2.One * View.PixelWorld.Scale);
 		DrawTexture(icon, -icon.GetSize() / 2, new Color(1, 1, 1, 0.7f));
 		DrawSetTransformMatrix(Transform2D.Identity);
 		if (!Selected.NeedsDirection)

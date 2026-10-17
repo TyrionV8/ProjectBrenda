@@ -152,7 +152,7 @@ public partial class Hud : CanvasLayer
 		panel.AddChild(box);
 		box.AddChild(Ui.Label("CASH", "SmallHeader", HorizontalAlignment.Center));
 		_money = Ui.Label("0", "MoneyLabel");
-		box.AddChild(IconRow("res://assets/art/icons/chip.svg", UiTheme.Gold, _money));
+		box.AddChild(IconRow("res://assets/sprites/icons/chip.png", UiTheme.Gold, _money));
 		box.AddChild(Ui.Divider());
 		for (var i = 0; i < Catalog.Turrets.Count; i++)
 		{
@@ -180,7 +180,7 @@ public partial class Hud : CanvasLayer
 		box.AddChild(Ui.Label("ENERGY", "SmallHeader", HorizontalAlignment.Center));
 		_energy = Ui.Label("0", "MoneyLabel");
 		_energy.AddThemeColorOverride("font_color", UiTheme.Magenta);
-		box.AddChild(IconRow("res://assets/art/icons/damage.svg", UiTheme.Magenta, _energy));
+		box.AddChild(IconRow("res://assets/sprites/icons/damage.png", UiTheme.Magenta, _energy));
 		box.AddChild(Ui.Divider());
 		for (var i = 0; i < Catalog.EnemyList.Count; i++)
 		{
@@ -226,7 +226,7 @@ public partial class Hud : CanvasLayer
 		row.AddChild(new TextureRect
 		{
 			Texture = GD.Load<Texture2D>(icon), ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize, CustomMinimumSize = new Vector2(30, 30),
-			StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered, Modulate = color,
+			StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered, Modulate = color, TextureFilter = CanvasItem.TextureFilterEnum.Nearest,
 		});
 		row.AddChild(value);
 		return row;

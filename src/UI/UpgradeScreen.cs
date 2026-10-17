@@ -40,8 +40,9 @@ public partial class UpgradeScreen : Control
 		pointsBox.AddChild(pointsRow);
 		pointsRow.AddChild(new TextureRect
 		{
-			Texture = GD.Load<Texture2D>("res://assets/art/icons/chip.svg"), ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
-			CustomMinimumSize = new Vector2(36, 36), Modulate = UiTheme.Gold,
+			Texture = GD.Load<Texture2D>("res://assets/sprites/icons/chip.png"), ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+			CustomMinimumSize = new Vector2(30, 30), Modulate = UiTheme.Gold, TextureFilter = TextureFilterEnum.Nearest,
+			StretchMode = TextureRect.StretchModeEnum.Scale, SizeFlagsVertical = SizeFlags.ShrinkCenter,
 		});
 		var col = Ui.VBox(0);
 		col.AddChild(Ui.Label("POINTS", "SmallHeader"));

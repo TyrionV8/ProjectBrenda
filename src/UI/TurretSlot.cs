@@ -7,8 +7,6 @@ namespace HardwareDefence.UI;
 /// <summary>Inventory slot for one turret type: preview, name, cost and hotkey.</summary>
 public partial class TurretSlot : Button
 {
-	static readonly Texture2D Socket = GD.Load<Texture2D>("res://assets/art/turrets/socket.svg");
-
 	public readonly TurretDef Def;
 	readonly int _hotkey;
 	readonly Texture2D _icon;
@@ -24,6 +22,7 @@ public partial class TurretSlot : Button
 		Flat = true;
 		FocusMode = FocusModeEnum.None;
 		CustomMinimumSize = new Vector2(186, 92);
+		TextureFilter = TextureFilterEnum.Nearest;
 		TooltipText = $"{def.Name}\n{def.Description}";
 		MouseEntered += () =>
 		{
@@ -79,8 +78,8 @@ public partial class TurretSlot : Button
 		var well = new Rect2(7, 7, 78, 78);
 		DrawStyleBox(UiTheme.Box(new Color(0.01f, 0.03f, 0.05f, 1), new Color(1, 1, 1, 0.06f), 1, 8, 0, 0), well);
 		var mod = _affordable ? Colors.White : new Color(0.5f, 0.5f, 0.55f, 0.7f);
-		DrawTextureRect(Socket, well.Grow(-6), false, mod);
-		DrawTextureRect(_icon, well.Grow(-6), false, mod);
+		var size = _icon.GetSize() * View.PixelWorld.Scale;
+		DrawTextureRect(_icon, new Rect2((well.GetCenter() - size / 2).Floor(), size), false, mod);
 		var words = Def.Name.ToUpperInvariant().Split(' ', 2);
 		for (var i = 0; i < words.Length; i++)
 			DrawString(UiTheme.PixelFont, new Vector2(96, 24 + i * 15), words[i], HorizontalAlignment.Left, Size.X - 100, 11, _affordable ? UiTheme.TextColor : UiTheme.Dim);

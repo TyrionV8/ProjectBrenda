@@ -35,7 +35,7 @@ click a bug (or `1`–`9`) to send it.
 ```
   project.godot, HardwareDefence.csproj/.sln
   data/            turrets.json, enemies.json, versus.json, levels/level_N.json
-  assets/          art (SVG), fx textures, shaders, audio, fonts, ui/theme.tres
+  assets/          sprites (pixel art), fx textures, shaders, audio, fonts, ui/theme.tres
   scenes/          one scene per screen (the scripts build their nodes in code)
   src/
     Data/          Grid, LevelData, TurretDef, EnemyDef, ComponentTypes, Catalog, JsonIO
@@ -77,6 +77,10 @@ sprites, lines, particles and lights all share that grid. Keep new art at 1:1 in
 
 * `assets/sprites/bugs/ID.png` — 6 frames per row (walk ×4, chew ×2); row 1 holds the
   emissive pixels (eyes) drawn additively. Bugs face right and turn in 90° steps.
+* `assets/sprites/turrets/` — a shared 16×16 socket, one head per turret (head + emissive
+  frame) and `ID_icon.png` for menus. Heads stay upright; the game draws the barrels as
+  pixel lines pointing where the turret aims (the laser turns its sprite in 90° steps).
+* `assets/sprites/icons/` — 10×10 white UI icons (tinted by the UI), shown at 3×.
 * Board, components and the CPU are painted pixel by pixel in code (`View/Pixel/PixelCanvas`,
   `ComponentArt`), with a 3×5 pixel font (`MicroFont`) for markings.
 * `tools/sprites/make_sprites.py` generates the sprite sheets from the designs next to it

@@ -27,7 +27,7 @@
     "stat": "damage",
     "per_level": 1.0,
     "max_level": 50,
-    "icon": "res://assets/art/icons/damage.svg"
+    "icon": "res://assets/sprites/icons/damage.png"
    },
    {
     "id": "speed",
@@ -36,7 +36,7 @@
     "stat": "cooldown",
     "per_level": -0.033333,
     "max_level": 25,
-    "icon": "res://assets/art/icons/cooldown.svg"
+    "icon": "res://assets/sprites/icons/cooldown.png"
    },
    {
     "id": "range",
@@ -45,10 +45,10 @@
     "stat": "range",
     "per_level": 5.0,
     "max_level": 15,
-    "icon": "res://assets/art/icons/range.svg"
+    "icon": "res://assets/sprites/icons/range.png"
    }
   ],
-  "icon": "res://assets/art/turrets/blaster_head.svg"
+  "icon": "res://assets/sprites/turrets/blaster_icon.png"
  },
  {
   "id": "mortar",
@@ -79,7 +79,7 @@
     "stat": "damage",
     "per_level": 0.2,
     "max_level": 50,
-    "icon": "res://assets/art/icons/damage.svg"
+    "icon": "res://assets/sprites/icons/damage.png"
    },
    {
     "id": "speed",
@@ -88,7 +88,7 @@
     "stat": "cooldown",
     "per_level": -0.033333,
     "max_level": 25,
-    "icon": "res://assets/art/icons/cooldown.svg"
+    "icon": "res://assets/sprites/icons/cooldown.png"
    },
    {
     "id": "range",
@@ -97,7 +97,7 @@
     "stat": "range",
     "per_level": 4.0,
     "max_level": 15,
-    "icon": "res://assets/art/icons/range.svg"
+    "icon": "res://assets/sprites/icons/range.png"
    },
    {
     "id": "bomb_speed",
@@ -106,7 +106,7 @@
     "stat": "projectile_speed",
     "per_level": 1.2,
     "max_level": 15,
-    "icon": "res://assets/art/icons/projectile_speed.svg"
+    "icon": "res://assets/sprites/icons/projectile_speed.png"
    },
    {
     "id": "bomb_area",
@@ -115,10 +115,10 @@
     "stat": "blast_radius",
     "per_level": 2.0,
     "max_level": 15,
-    "icon": "res://assets/art/icons/area.svg"
+    "icon": "res://assets/sprites/icons/area.png"
    }
   ],
-  "icon": "res://assets/art/turrets/mortar_head.svg"
+  "icon": "res://assets/sprites/turrets/mortar_icon.png"
  },
  {
   "id": "burst",
@@ -149,7 +149,7 @@
     "stat": "damage",
     "per_level": 0.2,
     "max_level": 50,
-    "icon": "res://assets/art/icons/damage.svg"
+    "icon": "res://assets/sprites/icons/damage.png"
    },
    {
     "id": "speed",
@@ -158,7 +158,7 @@
     "stat": "cooldown",
     "per_level": -0.02,
     "max_level": 25,
-    "icon": "res://assets/art/icons/cooldown.svg"
+    "icon": "res://assets/sprites/icons/cooldown.png"
    },
    {
     "id": "range",
@@ -167,7 +167,7 @@
     "stat": "range",
     "per_level": 5.0,
     "max_level": 15,
-    "icon": "res://assets/art/icons/range.svg"
+    "icon": "res://assets/sprites/icons/range.png"
    },
    {
     "id": "density",
@@ -176,10 +176,10 @@
     "stat": "shots",
     "per_level": 0.4,
     "max_level": 15,
-    "icon": "res://assets/art/icons/density.svg"
+    "icon": "res://assets/sprites/icons/density.png"
    }
   ],
-  "icon": "res://assets/art/turrets/burst_head.svg"
+  "icon": "res://assets/sprites/turrets/burst_icon.png"
  },
  {
   "id": "laser",
@@ -202,7 +202,7 @@
     "stat": "dps",
     "per_level": 6.0,
     "max_level": 50,
-    "icon": "res://assets/art/icons/damage.svg"
+    "icon": "res://assets/sprites/icons/damage.png"
    },
    {
     "id": "fire_distance",
@@ -211,10 +211,10 @@
     "stat": "beam_length",
     "per_level": 9.6,
     "max_level": 50,
-    "icon": "res://assets/art/icons/beam_length.svg"
+    "icon": "res://assets/sprites/icons/beam_length.png"
    }
   ],
-  "icon": "res://assets/art/turrets/laser_head.svg"
+  "icon": "res://assets/sprites/turrets/laser_icon.png"
  },
  {
   "id": "freezer",
@@ -249,7 +249,7 @@
     "stat": "slow_factor",
     "per_level": -0.02,
     "max_level": 50,
-    "icon": "res://assets/art/icons/slow.svg"
+    "icon": "res://assets/sprites/icons/slow.png"
    },
    {
     "id": "speed",
@@ -258,7 +258,7 @@
     "stat": "cooldown",
     "per_level": -0.066667,
     "max_level": 25,
-    "icon": "res://assets/art/icons/cooldown.svg"
+    "icon": "res://assets/sprites/icons/cooldown.png"
    },
    {
     "id": "range",
@@ -267,7 +267,7 @@
     "stat": "range",
     "per_level": 5.0,
     "max_level": 15,
-    "icon": "res://assets/art/icons/range.svg"
+    "icon": "res://assets/sprites/icons/range.png"
    },
    {
     "id": "bullet_speed",
@@ -276,9 +276,9 @@
     "stat": "projectile_speed",
     "per_level": 3.0,
     "max_level": 50,
-    "icon": "res://assets/art/icons/projectile_speed.svg"
+    "icon": "res://assets/sprites/icons/projectile_speed.png"
    }
   ],
-  "icon": "res://assets/art/turrets/freezer_head.svg"
+  "icon": "res://assets/sprites/turrets/freezer_icon.png"
  }
 ]
