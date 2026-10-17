@@ -17,6 +17,8 @@ namespace Brenda.Autoload;
 ///   godot --path . -- --capture=menu,game:1 --out=DIR      save screenshots
 ///   godot --headless --path . -- --build-theme             regenerate assets/ui/theme.tres
 ///   godot --headless --path . -- --balance                 bot vs bot versus report (data/versus.json)
+///   godot --headless --path . -- --server [--level=N] [--port=7777] [--defender=remote|bot] [--attacker=remote|bot]
+///                                                          dedicated versus host, e.g. for AI clients
 /// </summary>
 public partial class DevTools : Node
 {
@@ -35,6 +37,8 @@ public partial class DevTools : Node
 			BalanceReport();
 			GetTree().Quit();
 		}
+		else if (args.Contains("--server"))
+			RunServer(args);
 		else if (args.Contains("--test"))
 			Callable.From(() => { _ = RunTests(Arg(args, "--filter", "")); }).CallDeferred();
 		else if (args.Any(a => a.StartsWith("--capture=")))
@@ -72,6 +76,67 @@ public partial class DevTools : Node
 			GD.Print(line);
 		}
 		GD.Print($"Defender won {wins}/{games} ({100 * wins / games}%). Aim for 40-60%.");
+	}
+
+	Net.HostFeed _server;
+	int _serverReported = -1;
+	double _serverEnd = -1;
+
+	/// <summary>Headless versus host: remote roles wait for WebSocket clients, bot roles play themselves.</summary>
+	void RunServer(string[] args)
+	{
+		var level = Catalog.Levels[Math.Clamp(int.Parse(Arg(args, "--level", "1")) - 1, 0, Catalog.Levels.Count - 1)];
+		var port = int.Parse(Arg(args, "--port", Net.Protocol.DefaultPort.ToString()));
+		var remote = new System.Collections.Generic.List<PlayerSide>();
+		if (Arg(args, "--defender", "remote") == "remote")
+			remote.Add(PlayerSide.Defender);
+		if (Arg(args, "--attacker", "remote") == "remote")
+			remote.Add(PlayerSide.Attacker);
+		if (remote.Count == 0)
+		{
+			GD.PrintErr("Nothing to serve: at least one side must be remote (use --balance for bot vs bot).");
+			GetTree().Quit(1);
+			return;
+		}
+		_server = new Net.HostFeed(level, port, PlayerSide.Defender, remote.ToArray());
+		if (!remote.Contains(PlayerSide.Defender))
+			_server.DefenderBot = new DefenderBot();
+		if (!remote.Contains(PlayerSide.Attacker))
+			_server.AttackerBot = new AttackerBot((int)Time.GetTicksMsec());
+		_server.Host.Joined += (role, name) => GD.Print($"{name} joined as {Net.Protocol.RoleName(role)}");
+		_server.Host.Left += role => GD.Print($"the {Net.Protocol.RoleName(role)} left");
+		GD.Print(_server.Host.Listening ? $"Serving '{level.Title}' on ws://0.0.0.0:{port} - waiting for {string.Join(", ", remote.Select(Net.Protocol.RoleName))}" : _server.Host.Error);
+		if (!_server.Host.Listening)
+			GetTree().Quit(1);
+	}
+
+	public override void _Process(double delta)
+	{
+		if (_server == null)
+			return;
+		_server.Process((float)delta);
+		_server.DrainEvents();
+		var m = _server.Match;
+		var minute = (int)(m.Time / 30);
+		if (minute != _serverReported && m.Time > 0)
+		{
+			_serverReported = minute;
+			GD.Print($"t={m.Time:0}s cpu={m.CpuHp} energy={m.Energy:0} money={m.Money} bugs={m.Bugs.Count} turrets={m.Turrets.Count}");
+		}
+		if (m.State == MatchState.Playing)
+			return;
+		if (_serverEnd < 0)
+		{
+			GD.Print($"Match over: {Snapshot.StateName(m.State)} at {m.Time:0}s (cpu {m.CpuHp}, board {m.BoardIntegrity:P0})");
+			_serverEnd = 0;
+		}
+		// Keep serving for a moment so clients receive the final state.
+		_serverEnd += delta;
+		if (_serverEnd < 1.5)
+			return;
+		_server.Close();
+		_server = null;
+		GetTree().Quit();
 	}
 
 	async Task RunTests(string filter)
@@ -158,6 +223,11 @@ public partial class DevTools : Node
 					break;
 				case "versus":
 					await Goto("res://scenes/versus_menu.tscn", 1.5f);
+					break;
+				case "host":
+					var hostLevel = Catalog.Levels[Math.Min(level, Catalog.Levels.Count - 1)];
+					GameSession.StartOnline(() => new Net.HostFeed(hostLevel, 47900, PlayerSide.Defender, PlayerSide.Attacker));
+					await Wait(2.5f);
 					break;
 				case "board":
 					var boardLevel = Catalog.Levels[Math.Min(level, Catalog.Levels.Count - 1)];

@@ -20,7 +20,7 @@ public partial class GameScreen : Node2D
 	public IMatchFeed Feed { get; private set; }
 	public BuildController Build { get; private set; }
 	public Hud Hud { get; private set; }
-	public bool Playing => _state == MatchState.Playing && Feed.Current != null;
+	public bool Playing => _state == MatchState.Playing && Feed.Current != null && string.IsNullOrEmpty(Feed.Status);
 
 	Camera2D _camera;
 	BoardView _board;
@@ -103,11 +103,13 @@ public partial class GameScreen : Node2D
 		var dt = (float)delta;
 		Feed.Process(dt);
 		var snap = Feed.Current;
+		var status = Feed.Status;
+		if (!string.IsNullOrEmpty(status) && !_ended)
+			Hud.ShowWaiting(status);
+		else
+			Hud.HideWaiting();
 		if (snap == null)
-		{
-			Hud.ShowWaiting(Feed.Status);
 			return;
-		}
 		SyncBugs(snap, dt);
 		SyncTurrets(snap);
 		SyncProjectiles(snap, dt);
@@ -400,6 +402,8 @@ public partial class GameScreen : Node2D
 		{
 			var title = localWon ? "YOU WIN" : "YOU LOSE";
 			var message = defenderWon ? "The CPU survived the attack." : "The bugs broke into the CPU.";
+			if (Feed is Net.HostFeed { OpponentLeft: true })
+				message = "Your opponent left the match.";
 			message += $"\nBoard integrity: {Mathf.RoundToInt(snap.Integrity * 100)}%";
 			Hud.ShowResult(title, localWon ? UiTheme.Green : UiTheme.Red, message, 0, ("Main Menu", () => Leave()));
 			return;

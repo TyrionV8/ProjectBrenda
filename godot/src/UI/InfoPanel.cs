@@ -27,6 +27,7 @@ public partial class InfoPanel : PanelContainer
 		_versus = versus;
 		_levelNumber = levelNumber;
 		ThemeTypeVariation = "SidePanel";
+		ClipContents = true;
 		Position = Vector2.Zero;
 		Size = new Vector2(Grid.Origin.X, 768);
 	}
@@ -49,7 +50,8 @@ public partial class InfoPanel : PanelContainer
 			box.AddChild(_energyBar);
 		}
 		_middle = Ui.Label("1/1", "ValueLabel", HorizontalAlignment.Center);
-		_middle.AddThemeFontSizeOverride("font_size", _versus ? 18 : 28);
+		_middle.AddThemeFontSizeOverride("font_size", _versus ? 15 : 28);
+		_middle.ClipText = true;
 		if (_versus)
 			_middle.AddThemeColorOverride("font_color", UiTheme.Magenta);
 		box.AddChild(_middle);
@@ -82,7 +84,7 @@ public partial class InfoPanel : PanelContainer
 			var t = Mathf.CeilToInt(s.TimeLeft);
 			_top.Text = $"{t / 60}:{t % 60:00}";
 			_top.AddThemeColorOverride("font_color", t <= 30 ? UiTheme.Gold : UiTheme.Cyan);
-			_middle.Text = $"{Mathf.FloorToInt(s.Energy)} (+{s.EnergyRate:0.0}/s)";
+			_middle.Text = $"{Mathf.FloorToInt(s.Energy)}  +{s.EnergyRate:0.0}/s";
 			_status.Text = $"BUGS\n{s.Bugs.Count}";
 			_energyBar.QueueRedraw();
 		}

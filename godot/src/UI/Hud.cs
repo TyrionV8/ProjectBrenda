@@ -48,8 +48,6 @@ public partial class Hud : CanvasLayer
 
 	public void Apply(Snapshot s)
 	{
-		if (_waiting.Visible)
-			_waiting.Visible = false;
 		_info.Apply(s);
 		if (Attacker)
 		{
@@ -70,6 +68,8 @@ public partial class Hud : CanvasLayer
 		_waiting.Visible = true;
 		_waitingText.Text = text;
 	}
+
+	public void HideWaiting() => _waiting.Visible = false;
 
 	public void UpdateSpeed(float value)
 	{
@@ -254,6 +254,7 @@ public partial class Hud : CanvasLayer
 		var box = Ui.VBox(16);
 		panel.AddChild(box);
 		_waitingText = Ui.Label("", "HeaderLabel", HorizontalAlignment.Center);
+		_waitingText.AddThemeFontSizeOverride("font_size", 20);
 		box.AddChild(_waitingText);
 		var leave = Ui.Button("Leave", () => _screen.Leave(), "DangerButton");
 		leave.SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter;

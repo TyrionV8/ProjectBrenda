@@ -180,6 +180,13 @@ public sealed partial class Match
 
 	// ---------------------------------------------------------------- commands
 
+	/// <summary>A player left the match: the other side wins.</summary>
+	public void Forfeit(PlayerSide loser)
+	{
+		if (State == MatchState.Playing)
+			End(loser == PlayerSide.Attacker ? MatchState.DefenderWon : MatchState.AttackerWon);
+	}
+
 	public bool CanBuild(Vector2I cell) => Grid.InBounds(cell) && !Blocked.Contains(cell) && !TurretAt.ContainsKey(cell);
 
 	public bool Build(TurretDef def, Vector2I cell, float direction = 0)
