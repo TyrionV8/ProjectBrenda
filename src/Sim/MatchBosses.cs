@@ -45,7 +45,7 @@ public sealed partial class Match
 				if (!Tick(b, dt, def.AbilityEvery))
 					return;
 				foreach (var t in Turrets)
-					if (t.Pos.DistanceTo(b.Pos) <= def.AbilityRadius)
+					if (t.LockImmunity <= 0 && t.Pos.DistanceTo(b.Pos) <= def.AbilityRadius)
 						t.Locked = Mathf.Max(t.Locked, def.AbilityTime);
 				Events.Add(new SimEvent(EventKind.BossAbility, b.Id, b.Pos, def.AbilityRadius, "encrypt"));
 				break;
@@ -54,7 +54,8 @@ public sealed partial class Match
 				if (!Tick(b, dt, def.AbilityEvery))
 					return;
 				foreach (var t in Turrets)
-					t.Locked = Mathf.Max(t.Locked, def.AbilityTime);
+					if (t.LockImmunity <= 0)
+						t.Locked = Mathf.Max(t.Locked, def.AbilityTime);
 				Events.Add(new SimEvent(EventKind.BossAbility, b.Id, b.Pos, def.AbilityTime, "panic"));
 				break;
 		}
@@ -98,7 +99,7 @@ public sealed partial class Match
 	/// </summary>
 	bool Intercepted(Projectile p, Vector2 at)
 	{
-		if (p.Screened)
+		if (p.Protected || p.Screened)
 			return false;
 		foreach (var b in Bugs)
 		{

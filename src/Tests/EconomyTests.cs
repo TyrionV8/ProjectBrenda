@@ -226,7 +226,7 @@ public sealed class EconomyTests : TestSuite
 			foreach (var preview in screen.FindChildren("*", "Control", true, false).OfType<TurretPreview>())
 				CheckEq(preview.CustomMinimumSize, new Vector2(110, 110), "preview unchanged");
 			var unlocks = screen.FindChildren("*", "Button", true, false).Cast<Button>().Where(button => button.Text.StartsWith("Unlock")).ToArray();
-			CheckEq(unlocks.Count(button => button.Visible), 9 - count, "only locked fixtures show unlock button");
+			CheckEq(unlocks.Count(button => button.Visible), Catalog.Turrets.Count(t => t.UnlockPrice > 0), "all four real counter turrets show unlock button");
 			Check(unlocks.Where(button => button.Visible).All(button => button.Disabled), "unlock disabled without balance");
 		}
 		finally

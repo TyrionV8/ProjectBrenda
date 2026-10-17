@@ -33,7 +33,7 @@ public partial class BuildController : Node2D
 
 	public void Select(TurretDef def)
 	{
-		if (!Screen.Playing)
+		if (!Screen.Playing || !GameState.IsTurretAvailable(def))
 			return;
 		Selected = def;
 		Aiming = false;

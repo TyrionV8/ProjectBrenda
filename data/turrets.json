@@ -316,5 +316,163 @@
    }
   ],
   "icon": "res://assets/sprites/turrets/freezer_icon.png"
+ },
+ {
+  "id": "antivirus",
+  "name": "Antivirus Scanner",
+  "description": "Exposes cloaked Rootkits while in range and reveals disguised Trojans.",
+  "behavior": "antivirus",
+  "cost": 25,
+  "unlock_price": 60,
+  "color": "3dff6a",
+  "icon": "res://assets/sprites/turrets/antivirus_icon.png",
+  "stats": {
+   "range": 180,
+   "cooldown": 1
+  },
+  "limits": {
+   "cooldown": [
+    0.2,
+    99
+   ]
+  },
+  "upgrades": [
+   {
+    "id": "range",
+    "label": "Range",
+    "description": "+6 support range.",
+    "stat": "range",
+    "per_level": 6,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/range.png",
+    "price": 5,
+    "price_step": 10
+   }
+  ]
+ },
+ {
+  "id": "firewall",
+  "name": "Firewall",
+  "description": "Protects shots fired in or crossing its range from interception; deletes junk packets.",
+  "behavior": "firewall",
+  "cost": 25,
+  "unlock_price": 70,
+  "color": "ff8a3d",
+  "icon": "res://assets/sprites/turrets/firewall_icon.png",
+  "stats": {
+   "range": 155,
+   "cooldown": 1.8
+  },
+  "limits": {
+   "cooldown": [
+    0.2,
+    99
+   ]
+  },
+  "upgrades": [
+   {
+    "id": "range",
+    "label": "Range",
+    "description": "+6 support range.",
+    "stat": "range",
+    "per_level": 6,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/range.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "support",
+    "label": "Filtering speed",
+    "description": "Improves this support ability.",
+    "stat": "cooldown",
+    "per_level": -0.06,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/shield.png",
+    "price": 5,
+    "price_step": 10
+   }
+  ]
+ },
+ {
+  "id": "backup",
+  "name": "Backup Drive",
+  "description": "Speeds up nearby turret recovery and grants brief immunity after restoring them.",
+  "behavior": "backup",
+  "cost": 25,
+  "unlock_price": 80,
+  "color": "4da3ff",
+  "icon": "res://assets/sprites/turrets/backup_icon.png",
+  "stats": {
+   "range": 165,
+   "cooldown": 0.7,
+   "recovery_rate": 4,
+   "immunity": 1.5
+  },
+  "limits": {},
+  "upgrades": [
+   {
+    "id": "range",
+    "label": "Range",
+    "description": "+6 support range.",
+    "stat": "range",
+    "per_level": 6,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/range.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "support",
+    "label": "Recovery",
+    "description": "Improves this support ability.",
+    "stat": "recovery_rate",
+    "per_level": 0.3,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/restore.png",
+    "price": 5,
+    "price_step": 10
+   }
+  ]
+ },
+ {
+  "id": "technician",
+  "name": "Repair Bot",
+  "description": "Slowly repairs components and LEDs. Destroyed components return after a complete rebuild.",
+  "behavior": "technician",
+  "cost": 30,
+  "unlock_price": 90,
+  "color": "ffd9a0",
+  "icon": "res://assets/sprites/turrets/technician_icon.png",
+  "stats": {
+   "range": 165,
+   "cooldown": 0.25,
+   "repair_rate": 0.6
+  },
+  "limits": {},
+  "upgrades": [
+   {
+    "id": "range",
+    "label": "Range",
+    "description": "+6 support range.",
+    "stat": "range",
+    "per_level": 6,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/range.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "support",
+    "label": "Repair speed",
+    "description": "Improves this support ability.",
+    "stat": "repair_rate",
+    "per_level": 0.12,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/repair.png",
+    "price": 5,
+    "price_step": 10
+   }
+  ]
  }
 ]

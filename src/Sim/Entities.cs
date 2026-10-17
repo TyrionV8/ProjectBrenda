@@ -41,6 +41,7 @@ public sealed class Bug
 	public float AbilityTimer;
 	/// <summary>Rootkit: hidden, so turrets can't aim at or damage it.</summary>
 	public bool Cloaked;
+	public bool Exposed;
 	/// <summary>Trojan: its disguise is off.</summary>
 	public bool Revealed;
 	/// <summary>Worm: copies made so far.</summary>
@@ -50,7 +51,7 @@ public sealed class Bug
 	public bool Slowed => SlowTime > 0;
 	public bool Gone => Dead || Escaped;
 	/// <summary>Turrets can aim at it and hurt it.</summary>
-	public bool Targetable => !Gone && !Cloaked;
+	public bool Targetable => !Gone && (!Cloaked || Exposed);
 
 	public void ApplySlow(float factor, float duration)
 	{
@@ -78,6 +79,7 @@ public sealed class Turret
 	public int NextSlot;
 	/// <summary>Seconds left encrypted (ransomware) or crashed (kernel panic): it can't fire.</summary>
 	public float Locked;
+	public float LockImmunity;
 
 	public float Stat(string name) => Stats.GetValueOrDefault(name);
 	public float Range => Def.Behavior == "laser" ? 0 : Stat("range");
@@ -97,6 +99,8 @@ public sealed class Projectile
 	public ProjectileKind Kind;
 	/// <summary>Already checked by a man-in-the-middle (each shot gets one chance to be intercepted).</summary>
 	public bool Screened;
+	/// <summary>Has originated inside, or crossed, an active firewall range.</summary>
+	public bool Protected;
 	/// <summary>Turret type that fired it (for colours).</summary>
 	public string Source;
 	public Vector2 Pos;
@@ -138,6 +142,8 @@ public sealed class BoardComponent
 	public float MaxHp;
 	public float Hp;
 	public bool Destroyed;
+	/// <summary>Rebuild progress, kept invisible until the destroyed component is fully repaired.</summary>
+	public float RepairProgress;
 
 	public bool Chewable => MaxHp > 0 && !Destroyed;
 	public float Ratio => MaxHp <= 0 ? 1 : Hp / MaxHp;

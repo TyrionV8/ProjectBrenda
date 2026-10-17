@@ -11,11 +11,16 @@ public sealed partial class Match
 		if (t.Locked > 0)
 		{
 			// Encrypted or crashed: no aiming, no shooting.
-			t.Locked = Mathf.Max(t.Locked - dt, 0);
 			return;
 		}
 		switch (t.Def.Behavior)
 		{
+			case "antivirus":
+			case "firewall":
+			case "backup":
+			case "technician":
+				StepCounter(t, dt);
+				break;
 			case "blaster":
 				StepBlaster(t, dt);
 				break;
@@ -66,7 +71,7 @@ public sealed partial class Match
 		{
 			Kind = ProjectileKind.Bullet, Source = t.Def.Id, Pos = t.Muzzle(30), Vel = dir * t.Stat("projectile_speed"),
 			Damage = t.Stat("damage"), Size = 4, MaxDistance = t.Range * 2.5f,
-		});
+		}, t.Pos);
 		Events.Add(new SimEvent(EventKind.TurretFired, t.Id, t.Muzzle(30), Type: t.Def.Id));
 	}
 
@@ -89,7 +94,7 @@ public sealed partial class Match
 			Kind = ProjectileKind.Bomb, Source = t.Def.Id, Pos = start, Start = start, Target = target.Pos,
 			Duration = Mathf.Max(start.DistanceTo(target.Pos) / Mathf.Max(t.Stat("projectile_speed"), 1), 0.15f),
 			Damage = t.Stat("damage"), Radius = t.Stat("blast_radius"),
-		});
+		}, t.Pos);
 		Events.Add(new SimEvent(EventKind.TurretFired, t.Id, start, Type: t.Def.Id));
 	}
 
@@ -111,7 +116,7 @@ public sealed partial class Match
 			{
 				Kind = ProjectileKind.Bullet, Source = t.Def.Id, Pos = t.Pos + dir * 20, Vel = dir * t.Stat("projectile_speed"),
 				Damage = t.Stat("damage"), Size = 3, MaxDistance = t.Range,
-			});
+			}, t.Pos);
 		}
 		t.Spin = 9;
 		Events.Add(new SimEvent(EventKind.TurretFired, t.Id, t.Pos, Type: t.Def.Id));
@@ -158,7 +163,7 @@ public sealed partial class Match
 				Kind = ProjectileKind.Orb, Source = t.Def.Id, Pos = pos, Anchor = pos, OwnerId = t.Id,
 				SlowFactor = t.Stat("slow_factor"), SlowDuration = t.Stat("slow_duration"), Speed = t.Stat("projectile_speed"),
 				SearchRange = t.Range, Phase = t.NextSlot,
-			});
+			}, t.Pos);
 			t.Orbs[t.NextSlot] = p.Id;
 			t.Cooldown = t.Stat("cooldown");
 			Events.Add(new SimEvent(EventKind.TurretFired, t.Id, pos, Type: t.Def.Id));
@@ -190,6 +195,7 @@ public sealed partial class Match
 		var step = p.Vel * dt;
 		p.Pos += step;
 		p.Travelled += step.Length();
+		ProtectShot(p, from, p.Pos);
 		if (Intercepted(p, p.Pos))
 		{
 			p.Done = true;
@@ -217,6 +223,8 @@ public sealed partial class Match
 	void StepBomb(Projectile p, float dt)
 	{
 		p.T += dt / p.Duration;
+		var next = p.Start.Lerp(p.Target, Mathf.Min(p.T, 1));
+		ProtectShot(p, p.Pos, next);
 		if (p.T >= 1 && Intercepted(p, p.Target))
 		{
 			p.Done = true;
@@ -239,7 +247,7 @@ public sealed partial class Match
 	{
 		p.Phase += dt;
 		var target = p.TargetId != 0 ? FindBug(p.TargetId) : null;
-		if (target is { Cloaked: true })
+		if (target != null && !target.Targetable)
 			target = null;
 		if (target == null)
 		{
@@ -263,6 +271,8 @@ public sealed partial class Match
 			p.Done = true;
 			return;
 		}
-		p.Pos += toTarget / dist * Mathf.Min(p.Speed * dt, dist);
+		var next = p.Pos + toTarget / dist * Mathf.Min(p.Speed * dt, dist);
+		ProtectShot(p, p.Pos, next);
+		p.Pos = next;
 	}
 }

@@ -23,6 +23,8 @@ public partial class GameScreen : Node2D
 	public IMatchFeed Feed { get; private set; }
 	public BuildController Build { get; private set; }
 	public Hud Hud { get; private set; }
+	/// <summary>One ordered inventory shared by the HUD and numeric shortcuts in every local mode.</summary>
+	public IReadOnlyList<TurretDef> AvailableTurrets => Catalog.Turrets.Where(GameState.IsTurretAvailable).ToArray();
 	public bool Playing => _state == MatchState.Playing && Feed.Current != null && string.IsNullOrEmpty(Feed.Status);
 
 	PixelWorld _world;
@@ -37,6 +39,7 @@ public partial class GameScreen : Node2D
 	Node2D _projectileLayer;
 	Fx _fx;
 	BossFx _bossFx;
+	CounterFx _counterFx;
 	PauseMenu _pause;
 	HashSet<Vector2I> _blocked;
 	readonly Dictionary<int, BugView> _bugs = new();
@@ -90,6 +93,8 @@ public partial class GameScreen : Node2D
 			Audio.Play("alarm", "SFX", -2, 0);
 			PostFx.PulseDamage(0.35f);
 		};
+		_counterFx = new CounterFx();
+		_board.AddChild(_counterFx);
 		Build = new BuildController { Screen = this };
 		_board.AddChild(Build);
 
@@ -171,8 +176,8 @@ public partial class GameScreen : Node2D
 		else if (e is InputEventKey { Pressed: true, Echo: false } key)
 		{
 			var k = (int)key.Keycode - (int)Key.Key1;
-			if (Feed.LocalSide == PlayerSide.Defender && k >= 0 && k < Catalog.Turrets.Count)
-				Build.Select(Catalog.Turrets[k]);
+			if (Feed.LocalSide == PlayerSide.Defender && k >= 0 && k < AvailableTurrets.Count && k < 9)
+				Build.Select(AvailableTurrets[k]);
 			else if (Feed.LocalSide == PlayerSide.Attacker && k >= 0 && k < Catalog.VersusEnemies.Count)
 				SendBug(Catalog.VersusEnemies[k]);
 		}
@@ -352,6 +357,14 @@ public partial class GameScreen : Node2D
 					Audio.Play(boss.Ability == "trojan" ? "upgrade" : "alarm", "SFX", -2, 0);
 					PostFx.PulseDamage(0.35f);
 					_fx.Shake(3);
+				}
+				break;
+			case EventKind.TurretAbility:
+				var source = _turrets.GetValueOrDefault(e.Id);
+				if (source != null)
+				{
+					source.Fired();
+					_counterFx.Emit(e, source.Position);
 				}
 				break;
 			case EventKind.BossAbility:

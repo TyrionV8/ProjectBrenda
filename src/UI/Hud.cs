@@ -156,7 +156,7 @@ public partial class Hud : CanvasLayer
 
 	Control BossBar()
 	{
-		var bar = new Control { CustomMinimumSize = new Vector2(0, 64), MouseFilter = Control.MouseFilterEnum.Ignore, Visible = false };
+		var bar = new Control { Name = "BossBar", CustomMinimumSize = new Vector2(0, 64), MouseFilter = Control.MouseFilterEnum.Ignore, Visible = false };
 		bar.Draw += DrawBossBar;
 		return bar;
 	}
@@ -224,15 +224,16 @@ public partial class Hud : CanvasLayer
 	void BuildDefenderPanel()
 	{
 		var panel = SidePanel();
-		var box = Ui.VBox(8);
+		var box = Ui.VBox(4);
 		panel.AddChild(box);
 		box.AddChild(Ui.Label("CASH", "SmallHeader", HorizontalAlignment.Center));
 		_money = Ui.Label("0", "MoneyLabel");
 		box.AddChild(IconRow("res://assets/sprites/icons/chip.png", UiTheme.Gold, _money));
 		box.AddChild(Ui.Divider());
-		for (var i = 0; i < Catalog.Turrets.Count; i++)
+		var available = _screen.AvailableTurrets;
+		for (var i = 0; i < available.Count; i++)
 		{
-			var def = Catalog.Turrets[i];
+			var def = available[i];
 			var slot = new TurretSlot(def, i + 1);
 			slot.Pressed += () =>
 			{
@@ -276,6 +277,7 @@ public partial class Hud : CanvasLayer
 	Control BottomRow()
 	{
 		var row = Ui.HBox(8);
+		row.Name = "HudFooter";
 		if (_screen.Feed.IsLocalOnly)
 		{
 			_speed = Ui.Button("1x", _screen.CycleSpeed);

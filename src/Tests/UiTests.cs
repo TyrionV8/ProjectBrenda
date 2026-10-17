@@ -28,14 +28,14 @@ public sealed class UiTests : TestSuite
 		const float contentWidth = 186;
 		foreach (var turret in Catalog.Turrets)
 		{
-			foreach (var word in turret.Name.ToUpperInvariant().Split(' ', 2))
+			foreach (var word in TurretSlot.NameLines(turret.Name))
 				Check(UiTheme.PixelFont.GetStringSize(word, fontSize: TurretSlot.NameSize).X <= contentWidth - TurretSlot.TextLeft - 4,
 					$"{turret.Name}: full name fits beside the icon");
-			Check(UiTheme.PixelBold.GetStringSize($"${turret.Cost}", fontSize: UiTheme.PixelNormal).X <= contentWidth - TurretSlot.TextLeft - 26,
+			Check(UiTheme.PixelBold.GetStringSize($"${turret.Cost}", fontSize: UiTheme.PixelSmall).X <= contentWidth - TurretSlot.TextLeft - 26,
 				$"{turret.Name}: price fits before the hotkey");
 		}
-		// Includes side-panel padding, cash heading/value, dividers, five gaps and bottom buttons.
-		Check(Catalog.Turrets.Count * TurretSlot.SlotHeight + 220 <= 768, "five inventory entries and HUD controls fit vertically");
+		// Includes nine compact slots, side padding, cash, gaps, a boss bar and bottom buttons.
+		Check(Catalog.Turrets.Count * TurretSlot.SlotHeight + 280 <= 768, "nine inventory entries, boss bar and HUD controls fit vertically");
 	}
 	[Test]
 	public void TimelineCaptionsFitIncludingBossNames()

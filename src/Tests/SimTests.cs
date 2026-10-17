@@ -43,7 +43,7 @@ public sealed class SimTests : TestSuite
 	[Test]
 	public void EveryTurretAffectsBugs()
 	{
-		foreach (var def in Catalog.Turrets)
+		foreach (var def in Catalog.Turrets.Where(t => t.Behavior is "blaster" or "mortar" or "burst" or "laser" or "freezer"))
 		{
 			var level = Catalog.Levels[0].Clone();
 			level.Waves.Clear();

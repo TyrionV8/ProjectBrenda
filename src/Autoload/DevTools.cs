@@ -184,9 +184,9 @@ public partial class DevTools : Node
 	/// <summary>Errors in an awaited task would otherwise vanish and leave the game running.</summary>
 	async Task CaptureOrQuit(string[] shots, string outDir)
 	{
-		// These two preparations buy upgrades / complete a campaign level. Isolate their
+		// These preparations buy upgrades, unlock counters or complete a campaign level. Isolate their
 		// entire lifetime, including result callbacks and capture failures.
-		using var captureSave = shots.Any(shot => shot.Split(':')[0] is "upgrades" or "campaignwin")
+		using var captureSave = shots.Any(shot => shot.Split(':')[0] is "upgrades" or "campaignwin" or "game" or "boss")
 			? GameState.UseTemporarySave() : null;
 		try
 		{
@@ -258,6 +258,7 @@ public partial class DevTools : Node
 				case "attack":
 				case "win":
 				case "campaignwin":
+					if (parts[0] == "game") UnlockCounterCapture();
 					var attacker = parts[0] == "attack";
 					var lvl = Catalog.Levels[Math.Min(level, Catalog.Levels.Count - 1)];
 					var campaignWin = parts[0] == "campaignwin";
@@ -274,6 +275,7 @@ public partial class DevTools : Node
 							DefenderBot = new DefenderBot(), AttackerBot = attacker ? new AttackerBot(5) : null,
 						};
 						feed.Match.Money += attacker || campaignWin ? 0 : 60;
+						if (parts[0] == "game" && level == 3) PrepareRepairCapture(feed.Match);
 						return feed;
 					};
 					await Goto(GameSession.GameScene, 0.3f);
@@ -296,15 +298,18 @@ public partial class DevTools : Node
 					}
 					break;
 				case "boss":
-					// The level's boss walking onto a defended board, then a shot after `wait` seconds.
-					var bossLevel = Catalog.Levels[Math.Min(level, Catalog.Levels.Count - 1)];
+					// Deterministic counter showcase; only capture setup changes, not combat rules.
+					UnlockCounterCapture();
+					var bossLevel = Catalog.Levels[Math.Min(level, Catalog.Levels.Count - 1)].Clone();
 					var bossId = bossLevel.Waves.SelectMany(w => w).Select(s => s.Enemy).FirstOrDefault(id => Catalog.Enemy(id)?.Boss == true);
+					bossLevel.Waves.Clear();
+					bossLevel.Waves.Add(new() { new SpawnData { Enemy = "bug", Time = 999 } });
 					LocalFeed bossFeed = null;
 					GameSession.Current = GameSession.Kind.Custom;
 					GameSession.CreateFeed = () =>
 					{
-						bossFeed = new LocalFeed(bossLevel, MatchMode.Campaign, PlayerSide.Defender, false) { DefenderBot = new DefenderBot() };
-						bossFeed.Match.Money += 150;
+						bossFeed = new LocalFeed(bossLevel, MatchMode.Campaign, PlayerSide.Defender, false);
+						bossFeed.Match.Money = 1000;
 						return bossFeed;
 					};
 					await Goto(GameSession.GameScene, 0.3f);
@@ -312,7 +317,10 @@ public partial class DevTools : Node
 						await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 					await Wait(1.5f);
 					if (bossId != null)
-						bossFeed.Match.SpawnBug(bossId, bossFeed.Match.Path.Length * (parts.Length > 3 ? float.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture) : 0.3f));
+					{
+						var boss = bossFeed.Match.SpawnBug(bossId, bossFeed.Match.Path.Length * (parts.Length > 3 ? float.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture) : 0.3f));
+						PrepareBossCounterCapture(bossFeed.Match, boss, wait);
+					}
 					await Wait(wait);
 					break;
 				case "pause":
@@ -326,6 +334,67 @@ public partial class DevTools : Node
 			GD.Print($"saved {path}");
 		}
 		GetTree().Quit();
+	}
+
+	static void UnlockCounterCapture()
+	{
+		GameState.Reset();
+		GameState.Balance = 1000;
+		foreach (var turret in Catalog.Turrets.Where(t => t.UnlockPrice > 0))
+			GameState.Unlock(turret);
+	}
+
+	static System.Collections.Generic.IEnumerable<Vector2I> CaptureCells(Match m, Vector2 near) =>
+		Enumerable.Range(0, Grid.Cols).SelectMany(x => Enumerable.Range(0, Grid.Rows).Select(y => new Vector2I(x, y)))
+			.Where(m.CanBuild).OrderBy(c => Grid.CellCenter(c).DistanceTo(near));
+
+	static void PrepareRepairCapture(Match m)
+	{
+		// A large damaged component still needs work after 40 seconds at the real repair rate.
+		var component = m.Components.Where(c => c.MaxHp >= 35)
+			.OrderBy(c => c.Rect.GetCenter().DistanceTo(Grid.Size / 2)).First();
+		component.Hp = 1;
+		var cell = CaptureCells(m, component.Rect.GetCenter()).First();
+		m.Money += Catalog.Turret("technician").Cost;
+		m.Build(Catalog.Turret("technician"), cell);
+	}
+
+	static void PrepareBossCounterCapture(Match m, Bug boss, float wait)
+	{
+		var near = m.Path.Sample(boss.Progress + boss.Def.Speed * wait);
+		var counter = boss.Def.Ability switch
+		{
+			"rootkit" or "trojan" => "antivirus",
+			"mitm" or "ddos" => "firewall",
+			"ransomware" or "panic" => "backup",
+			_ => null,
+		};
+		if (counter == null) return;
+		if (counter == "backup")
+		{
+			// The weapon is encrypted; the backup sits just outside the attack radius,
+			// inside support range. Both still obey their ordinary lock rules.
+			var target = CaptureCells(m, near).First();
+			m.Build(Catalog.Turret("blaster"), target);
+			var def = Catalog.Turret(counter);
+			var cell = CaptureCells(m, near).First(c => Grid.CellCenter(c).DistanceTo(near) > boss.Def.AbilityRadius + 12
+				&& Grid.CellCenter(c).DistanceTo(Grid.CellCenter(target)) < def.Stats["range"]);
+			m.Build(def, cell);
+		}
+		else
+		{
+			// The nearest cell belongs to a real weapon, so its unmodified 50px range
+			// reaches the boss. Support occupies the next cell and covers that weapon.
+			m.Build(Catalog.Turret("blaster"), CaptureCells(m, near).First());
+			m.Turrets.Last().Cooldown = Mathf.Max(0, wait - 0.25f);
+			m.Build(Catalog.Turret(counter), CaptureCells(m, near).First());
+			if (counter == "antivirus") m.Turrets.Last().Cooldown = 0.2f;
+			foreach (var cell in CaptureCells(m, near).Take(2).ToArray())
+			{
+				m.Build(Catalog.Turret("blaster"), cell);
+				m.Turrets.Last().Cooldown = Mathf.Max(0, wait - 0.25f);
+			}
+		}
 	}
 
 	async Task Goto(string path, float wait)

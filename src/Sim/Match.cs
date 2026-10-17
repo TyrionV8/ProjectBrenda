@@ -150,6 +150,8 @@ public sealed partial class Match
 			}
 		}
 
+		RecoverTurrets(dt);
+		RefreshScans();
 		foreach (var t in Turrets)
 			StepTurret(t, dt);
 		foreach (var p in Projectiles)
@@ -159,6 +161,8 @@ public sealed partial class Match
 		foreach (var (enemy, progress) in _spawnQueue)
 			SpawnBug(enemy, progress);
 		_spawnQueue.Clear();
+		// Movement and new boss locks can change exposure before snapshots or external damage.
+		RefreshScans();
 
 		Projectiles.RemoveAll(p =>
 		{
@@ -210,6 +214,7 @@ public sealed partial class Match
 		};
 		turret.Cooldown = turret.Stat("cooldown") * 0.5f;
 		Turrets.Add(turret);
+		if (def.Behavior == "firewall") _firewalls.Add(turret);
 		TurretAt[cell] = turret;
 		Money -= def.Cost;
 		Events.Add(new SimEvent(EventKind.TurretBuilt, turret.Id, turret.Pos, Type: def.Id));
@@ -363,8 +368,9 @@ public sealed partial class Match
 		return best;
 	}
 
-	Projectile AddProjectile(Projectile p)
+	Projectile AddProjectile(Projectile p, Vector2 origin)
 	{
+		ProtectShot(p, origin, origin);
 		p.Id = _nextId++;
 		Projectiles.Add(p);
 		_projById[p.Id] = p;

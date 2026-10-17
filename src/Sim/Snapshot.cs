@@ -26,6 +26,7 @@ public sealed class BugSnap
 	public bool Cloaked { get; set; }
 	/// <summary>Trojan boss without its disguise.</summary>
 	public bool Revealed { get; set; }
+	public bool Exposed { get; set; }
 }
 
 public sealed class TurretSnap
@@ -39,6 +40,7 @@ public sealed class TurretSnap
 	public float Head { get; set; }
 	/// <summary>Encrypted or crashed by a boss: it can't fire.</summary>
 	public bool Locked { get; set; }
+	public bool Immune { get; set; }
 }
 
 public sealed class ProjectileSnap
@@ -50,6 +52,7 @@ public sealed class ProjectileSnap
 	public string Kind { get; set; }
 	/// <summary>Turret type that fired it.</summary>
 	public string Source { get; set; }
+	public bool Protected { get; set; }
 	public float X { get; set; }
 	public float Y { get; set; }
 	/// <summary>Bomb arc height (0..1).</summary>
@@ -120,18 +123,18 @@ public sealed class Snapshot
 			s.Bugs.Add(new BugSnap
 			{
 				Id = b.Id, Type = b.Def.Id, X = R(b.Pos.X), Y = R(b.Pos.Y), Angle = R(b.Angle, 3), Hp = R(b.Hp, 2),
-				Slowed = b.Slowed, Chewing = b.Detour == DetourState.Chewing && b.ChewTarget >= 0, OffRoute = b.OffRoute, Progress = R(b.Progress), Cloaked = b.Cloaked, Revealed = b.Revealed,
+				Slowed = b.Slowed, Chewing = b.Detour == DetourState.Chewing && b.ChewTarget >= 0, OffRoute = b.OffRoute, Progress = R(b.Progress), Cloaked = b.Cloaked && !b.Exposed, Exposed = b.Exposed, Revealed = b.Revealed,
 			});
 		foreach (var t in m.Turrets)
 			s.Turrets.Add(new TurretSnap
 			{
-				Id = t.Id, Type = t.Def.Id, Cell = new[] { t.Cell.X, t.Cell.Y }, Direction = R(t.Direction, 3), Head = R(t.HeadAngle, 3), Locked = t.Locked > 0,
+				Id = t.Id, Type = t.Def.Id, Cell = new[] { t.Cell.X, t.Cell.Y }, Direction = R(t.Direction, 3), Head = R(t.HeadAngle, 3), Locked = t.Locked > 0, Immune = t.LockImmunity > 0,
 			});
 		foreach (var p in m.Projectiles)
 			s.Projectiles.Add(new ProjectileSnap
 			{
 				Id = p.Id, Kind = p.Kind.ToString().ToLowerInvariant(), Source = p.Source, X = R(p.Pos.X), Y = R(p.Pos.Y),
-				H = R(p.Height, 2), A = R(p.Vel.Angle(), 3),
+				Protected = p.Protected, H = R(p.Height, 2), A = R(p.Vel.Angle(), 3),
 			});
 		foreach (var c in m.Components)
 			s.Components.Add(c.Destroyed ? -1 : R(c.Hp, 1));

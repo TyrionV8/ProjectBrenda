@@ -14,8 +14,8 @@ it started as a GameMaker prototype, which was retired once the Godot version re
 2. Open `project.godot` in the Godot editor and press F5 (the first run builds the C#
    project). Or open `HardwareDefence.sln` in Rider/VS Code/Visual Studio to edit the code.
 
-Controls: pick a turret on the right (or `1`–`5`) and click a free cell; the laser asks for a
-second click to aim it. Right click / `Esc` / CANCEL stops placing. `F` changes game speed,
+Controls: pick a turret on the right (or `1`–`9`, in visible-list order) and click a free
+cell; the laser asks for a second click to aim it. Right click / `Esc` / CANCEL stops placing. `F` changes game speed,
 `G` shows the grid, `Esc` pauses. Everything also works with touch. In versus as the attacker,
 click a bug (or `1`–`9`) to send it.
 
@@ -24,9 +24,9 @@ click a bug (or `1`–`9`) to send it.
 * **Campaign** — 8 boards (Dev Board → Server Board). A victory earns 1–3 stars from board
   integrity and credits the remaining match money to the upgrade balance. Each board keeps
   its best remaining-money result: a worse replay gives no credit, a better replay gives
-  only the difference. Spend this balance on progressively priced upgrades and, when their
-  gameplay definitions are available, permanent counter-turret unlocks. Each match still
-  begins with that level's normal starting money; defeat, custom levels and versus give
+  only the difference. Spend this balance on progressively priced upgrades and permanent
+  counter-turret unlocks. Each match still begins with that level's normal starting money;
+  defeat, custom levels and versus give
   no campaign credit.
 * **Versus** — one player defends and hosts, the other spends energy to send bugs. Play
   against the built-in AI, host a match or join one. Online play uses a small WebSocket/JSON
@@ -87,6 +87,26 @@ point before continuing. It stays targetable and affected by slowing throughout 
 Bosses and DDoS packets never detour. Match-local seeded randomness keeps identical runs
 reproducible; the `Match` constructor accepts an optional seed.
 
+### Counter-turrets
+
+The five original weapons are always available. Unlock these four supports permanently
+from Upgrades; their construction prices use match money, while unlocking uses campaign
+balance. Local campaign, versus and custom inventories follow the same saved unlocks;
+the simulation and remote build commands accept all definitions.
+
+| Turret (id) | Unlock | Build | Function |
+|---|---|---|---|
+| Antivirus Scanner (`antivirus`) | $60 | $25 | Exposes Rootkits while in range and permanently reveals disguised Trojans. |
+| Firewall (`firewall`) | $70 | $25 | Protects shots fired inside or crossing its range from Man-in-the-Middle; deletes one DDoS packet per reload. |
+| Backup Drive (`backup`) | $80 | $25 | Recovers nearby locked turrets at 4× speed and grants 1.5 seconds of lock immunity after recovery. Its own reboot also accelerates after a global panic. |
+| Repair Bot (`technician`) | $90 | $30 | Repairs one damaged component at 0.6 HP per second, including LEDs; destroyed components return only after a full rebuild. |
+
+All four can be locked by bosses; their external support is inactive until recovery.
+Range and ability upgrades use the auxiliary $5 + $10-per-level price progression.
+The defender bot reserves money after establishing its weapons, then buys the matching
+support for an active/current-wave boss. Nine compact inventory entries leave room for
+the boss health bar and footer at 1366×768.
+
 ### Art
 
 Everything on the board is pixel art on one grid: **1 art pixel = 3 screen pixels** and a
@@ -108,9 +128,9 @@ sprites, lines, particles and lights all share that grid. Keep new art at 1:1 in
   Turrets have no dynamic lights or broad halos: the second head frame and a local status
   pixel stay emissive in the dark. Construction and firing flash those pixels; boss locks
   dim them, change the status colour and hide the laser beam. The beam remains additive.
-  Art is also prepared for Antivirus Scanner, Firewall, Backup Drive and Repair Bot; their
-  gameplay definitions will be added separately. The generator has art defaults by id,
-  overridden by `turrets.json` entries when available. Upgrade-screen preview sizes stay
+  Antivirus Scanner, Firewall, Backup Drive and Repair Bot use green scan lines, orange
+  shields, blue recovery pulses and warm repair beams on the same pixel grid. The generator
+  has art defaults by id, overridden by `turrets.json` entries when available. Upgrade-screen preview sizes stay
   unchanged.
 * `assets/sprites/icons/` — 10×10 white UI icons (tinted by the UI), shown at 3×.
   Includes `scan`, `shield`, `restore` and `repair` for the counter-turrets.
@@ -195,8 +215,12 @@ godot --headless --path . -- --build-theme
 ```
 
 Run one screenshot mode per process, except `game:1:5,pause` for the pause overlay.
-The `upgrades` and `campaignwin` capture preparations use their own disposable campaign
-save and never replace the player's normal save. For the full test suite, use isolated
+The `upgrades`, `campaignwin`, `game` and `boss` capture preparations use their own disposable
+campaign save and never replace the player's normal save. `game` unlocks all four supports
+for inventory inspection; board 4 starts with a damaged component and a Repair Bot.
+`boss` uses a cloned board with a delayed dummy wave and places the appropriate support
+beside real weapons to show its effect, without changing combat statistics. These are
+demonstration setups, not unassisted campaign runs. For the full test suite, use isolated
 user-data directories: some general tests intentionally write campaign files.
 
 The same Linux test entry point is used locally and by GitHub Actions:

@@ -25,12 +25,34 @@ public sealed class DefenderBot
 		if (_timer > 0)
 			return;
 		_timer = Interval;
+		// Establish weapons first; reserve another basic weapon before buying support.
+		var counter = CounterFor(m);
+		if (_next >= 7 && counter != null && !m.Turrets.Any(t => t.Def.Id == counter.Id))
+		{
+			// Save a bounded budget instead of spending every small reward on another gun.
+			if (m.Money < counter.Cost + 10) return;
+			var counterCell = BestCell(m, counter);
+			if (counterCell.X >= 0 && m.Build(counter, counterCell)) return;
+		}
 		var def = Catalog.Turret(Plan[_next % Plan.Length]);
 		if (m.Money < def.Cost)
 			return;
 		var cell = BestCell(m, def);
 		if (cell.X >= 0 && m.Build(def, cell, BestDirection(m, def, cell)))
 			_next++;
+	}
+
+	static TurretDef CounterFor(Match m)
+	{
+		var boss = m.Bugs.FirstOrDefault(b => !b.Gone && b.Def.Boss)?.Def
+			?? m.Waves.Upcoming().Select(s => Catalog.Enemy(s.Enemy)).FirstOrDefault(b => b?.Boss == true);
+		return Catalog.Turret(boss?.Ability switch
+		{
+			"trojan" or "rootkit" => "antivirus",
+			"mitm" or "ddos" => "firewall",
+			"ransomware" or "panic" => "backup",
+			_ => null,
+		});
 	}
 
 	public static Vector2I BestCell(Match m, TurretDef def)
@@ -48,6 +70,8 @@ public sealed class DefenderBot
 					continue;
 				var center = Grid.CellCenter(cell);
 				var score = points.Count(p => center.DistanceTo(p) <= reach);
+				if (def.Behavior is "backup" or "firewall")
+					score += m.Turrets.Count(t => center.DistanceTo(t.Pos) <= reach) * 8;
 				// Prefer covering the end of the route, where bugs are about to hit the CPU.
 				if (score > bestScore)
 				{

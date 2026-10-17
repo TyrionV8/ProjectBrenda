@@ -20,6 +20,8 @@ public enum EventKind
 	MatchEnded,
 	/// <summary>A boss used its ability. Id = bug, Type = what happened (see Match.StepAbility).</summary>
 	BossAbility,
+	/// <summary>Counter turret ability. Id = turret, Pos = target, Value = support range (scan/block/restore) or component index (repair).</summary>
+	TurretAbility,
 }
 
 /// <summary>
