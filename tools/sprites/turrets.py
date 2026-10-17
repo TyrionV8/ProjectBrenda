@@ -4,10 +4,9 @@ The heads don't rotate as sprites (that would smear the pixels): the game draws 
 barrels as pixel lines on top of the socket and under the head, pointing where the turret
 aims. Only the laser turns its sprite, in 90 degree steps. Head sheets have 2 frames: the
 head and its emissive pixels. *_icon.png is the whole turret for menus (barrel to the right).
-Colours come from data/turrets.json.
+Colours come from data/turrets.json, with defaults for the future counter-turrets.
 """
 import json
-import math
 import os
 
 from pixel import Canvas, hexc
@@ -49,6 +48,7 @@ def blaster(t):
     head.outline(OUTLINE)
     head.rect(7, 7, 2, 2, t[4])
     glow.rect(7, 7, 2, 2, t[4])
+    glow.points([(5, 6), (6, 5), (9, 10)], t[3])
     return head, glow
 
 
@@ -58,7 +58,8 @@ def mortar(t):
     head.outline(OUTLINE)
     head.ellipse(C, C, 2.4, 2.4, t[0])
     head.ellipse(C + 0.4, C + 0.4, 1.6, 1.6, hexc("05070a"))
-    glow.points([(7, 6), (6, 7)], t[3])
+    glow.points([(7, 5), (8, 5), (5, 7), (5, 8)], t[4])
+    glow.points([(10, 9), (9, 10)], t[3])
     return head, glow
 
 
@@ -70,6 +71,7 @@ def burst(t):
     head.ellipse(C, C, 1.6, 1.6, t[0])
     head.rect(7, 7, 2, 2, t[4])
     glow.rect(7, 7, 2, 2, t[4])
+    glow.points([(5, 5), (10, 5), (5, 10), (10, 10)], t[3])
     return head, glow
 
 
@@ -87,6 +89,8 @@ def laser(t):
     head.rect(12, 7, 2, 2, t[4])
     glow.rect(12, 6, 2, 4, t[3])
     glow.rect(12, 7, 2, 2, t[4])
+    head.rect(6, 6, 1, 4, t[4])
+    glow.rect(6, 6, 1, 4, t[3])
     return head, glow
 
 
@@ -104,11 +108,99 @@ def freezer(t):
     head.points([(7, 5), (8, 5), (7, 10), (8, 10), (5, 7), (5, 8), (10, 7), (10, 8)], flake)
     head.rect(7, 7, 2, 2, flake)
     glow.rect(7, 7, 2, 2, flake)
-    glow.points([(7, 5), (8, 10), (5, 8), (10, 7)], t[4])
+    glow.points([(7, 5), (8, 5), (7, 10), (8, 10), (5, 7), (5, 8), (10, 7), (10, 8)], t[4])
     return head, glow
 
 
-HEADS = {"blaster": blaster, "mortar": mortar, "burst": burst, "laser": laser, "freezer": freezer}
+def antivirus(t):
+    """A scanner lens with a quarter-sweep and a bright detected contact."""
+    head, glow = Canvas(S, S), Canvas(S, S)
+    head.dome(C, C, 5, 5, t)
+    head.outline(OUTLINE)
+    head.ellipse(C, C, 3.6, 3.6, t[0])
+    rim = [(5, 5), (6, 4), (7, 4), (8, 4), (9, 4), (10, 5), (11, 6), (11, 7)]
+    head.points(rim, t[3])
+    glow.points(rim, t[2])
+    for canvas in (head, glow):
+        canvas.line(7, 8, 9, 6, t[3])
+        canvas.rect(7, 7, 2, 2, t[4])
+        canvas.set(6, 10, t[4])
+    return head, glow
+
+
+def firewall(t):
+    """Brick-like shield face: broad shoulders and a tapered lower tip."""
+    head, glow = Canvas(S, S), Canvas(S, S)
+    head.rect(3, 3, 10, 5, t[2])
+    head.rect(4, 8, 8, 2, t[2])
+    head.rect(5, 10, 6, 2, t[1])
+    head.rect(7, 12, 2, 1, t[1])
+    head.outline(OUTLINE)
+    head.rect(4, 4, 8, 1, t[4])
+    head.rect(4, 7, 8, 1, t[0])
+    head.rect(7, 5, 1, 2, t[0])
+    head.rect(6, 8, 1, 2, t[0])
+    head.rect(9, 8, 1, 2, t[0])
+    glow.rect(4, 4, 8, 1, t[3])
+    glow.points([(4, 8), (5, 10), (6, 11), (7, 12), (8, 12), (9, 11), (10, 10), (11, 8)], t[3])
+    return head, glow
+
+
+def backup(t):
+    """Drive case, platter and a small read/write indicator."""
+    head, glow = Canvas(S, S), Canvas(S, S)
+    head.rect(3, 3, 10, 10, t[1])
+    head.rect(4, 4, 8, 7, t[2])
+    head.outline(OUTLINE)
+    head.ellipse(7.5, 7.5, 3, 3, t[3])
+    head.ellipse(7.5, 7.5, 1.3, 1.3, t[0])
+    head.line(8, 9, 11, 6, t[4])
+    head.rect(5, 11, 3, 1, t[0])
+    head.rect(10, 11, 2, 1, t[4])
+    glow.points([(5, 6), (6, 5), (7, 5), (8, 5)], t[2])
+    glow.line(8, 9, 11, 6, t[3])
+    glow.rect(10, 11, 2, 1, t[4])
+    return head, glow
+
+
+def technician(t):
+    """A square maintenance robot with a jointed wrench arm and friendly eyes."""
+    head, glow = Canvas(S, S), Canvas(S, S)
+    head.rect(3, 6, 7, 6, t[2])
+    head.rect(4, 5, 5, 1, t[3])
+    head.rect(4, 7, 5, 3, t[0])
+    head.line(9, 9, 12, 6, t[3])
+    head.rect(11, 4, 3, 3, t[3])
+    head.set(12, 4, (0, 0, 0, 0))
+    head.outline(OUTLINE)
+    head.rect(4, 11, 5, 1, t[1])
+    for canvas in (head, glow):
+        canvas.points([(5, 8), (7, 8)], t[4])
+        canvas.set(11, 7, t[4])
+    glow.points([(11, 4), (13, 4), (12, 6)], t[3])
+    return head, glow
+
+
+HEADS = {"blaster": blaster, "mortar": mortar, "burst": burst, "laser": laser, "freezer": freezer,
+         "antivirus": antivirus, "firewall": firewall, "backup": backup, "technician": technician}
+
+# Art can be reviewed before simulation/economy adds these definitions to the JSON.
+# Real data overlays these defaults by id, including colour and behaviour.
+FUTURE_TURRETS = {
+    "antivirus": {"id": "antivirus", "behavior": "antivirus", "color": "3dff6a"},
+    "firewall": {"id": "firewall", "behavior": "firewall", "color": "ff8a3d"},
+    "backup": {"id": "backup", "behavior": "backup", "color": "4da3ff"},
+    "technician": {"id": "technician", "behavior": "technician", "color": "ffd9a0"},
+}
+
+
+def definitions():
+    with open(os.path.join(ROOT, "data", "turrets.json")) as source:
+        configured = json.load(source)
+    turrets = {t["id"]: {**FUTURE_TURRETS.get(t["id"], {}), **t} for t in configured}
+    for id, defaults in FUTURE_TURRETS.items():
+        turrets.setdefault(id, defaults.copy())
+    return list(turrets.values())
 
 
 def barrels(behavior, t, c):
@@ -134,7 +226,7 @@ def barrels(behavior, t, c):
 
 
 def build(out_dir):
-    turrets = json.load(open(os.path.join(ROOT, "data", "turrets.json")))
+    turrets = definitions()
     os.makedirs(out_dir, exist_ok=True)
     sock = socket()
     sock_shadow = sock.copy()
@@ -143,7 +235,11 @@ def build(out_dir):
     for tdef in turrets:
         behavior = tdef["behavior"]
         t = tones(hexc(tdef["color"]))
-        head, glow = HEADS[behavior](t)
+        design = HEADS.get(tdef["id"], HEADS.get(behavior))
+        if design is None:
+            raise ValueError(f"No turret art for {tdef['id']} ({behavior})")
+        head, glow = design(t)
+        glow.mask(head)
         sheet = Canvas(S * 2, S)
         sheet.paste(head, 0, 0)
         sheet.paste(glow, S, 0)

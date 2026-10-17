@@ -115,6 +115,35 @@ def preview_row(images, path, zoom=6, bg=(16, 44, 74, 255)):
     out.resize((w * zoom, h * zoom), Image.NEAREST).save(path)
 
 
+def preview_turrets(images, path):
+    """Nine menu icons plus local emission on a board with 12% ambient light."""
+    from PIL import ImageChops, ImageDraw
+    definitions = turrets.definitions()
+    label_width = max(ImageDraw.Draw(Image.new("RGBA", (1, 1))).textbbox((0, 0), d["id"], font_size=7)[2] for d in definitions)
+    cell_w, cell_h = max(25, label_width + 4), 30
+    out = Image.new("RGBA", (cell_w * len(definitions), cell_h * 3), (8, 12, 18, 255))
+    draw = ImageDraw.Draw(out)
+    for column, definition in enumerate(definitions):
+        id = definition["id"]
+        x = column * cell_w
+        draw.text((x + 1, 1), id, fill=(220, 222, 219), font_size=7)
+        out.alpha_composite(images[id], (x + 4, 11))
+        with Image.open(os.path.join(ROOT, "assets", "sprites", "turrets", id + ".png")) as sheet:
+            emission = sheet.convert("RGBA").crop((16, 0, 32, 16))
+        for row, factor in ((1, 1), (2, .25)):
+            body = images[id].copy()
+            body.putdata([(int(r * .12), int(g * .12), int(b * .12), a) for r, g, b, a in body.getdata()])
+            tile = Image.new("RGBA", (16, 16), (3, 4, 7, 255))
+            tile.alpha_composite(body)
+            glow = Image.new("RGBA", (16, 16), (0, 0, 0, 255))
+            glow.alpha_composite(emission)
+            glow = glow.point(lambda value: int(value * factor))
+            tile = ImageChops.add(tile.convert("RGB"), glow.convert("RGB")).convert("RGBA")
+            out.alpha_composite(tile, (x + 4, row * cell_h + 11))
+            draw.text((x + 1, row * cell_h + 1), "dark" if row == 1 else "dim", fill=(150, 170, 190), font_size=7)
+    out.resize((out.width * 8, out.height * 8), Image.Resampling.NEAREST).save(path)
+
+
 if __name__ == "__main__":
     images = build_bugs()
     turret_images = turrets.build(os.path.join(ROOT, "assets", "sprites", "turrets"))
@@ -128,6 +157,6 @@ if __name__ == "__main__":
         preview(images, out.replace(".png", "_bosses.png"), designs=boss_designs)
         preview_animation(images, out.replace(".png", "_animation.gif"))
         preview_animation(images, out.replace(".png", "_bosses_animation.gif"), designs=boss_designs)
-        preview_row(list(turret_images.values()), out.replace(".png", "_turrets.png"), 10)
+        preview_turrets(turret_images, out.replace(".png", "_turrets.png"))
         preview_row(list(icon_images.values()), out.replace(".png", "_icons.png"), 8, (40, 40, 48, 255))
     print(f"wrote {len(images)} bug sheets, {len(turret_images)} turret images, {len(icon_images)} icons")

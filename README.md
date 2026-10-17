@@ -86,7 +86,15 @@ sprites, lines, particles and lights all share that grid. Keep new art at 1:1 in
 * `assets/sprites/turrets/` — a shared 16×16 socket, one head per turret (head + emissive
   frame) and `ID_icon.png` for menus. Heads stay upright; the game draws the barrels as
   pixel lines pointing where the turret aims (the laser turns its sprite in 90° steps).
+  Turrets have no dynamic lights or broad halos: the second head frame and a local status
+  pixel stay emissive in the dark. Construction and firing flash those pixels; boss locks
+  dim them, change the status colour and hide the laser beam. The beam remains additive.
+  Art is also prepared for Antivirus Scanner, Firewall, Backup Drive and Repair Bot; their
+  gameplay definitions will be added separately. The generator has art defaults by id,
+  overridden by `turrets.json` entries when available. Upgrade-screen preview sizes stay
+  unchanged.
 * `assets/sprites/icons/` — 10×10 white UI icons (tinted by the UI), shown at 3×.
+  Includes `scan`, `shield`, `restore` and `repair` for the counter-turrets.
 * Board, route, components and the CPU are painted pixel by pixel in code (`View/Pixel/PixelCanvas`,
   `ComponentArt`), with a 3×5 pixel font (`MicroFont`) for markings.
 * `tools/sprites/make_sprites.py` generates the sprite sheets from the designs next to it

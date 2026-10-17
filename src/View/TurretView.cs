@@ -7,7 +7,7 @@ namespace HardwareDefence.View;
 
 /// <summary>
 /// A turret on screen: pixel-art socket and head (assets/sprites/turrets), barrels drawn as
-/// pixel lines pointing where it aims, a coloured light, a status LED and (laser) the beam.
+/// pixel lines pointing where it aims, local emissive pixels, a status LED and (laser) the beam.
 /// Heads never rotate as sprites, except the laser in 90 degree steps.
 /// </summary>
 public partial class TurretView : Node2D
@@ -25,11 +25,10 @@ public partial class TurretView : Node2D
 	Node2D _barrels;
 	Sprite2D _headSprite;
 	Sprite2D _headGlow;
-	PointLight2D _light;
-	Sprite2D _status;
-	Sprite2D _core;
+	Node2D _status;
+	float _flash = 1;
+	float _buildFlash = 1;
 	Node2D _beam;
-	PointLight2D _beamLight;
 	float _t = GD.Randf() * 10;
 	bool _showRange;
 	bool _locked;
@@ -67,9 +66,6 @@ public partial class TurretView : Node2D
 	public override void _Ready()
 	{
 		AddChild(PixelWorld.Sprite(Socket));
-		_core = FxUtil.GlowSprite(Def.Color, 0.45f);
-		_core.Modulate = new Color(Def.Color, 0.4f);
-		AddChild(_core);
 		_barrels = new Node2D();
 		_barrels.Draw += DrawBarrels;
 		AddChild(_barrels);
@@ -80,28 +76,18 @@ public partial class TurretView : Node2D
 		AddChild(_headGlow);
 		if (Def.Behavior == "laser")
 			_headSprite.Rotation = _headGlow.Rotation = Mathf.Snapped(Direction, Mathf.Pi / 2);
-		_light = FxUtil.Light(Def.Color, 1, 0.6f);
-		AddChild(_light);
-		_status = FxUtil.GlowSprite(Def.Color, 0.12f);
-		_status.Position = new Vector2(5, 5) * Px;
+		// A single hard-edged status pixel on the socket, never a halo on the board.
+		_status = new Node2D { Material = FxUtil.Additive, Position = new Vector2(5, 4) * Px };
+		_status.Draw += () => _status.DrawRect(new Rect2(Vector2.Zero, Vector2.One * Px), Colors.White);
 		AddChild(_status);
 		if (Def.Behavior == "laser")
 		{
 			_beam = new Node2D { Material = FxUtil.Additive };
 			_beam.Draw += DrawBeam;
 			AddChild(_beam);
-			var length = Stats.GetValueOrDefault("beam_length");
-			_beamLight = FxUtil.Light(Def.Color, 0.7f, 0.35f);
-			_beamLight.Position = Vector2.FromAngle(Direction) * (24 + length * 0.5f);
-			_beamLight.Rotation = Direction;
-			_beamLight.Scale = new Vector2(Mathf.Max(length / 90f, 0.5f), 0.6f);
-			AddChild(_beamLight);
 		}
-		// Built: a bright flash instead of a scale pop (which would blur the pixels).
-		_light.Energy = 4;
-		CreateTween().TweenProperty(_light, "energy", 1f, 0.6f);
-		_headSprite.Modulate = new Color(2.5f, 2.5f, 2.5f);
-		CreateTween().TweenProperty(_headSprite, "modulate", Colors.White, 0.35f);
+		// Construction and recoil brighten only existing opaque/emissive pixels.
+		UpdateEmission();
 	}
 
 	public void Apply(TurretSnap s)
@@ -127,11 +113,11 @@ public partial class TurretView : Node2D
 		}
 		_lock.Visible = locked;
 		var dim = locked ? new Color(0.45f, 0.45f, 0.5f) : Colors.White;
-		_headSprite.Modulate = _headGlow.Modulate = dim;
+		_headSprite.Modulate = dim;
 		_barrels.Modulate = dim;
 		if (_beam != null)
-			_beam.Visible = _beamLight.Visible = !locked;
-		_light.Energy = locked ? 0.3f : 1;
+			_beam.Visible = !locked;
+		UpdateEmission();
 	}
 
 	static readonly string[] PadlockArt =
@@ -163,7 +149,7 @@ public partial class TurretView : Node2D
 		for (var y = 0; y < PadlockArt.Length; y++)
 			for (var x = 0; x < PadlockArt[y].Length; x++)
 				if (PadlockArt[y][x] == '#')
-					_lock.DrawRect(new Rect2(new Vector2(x - 3.5f, y - 9) * Px, Vector2.One * Px), y >= 3 ? gold : new Color("c9d0d8"));
+					_lock.DrawRect(new Rect2(new Vector2(x - 3, y - 9) * Px, Vector2.One * Px), y >= 3 ? gold : new Color("c9d0d8"));
 		var rnd = new RandomNumberGenerator { Seed = (ulong)(Mathf.FloorToInt(_t * 8) + Id * 17) };
 		var hex = $"{rnd.RandiRange(0, 255):X2}{rnd.RandiRange(0, 255):X2}";
 		MicroFont.DrawOutlined(_lock, new Vector2(0, 5 * Px), hex, new Color("ff4d5e"), new Color(0, 0, 0, 0.9f));
@@ -171,17 +157,34 @@ public partial class TurretView : Node2D
 
 	public void Fired()
 	{
+		if (_locked)
+			return;
 		_kick = 1;
-		_light.Energy = 2;
-		CreateTween().TweenProperty(_light, "energy", 1f, 0.25f);
-		_core.Modulate = new Color(Def.Color, 1);
-		CreateTween().TweenProperty(_core, "modulate:a", 0.4f, 0.3f);
+		_flash = 1;
+		UpdateEmission();
+	}
+
+	void UpdateEmission()
+	{
+		var pulse = 0.65f + 0.35f * Mathf.Abs(Mathf.Sin(_t * 2.2f));
+		var brightness = _locked ? 0.2f + 0.12f * pulse : 0.85f + _flash * 1.4f;
+		_headGlow.Modulate = new Color(brightness, brightness, brightness);
+		_status.Modulate = _locked
+			? new Color(LockKind == "panic" ? new Color("3f6fff") : new Color("ff4d5e"), pulse)
+			: new Color(Def.Color.Lightened(_flash * 0.5f), pulse);
+		if (!_locked)
+		{
+			var build = 1 + _buildFlash * 1.5f;
+			_headSprite.Modulate = new Color(build, build, build);
+		}
 	}
 
 	public override void _Process(double delta)
 	{
 		_t += (float)delta;
-		_status.Modulate = new Color(Def.Color, 0.35f + 0.65f * Mathf.Abs(Mathf.Sin(_t * 2.2f)));
+		_flash = Mathf.Max(0, _flash - (float)delta * 4);
+		_buildFlash = Mathf.Max(0, _buildFlash - (float)delta * 3);
+		UpdateEmission();
 		if (_kick > 0)
 		{
 			_kick = Mathf.Max(_kick - (float)delta * 6, 0);
@@ -244,7 +247,8 @@ public partial class TurretView : Node2D
 		_beam.DrawLine(from, to, new Color(1, 0.9f, 0.95f, 0.9f), Px);
 		for (var k = (_t * 220) % 40; k < length; k += 40)
 			_beam.DrawRect(new Rect2(PixelWorld.Snap(from + dir * k) - Vector2.One * Px, Vector2.One * Px * 2), new Color(1, 1, 1, 0.8f));
-		FxUtil.DrawGlow(_beam, to, 28, new Color(Def.Color, 0.8f));
-		FxUtil.DrawGlow(_beam, from, 32, new Color(Def.Color, flicker));
+		// Hard-edged endpoint sparks keep the beam readable without broad glows.
+		foreach (var end in new[] { from, to })
+			_beam.DrawRect(new Rect2(PixelWorld.Snap(end) - Vector2.One * Px, Vector2.One * Px * 2), new Color(Def.Color, flicker));
 	}
 }
