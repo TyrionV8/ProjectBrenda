@@ -51,9 +51,14 @@ public partial class GameScreen : Node2D
 	float _shake;
 	float _sparkTimer;
 	bool _ended;
+	TutorialTips _tips;
+	readonly HashSet<string> _observedEnemies = new();
+	readonly HashSet<string> _observedTurrets = new();
+	bool FirstBoardTutorial => GameSession.Current == GameSession.Kind.Campaign && GameState.CurrentLevel == 0 && Feed.Mode == MatchMode.Campaign;
 
 	public override void _Ready()
 	{
+		GameState.EnsureCampaignLoaded();
 		Feed = GameSession.CreateFeed?.Invoke() ?? new LocalFeed(Catalog.Levels[0], MatchMode.Campaign, PlayerSide.Defender, true);
 		var level = Feed.Level;
 		_blocked = level.BlockedCells();
@@ -100,6 +105,9 @@ public partial class GameScreen : Node2D
 
 		Hud = new Hud(this);
 		AddChild(Hud);
+		_tips = new TutorialTips();
+		Hud.AddChild(_tips);
+		if (FirstBoardTutorial) _tips.Enqueue(TutorialTips.Build);
 		_pause = new PauseMenu(this);
 		AddChild(_pause);
 		Build.SelectionChanged += Hud.OnSelectionChanged;
@@ -125,6 +133,7 @@ public partial class GameScreen : Node2D
 
 	public override void _Process(double delta)
 	{
+		_tips.Suspended = _pause.Visible;
 		var dt = (float)delta;
 		Feed.Process(dt);
 		var snap = Feed.Current;
@@ -135,6 +144,7 @@ public partial class GameScreen : Node2D
 			Hud.HideWaiting();
 		if (snap == null)
 			return;
+		if (!_ended && FirstBoardTutorial && snap.Bugs.Any(b => b.OffRoute)) _tips.Enqueue(TutorialTips.Detour);
 		SyncBugs(snap, dt);
 		_bossFx.Sync(snap, dt);
 		SyncTurrets(snap);
@@ -216,7 +226,11 @@ public partial class GameScreen : Node2D
 		Hud.UpdateSpeed(1);
 	}
 
-	public void OpenMenu() => _pause.Open();
+	public void OpenMenu()
+	{
+		_tips.Suspended = true;
+		_pause.Open();
+	}
 
 	public void Restart() => Transition.Go(GameSession.GameScene);
 
@@ -234,6 +248,7 @@ public partial class GameScreen : Node2D
 		foreach (var b in snap.Bugs)
 		{
 			seen.Add(b.Id);
+			ObserveEnemy(b.Type);
 			if (!_bugs.TryGetValue(b.Id, out var view))
 			{
 				var def = Catalog.Enemy(b.Type);
@@ -249,6 +264,14 @@ public partial class GameScreen : Node2D
 			RemoveBug(id);
 	}
 
+	void ObserveEnemy(string id)
+	{
+		if (!_observedEnemies.Add(id)) return;
+		GameState.SeeEnemy(id);
+		if (!_ended && Catalog.Enemy(id) is { Boss: true } boss)
+			_tips.Enqueue("boss_" + boss.Ability);
+	}
+
 	void RemoveBug(int id)
 	{
 		if (!_bugs.Remove(id, out var view))
@@ -260,6 +283,7 @@ public partial class GameScreen : Node2D
 	{
 		foreach (var t in snap.Turrets)
 		{
+			if (_observedTurrets.Add(t.Type)) GameState.SeeTurret(t.Type);
 			if (!_turrets.TryGetValue(t.Id, out var view))
 			{
 				var def = Catalog.Turret(t.Type);
@@ -351,6 +375,7 @@ public partial class GameScreen : Node2D
 		switch (e.Kind)
 		{
 			case EventKind.BugSpawned:
+				ObserveEnemy(e.Type);
 				if (Catalog.Enemy(e.Type) is { Boss: true } boss)
 				{
 					Hud.ShowBossWarning(boss);
@@ -433,6 +458,7 @@ public partial class GameScreen : Node2D
 				if (e.Id < _board.Components.Count)
 				{
 					var c = _board.Components[e.Id];
+					if (!_ended && FirstBoardTutorial && c.Data.Type is "led" or "led_5mm") _tips.Enqueue(TutorialTips.Led);
 					_fx.ComponentDestroyed(c.Rect, ComponentArt.MainColor(c.Data));
 					Audio.Play("explode", "SFX", -9);
 				}
@@ -446,6 +472,7 @@ public partial class GameScreen : Node2D
 				Hud.ShowBanner($"WAVE {e.Id} CLEARED", "Next wave incoming");
 				break;
 			case EventKind.WaveStarted:
+				if (!_ended && FirstBoardTutorial) _tips.Enqueue(TutorialTips.Wave);
 				Hud.ShowBanner($"WAVE {e.Id + 1}", $"{Feed.Level.EnemyCount(e.Id)} bugs");
 				Audio.Play("wave", "SFX", -2);
 				break;
@@ -455,6 +482,7 @@ public partial class GameScreen : Node2D
 	async void EndMatch(Snapshot snap)
 	{
 		_ended = true;
+		_tips.Clear();
 		Build.Cancel();
 		ResetSpeed();
 		var defenderWon = _state == MatchState.DefenderWon;
@@ -485,11 +513,14 @@ public partial class GameScreen : Node2D
 				var finished = GameState.CompleteCurrentLevel(snap.Stars, snap.Money);
 				var gained = GameState.Balance - before;
 				var record = GameState.BestRemainingMoney[clearedLevel];
+				var explainBalance = clearedLevel == 0 && TutorialTips.CanShow(TutorialTips.Victory);
 				var message = integrity + $"\nRemaining: ${snap.Money}  |  record: ${record}\n+${gained} for upgrades  |  balance: ${GameState.Balance}";
+				if (explainBalance) message += "\n" + TutorialTips.VictoryText;
 				if (finished)
 					Hud.ShowResult("ALL CIRCUITS SECURED", UiTheme.Green, message, snap.Stars, ("Continue", () => Transition.Go("res://scenes/end_screen.tscn")));
 				else
 					Hud.ShowResult("CIRCUIT SECURED", UiTheme.Green, message, snap.Stars, ("Upgrades", () => Transition.Go("res://scenes/upgrade_screen.tscn")));
+				if (explainBalance) GameState.MarkTipShown(TutorialTips.Victory);
 				break;
 			default:
 				Hud.ShowResult("CIRCUIT SECURED", UiTheme.Green, integrity, snap.Stars, ("Back", () => Transition.Go(GameSession.ReturnScene)));

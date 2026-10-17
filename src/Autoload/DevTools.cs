@@ -186,8 +186,9 @@ public partial class DevTools : Node
 	{
 		// These preparations buy upgrades, unlock counters or complete a campaign level. Isolate their
 		// entire lifetime, including result callbacks and capture failures.
-		using var captureSave = shots.Any(shot => shot.Split(':')[0] is "upgrades" or "campaignwin" or "game" or "boss")
-			? GameState.UseTemporarySave() : null;
+		using var captureSave = GameState.UseTemporarySave();
+		var previousTips = Settings.Instance.Tips;
+		if (shots.Any(shot => shot.StartsWith("game:1:"))) Settings.Instance.Tips = true;
 		try
 		{
 			await Capture(shots, outDir);
@@ -197,6 +198,7 @@ public partial class DevTools : Node
 			GD.PrintErr($"capture failed: {e}");
 			GetTree().Quit(1);
 		}
+		finally { Settings.Instance.Tips = previousTips; }
 	}
 
 	async Task Capture(string[] shots, string outDir)
@@ -209,6 +211,12 @@ public partial class DevTools : Node
 			var wait = parts.Length > 2 ? float.Parse(parts[2], System.Globalization.CultureInfo.InvariantCulture) : 10;
 			switch (parts[0])
 			{
+				case "bestiary":
+					GameState.Reset();
+					foreach (var enemy in Catalog.EnemyList.Take(4).Concat(Catalog.EnemyList.Where(e => e.Boss).Take(2))) GameState.SeeEnemy(enemy.Id);
+					foreach (var turret in Catalog.Turrets.Take(3)) GameState.SeeTurret(turret.Id);
+					await Goto("res://scenes/bestiary.tscn", 1.5f);
+					break;
 				case "menu":
 					await Goto(GameSession.MenuScene, 2.5f);
 					break;
@@ -259,6 +267,8 @@ public partial class DevTools : Node
 				case "win":
 				case "campaignwin":
 					if (parts[0] == "game") UnlockCounterCapture();
+					var tutorialCapture = parts[0] == "game" && level == 0;
+					if (tutorialCapture) GameState.CurrentLevel = 0;
 					var attacker = parts[0] == "attack";
 					var lvl = Catalog.Levels[Math.Min(level, Catalog.Levels.Count - 1)];
 					var campaignWin = parts[0] == "campaignwin";
@@ -267,7 +277,7 @@ public partial class DevTools : Node
 						GameState.Reset();
 						GameState.CurrentLevel = Math.Min(level, Catalog.Levels.Count - 1);
 					}
-					GameSession.Current = campaignWin ? GameSession.Kind.Campaign : attacker ? GameSession.Kind.Versus : GameSession.Kind.Custom;
+					GameSession.Current = campaignWin || tutorialCapture ? GameSession.Kind.Campaign : attacker ? GameSession.Kind.Versus : GameSession.Kind.Custom;
 					GameSession.CreateFeed = () =>
 					{
 						var feed = new LocalFeed(lvl, attacker ? MatchMode.Versus : MatchMode.Campaign, attacker ? PlayerSide.Attacker : PlayerSide.Defender, campaignWin)

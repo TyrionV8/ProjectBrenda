@@ -12,6 +12,7 @@ public partial class MainMenu : Control
 
 	public override void _Ready()
 	{
+		GameState.EnsureCampaignLoaded();
 		SetAnchorsPreset(LayoutPreset.FullRect);
 		AddChild(new MenuBackground());
 		AddChild(Shade());
@@ -43,6 +44,11 @@ public partial class MainMenu : Control
 		buttons.AddChild(Ui.Button("Versus", () => Transition.Go("res://scenes/versus_menu.tscn"), "BigButton"));
 		buttons.AddChild(Ui.Button("Level Editor", () => Transition.Go("res://scenes/level_editor.tscn"), "BigButton"));
 		var row = Ui.HBox(10);
+		row.AddChild(Ui.Button("Bestiary", () =>
+		{
+			GameState.Load();
+			Transition.Go("res://scenes/bestiary.tscn");
+		}, "BigButton"));
 		var settings = Ui.Button("Settings", OpenSettings, "BigButton");
 		settings.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		row.AddChild(settings);

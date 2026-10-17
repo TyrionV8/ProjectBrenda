@@ -38,6 +38,9 @@ public partial class SettingsPanel : PanelContainer
 			Settings.Instance.SetScreenFx(on);
 		};
 		box.AddChild(fx);
+		var tips = new CheckBox { Name = "TipsOption", Text = "Tips", ButtonPressed = Settings.Instance.Tips };
+		tips.Toggled += on => Settings.Instance.SetTips(on);
+		box.AddChild(tips);
 		box.AddChild(Ui.Spacer(8));
 		var back = Ui.Button("Back", () => Closed?.Invoke());
 		back.SizeFlagsHorizontal = SizeFlags.ShrinkCenter;

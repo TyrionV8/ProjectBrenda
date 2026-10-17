@@ -16,6 +16,7 @@ public partial class Settings : Node
 	public readonly Dictionary<string, float> Volumes = new() { ["Master"] = 0.8f, ["Music"] = 0.7f, ["SFX"] = 0.8f, ["UI"] = 0.8f };
 	public bool Fullscreen;
 	public bool ScreenFx = true;
+	public bool Tips = true;
 	public string PlayerName = "Player";
 	public string LastAddress = "127.0.0.1";
 
@@ -63,6 +64,13 @@ public partial class Settings : Node
 		Changed?.Invoke();
 	}
 
+	public void SetTips(bool on)
+	{
+		Tips = on;
+		SaveFile();
+		Changed?.Invoke();
+	}
+
 	public void SetNetwork(string name, string address)
 	{
 		PlayerName = name;
@@ -100,6 +108,7 @@ public partial class Settings : Node
 		foreach (var bus in Buses)
 			Volumes[bus] = (float)cfg.GetValue("audio", bus, Volumes[bus]);
 		Fullscreen = (bool)cfg.GetValue("display", "fullscreen", Fullscreen);
+		Tips = (bool)cfg.GetValue("gameplay", "tips", Tips);
 		ScreenFx = (bool)cfg.GetValue("display", "screen_fx", ScreenFx);
 		PlayerName = (string)cfg.GetValue("network", "name", PlayerName);
 		LastAddress = (string)cfg.GetValue("network", "address", LastAddress);
@@ -110,6 +119,7 @@ public partial class Settings : Node
 		var cfg = new ConfigFile();
 		foreach (var bus in Buses)
 			cfg.SetValue("audio", bus, Volumes[bus]);
+		cfg.SetValue("gameplay", "tips", Tips);
 		cfg.SetValue("display", "fullscreen", Fullscreen);
 		cfg.SetValue("display", "screen_fx", ScreenFx);
 		cfg.SetValue("network", "name", PlayerName);

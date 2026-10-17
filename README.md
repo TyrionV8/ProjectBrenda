@@ -35,6 +35,18 @@ click a bug (or `1`–`9`) to send it.
 * **Level Editor** — draw the route, place components from a palette, edit waves on a
   timeline, test play and save. Custom levels go to `user://levels` and show up under
   *Select Level → Custom levels* and in versus.
+* **Bestiary** — open it from the main menu or pause menu. Bugs, bosses and turrets have
+  animated portraits on the 3× pixel grid, descriptions and attributes read from the
+  current catalog. Unknown entries show silhouettes and `???`. Encounter an enemy, build
+  a turret or buy its unlock to discover it permanently. Returning from the pause-menu
+  bestiary keeps the same match and its pause state; online matches continue running.
+
+**Tips** in Settings controls short contextual hints. Board one introduces construction,
+waves, detours, burnt-out LEDs and the victory balance; each boss also has a response hint.
+Hints disappear after nine seconds or a click, without pausing play. They are recorded only
+when shown, wait while the menu/bestiary covers the game, and are never repeated once saved.
+The first board's victory explains that only improvement over the best remaining cash is
+credited to upgrades.
 
 ## Code layout
 
@@ -202,7 +214,9 @@ English in `MicroFont` on the same 3× pixel grid.
 
 Saves: `user://save.json` (campaign), `user://settings.cfg`, `user://levels/` (custom levels).
 Campaign save version 3 stores `balance`, `best_remaining_money`, `unlocked_turrets`,
-`upgrades`, `stars` and unlocked levels. Version 2 points become money at 20 per point;
+`upgrades`, `stars`, unlocked levels, `seen_enemies`, `seen_turrets` and `shown_tips`.
+Older saves safely default the discovery/hint sets; existing turret purchases also reveal
+those entries. Version 2 points become money at 20 per point;
 existing upgrades and stars are retained. New campaigns start with a zero upgrade balance.
 Purchases and victory records persist before notifying the interface; the file is written
 completely to a temporary path before replacing the previous save.
@@ -222,6 +236,9 @@ godot --headless --path . -- --server --level=3 --defender=bot --attacker=remote
 # screenshots (needs a display; xvfb-run works); boss:N:SECONDS drops level N's boss on the board
 godot --path . -- --capture=game:5:20 --out=/tmp/shots
 
+# bestiary with some discovered entries; game:1:6 also demonstrates the first hint
+godot --path . -- --capture=bestiary --out=/tmp/shots
+
 # actual campaign victory and its cash record (the win:N mode remains a custom level)
 godot --path . -- --capture=campaignwin:1 --out=/tmp/shots
 
@@ -230,8 +247,10 @@ godot --headless --path . -- --build-theme
 ```
 
 Run one screenshot mode per process, except `game:1:5,pause` for the pause overlay.
-The `upgrades`, `campaignwin`, `game` and `boss` capture preparations use their own disposable
-campaign save and never replace the player's normal save. `game` unlocks all four supports
+All screenshot preparations use their own disposable campaign save and restore in-memory
+campaign state afterwards, including errors. They never replace the player's normal save.
+`game:1` temporarily enables Tips in memory for reproducible screenshots, restoring the
+preference afterwards without writing settings. `game` unlocks all four supports
 for inventory inspection; board 4 starts with a damaged component and a Repair Bot.
 `boss` uses a cloned board with a delayed dummy wave and places the appropriate support
 beside real weapons to show its effect, without changing combat statistics. These are

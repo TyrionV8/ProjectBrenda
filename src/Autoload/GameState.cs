@@ -13,6 +13,7 @@ public static class GameState
 	public const string SavePath = "user://save.json";
 	public const int LegacyPointValue = 20;
 	static string _activeSavePath = SavePath;
+	static bool _loadedForDiscoveries;
 
 	/// <summary>Captures use a disposable campaign file, never the player's normal save.</summary>
 	public static IDisposable UseTemporarySave() => new TemporarySaveScope();
@@ -20,16 +21,27 @@ public static class GameState
 	sealed class TemporarySaveScope : IDisposable
 	{
 		readonly string _previousPath = _activeSavePath;
+		readonly SaveData _previousState = JsonIO.Read<SaveData>(JsonIO.Write(CaptureData()));
+		readonly int _previousLevel = CurrentLevel;
+		readonly bool _previousLoaded = _loadedForDiscoveries;
 		readonly string _temporaryPath = $"user://capture-campaign-{Guid.NewGuid():N}.json";
 		bool _disposed;
 
-		public TemporarySaveScope() => _activeSavePath = _temporaryPath;
+		public TemporarySaveScope()
+		{
+			_activeSavePath = _temporaryPath;
+			_loadedForDiscoveries = true;
+		}
 
 		public void Dispose()
 		{
 			if (_disposed) return;
 			_disposed = true;
 			_activeSavePath = _previousPath;
+			ApplyData(_previousState);
+			CurrentLevel = _previousLevel;
+			_loadedForDiscoveries = _previousLoaded;
+			Changed?.Invoke();
 			DirAccess.RemoveAbsolute(_temporaryPath);
 			DirAccess.RemoveAbsolute(_temporaryPath + ".tmp");
 		}
@@ -47,6 +59,9 @@ public static class GameState
 		public int Balance { get; set; }
 		public List<int> BestRemainingMoney { get; set; }
 		public HashSet<string> UnlockedTurrets { get; set; }
+		public HashSet<string> SeenEnemies { get; set; }
+		public HashSet<string> SeenTurrets { get; set; }
+		public HashSet<string> ShownTips { get; set; }
 	}
 
 	public static event Action Changed;
@@ -58,11 +73,19 @@ public static class GameState
 	public static int Balance;
 	public static List<int> BestRemainingMoney = new();
 	public static HashSet<string> UnlockedTurrets = new();
+	public static HashSet<string> SeenEnemies = new();
+	public static HashSet<string> SeenTurrets = new();
+	public static HashSet<string> ShownTips = new();
 
-	static GameState() => Reset();
+	static GameState()
+	{
+		Reset();
+		_loadedForDiscoveries = false;
+	}
 
 	public static void Reset()
 	{
+		_loadedForDiscoveries = true;
 		var count = Catalog.Levels.Count;
 		CurrentLevel = 0;
 		Unlocked = Enumerable.Repeat(false, count).ToList();
@@ -73,6 +96,9 @@ public static class GameState
 		Balance = 0;
 		BestRemainingMoney = Enumerable.Repeat(0, count).ToList();
 		UnlockedTurrets = new();
+		SeenEnemies = new();
+		SeenTurrets = new();
+		ShownTips = new();
 		Changed?.Invoke();
 	}
 
@@ -83,11 +109,7 @@ public static class GameState
 	{
 		path ??= _activeSavePath;
 		var temporary = path + ".tmp";
-		var data = new SaveData
-		{
-			Version = 3, Unlocked = Unlocked, Stars = Stars, Upgrades = Upgrades, Balance = Balance,
-			BestRemainingMoney = BestRemainingMoney, UnlockedTurrets = UnlockedTurrets,
-		};
+		var data = CaptureData();
 		Error writeError;
 		using (var file = FileAccess.Open(temporary, FileAccess.ModeFlags.Write))
 		{
@@ -131,6 +153,14 @@ public static class GameState
 		}
 		if (data == null || data.Version < 1 || data.Version > 3)
 			return false;
+		ApplyData(data);
+		_loadedForDiscoveries = true;
+		Changed?.Invoke();
+		return true;
+	}
+
+	static void ApplyData(SaveData data)
+	{
 		// Build the whole state first: subscribers must never observe a half-loaded migration.
 		var count = Catalog.Levels.Count;
 		Unlocked = Enumerable.Range(0, count).Select(i => i == 0 || (i < (data.Unlocked?.Count ?? 0) && data.Unlocked[i])).ToList();
@@ -145,10 +175,46 @@ public static class GameState
 		Balance = data.Version < 3 ? (int)Math.Clamp((long)data.Points * LegacyPointValue, 0, int.MaxValue) : Math.Max(0, data.Balance);
 		BestRemainingMoney = Enumerable.Range(0, count).Select(i => data.Version == 3 && i < (data.BestRemainingMoney?.Count ?? 0) ? Math.Max(0, data.BestRemainingMoney[i]) : 0).ToList();
 		UnlockedTurrets = data.Version == 3 && data.UnlockedTurrets != null ? new(data.UnlockedTurrets.Where(id => !string.IsNullOrWhiteSpace(id))) : new();
+		SeenEnemies = CleanIds(data.SeenEnemies);
+		SeenTurrets = CleanIds(data.SeenTurrets);
+		SeenTurrets.UnionWith(UnlockedTurrets);
+		SeenTurrets.UnionWith(Upgrades.Keys);
+		ShownTips = CleanIds(data.ShownTips);
 		CurrentLevel = LastUnlocked();
+	}
+
+	static HashSet<string> CleanIds(IEnumerable<string> ids) => new((ids ?? Array.Empty<string>()).Where(id => !string.IsNullOrWhiteSpace(id)));
+
+	static SaveData CaptureData() => new()
+	{
+		Version = 3, Unlocked = Unlocked, Stars = Stars, Upgrades = Upgrades, Balance = Balance,
+		BestRemainingMoney = BestRemainingMoney, UnlockedTurrets = UnlockedTurrets,
+		SeenEnemies = SeenEnemies, SeenTurrets = SeenTurrets, ShownTips = ShownTips,
+	};
+
+	/// <summary>Persist a discovery once, before observers are notified.</summary>
+	static bool Record(HashSet<string> set, string id)
+	{
+		if (string.IsNullOrWhiteSpace(id) || !set.Add(id)) return false;
+		if (!Save()) { set.Remove(id); return false; }
 		Changed?.Invoke();
 		return true;
 	}
+
+	/// <summary>Cold menu-to-versus/editor paths must load the campaign before automatic saves.
+	/// An explicit Reset is already initialized, so a new campaign never reloads erased progress.</summary>
+	public static bool EnsureCampaignLoaded()
+	{
+		if (_loadedForDiscoveries) return true;
+		if (HasSave()) return Load();
+		_loadedForDiscoveries = true;
+		return true;
+	}
+
+	public static bool SeeEnemy(string id) => EnsureCampaignLoaded() && Catalog.Enemy(id) != null && Record(SeenEnemies, id);
+	public static bool SeeTurret(string id) => EnsureCampaignLoaded() && Catalog.Turret(id) != null && Record(SeenTurrets, id);
+	public static bool MarkTipShown(string id) => EnsureCampaignLoaded() && Record(ShownTips, id);
+	public static bool HasSeenTurret(string id) => SeenTurrets.Contains(id) || UnlockedTurrets.Contains(id);
 
 	public static int LastUnlocked() => Math.Max(Unlocked.LastIndexOf(true), 0);
 	public static bool IsUnlocked(int index) => index >= 0 && index < Unlocked.Count && Unlocked[index];
@@ -161,10 +227,12 @@ public static class GameState
 			return false;
 		Balance -= def.UnlockPrice;
 		UnlockedTurrets.Add(def.Id);
+		var previouslySeen = !SeenTurrets.Add(def.Id);
 		if (!Save())
 		{
 			Balance += def.UnlockPrice;
 			UnlockedTurrets.Remove(def.Id);
+			if (!previouslySeen) SeenTurrets.Remove(def.Id);
 			return false;
 		}
 		Changed?.Invoke();

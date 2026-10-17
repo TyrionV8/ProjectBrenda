@@ -11,6 +11,7 @@ public partial class PauseMenu : CanvasLayer
 	Control _menu;
 	SettingsPanel _settings;
 	Control _settingsCenter;
+	Bestiary _bestiary;
 
 	public PauseMenu(GameScreen screen) => _screen = screen;
 
@@ -32,6 +33,7 @@ public partial class PauseMenu : CanvasLayer
 		box.AddChild(Ui.Button("Resume", Close, "BigButton"));
 		if (local)
 			box.AddChild(Ui.Button("Restart", _screen.Restart));
+		box.AddChild(Ui.Button("Bestiary", OpenBestiary));
 		box.AddChild(Ui.Button("Settings", OpenSettings));
 		box.AddChild(Ui.Button(local ? "Quit" : "Leave match", _screen.Leave, "DangerButton"));
 		_menu = Ui.Centered(panel);
@@ -61,8 +63,24 @@ public partial class PauseMenu : CanvasLayer
 		CreateTween().TweenProperty(_root, "modulate:a", 1f, 0.15f);
 	}
 
+	public void OpenBestiary()
+	{
+		_menu.Visible = false;
+		_bestiary = new Bestiary();
+		_bestiary.Closed += CloseBestiary;
+		_root.AddChild(_bestiary);
+	}
+
+	public void CloseBestiary()
+	{
+		_bestiary?.QueueFree();
+		_bestiary = null;
+		_menu.Visible = true;
+	}
+
 	public void Close()
 	{
+		CloseBestiary();
 		Visible = false;
 		GetTree().Paused = false;
 	}
@@ -77,7 +95,9 @@ public partial class PauseMenu : CanvasLayer
 	{
 		if (!Visible || !e.IsActionPressed("pause"))
 			return;
-		if (_settingsCenter.Visible)
+		if (_bestiary != null)
+			CloseBestiary();
+		else if (_settingsCenter.Visible)
 			_settings.EmitClosed();
 		else
 			Close();
