@@ -51,10 +51,15 @@ public partial class BugView : Node2D
 		var moved = pos.DistanceTo(_lastPos);
 		_lastPos = pos;
 		_body.Chewing = s.Chewing;
+		if (Def.Ability == "trojan")
+		{
+			var previousSize = _body.CurrentFrameSize;
+			_body.SetDisguised(!s.Revealed);
+			if (_body.CurrentFrameSize != previousSize)
+				QueueRedraw(); // The health bar follows the revealed horse's larger frame.
+		}
 		_body.Animate(moved, delta);
 		_body.SetFrozen(s.Slowed ? 1 : 0);
-		if (Def.Ability == "trojan")
-			_body.SetDisguised(!s.Revealed);
 		if (Def.Ability == "rootkit")
 		{
 			_cloak = Mathf.MoveToward(_cloak, s.Cloaked ? 0.9f : 0, delta * 4);

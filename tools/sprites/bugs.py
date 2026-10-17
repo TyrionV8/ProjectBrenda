@@ -1,16 +1,21 @@
 """The bugs. Every bug faces right (+x) and is drawn on an odd-sized canvas so it can turn
-around its centre pixel. A sprite sheet has 6 frames per row (4 walking, 2 chewing):
+around its centre pixel. A sprite sheet has 15 frames per row (8 walking, 6 chewing, idle):
 row 0 is the bug, row 1 holds its emissive pixels (eyes, glowing marks), which the game
 draws additively so they stay visible on a dark board.
 """
 from pixel import Canvas, hexc, ramp
 
-WALK = [1, 0, -1, 0]
-FRAMES = 6  # walk 0-3, chew 0-1
+WALK_FRAMES = 8
+CHEW_FRAMES = 6
+IDLE_FRAME = WALK_FRAMES + CHEW_FRAMES
+FRAMES = IDLE_FRAME + 1
+WALK = [0, 1, 1, 1, 0, -1, -1, -1]
+LIFT = [0, 0, 1, 2, 2, 2, 1, 0]
+BITE = [0, 1, 2, 1, 0, 1]
 
 
 def swing(frame, group):
-    if frame >= 4:
+    if frame >= WALK_FRAMES:
         return 0
     return WALK[frame] * (1 if group == 0 else -1)
 
@@ -23,6 +28,7 @@ class Bug:
     id = ""
     w = h = 13
     outline = hexc("0b0d10")
+    warm = hexc("ffc58b", 24)
 
     def legs(self, c, frame):
         pass
@@ -38,23 +44,35 @@ class Bug:
         pass
 
     def chewing(self, frame):
-        return frame >= 4
+        return WALK_FRAMES <= frame < IDLE_FRAME
 
     def jaw(self, frame):
-        """0 = closed, 1 = open (chewing frames snap the jaws)."""
-        return 1 if frame == 4 else 0
+        """Three jaw apertures, with anticipation, contact and release."""
+        return BITE[frame - WALK_FRAMES] if self.chewing(frame) else 0
+
+    def bob(self, frame):
+        if frame in (12, 13):
+            return 1
+        return -1 if frame in (2, 3, 6, 7, 10, 11) else 0
+
+    def feeler(self, frame):
+        return 1 if frame in (1, 2, 3, 9, 10) else 0
 
     # Legs are described for the top side; the bottom side mirrors them.
     def pair_legs(self, c, legs, color, frame, knee_swing=False):
         for i, (hip, knee, foot) in enumerate(legs):
             for side in (0, 1):
                 s = swing(frame, (i + side) % 2)
-                k = (knee[0] + (s if knee_swing else 0), knee[1])
-                f = (foot[0] + s, foot[1])
-                pts = [hip, k, f]
+                phase = (frame + side * 4 + i * 4) % WALK_FRAMES
+                lift = LIFT[phase] if frame < WALK_FRAMES else 0
+                k = (knee[0] + (s if knee_swing else 0), knee[1] + lift)
+                f = (max(0, min(self.w - 2, foot[0] + s)), max(0, foot[1] + lift))
+                pts = [(hip[0], hip[1]), k, f]
                 if side:
                     pts = [(x, mirror_y(self.h, y)) for x, y in pts]
-                c.polyline(pts, color)
+                pts[0] = (pts[0][0], pts[0][1] + self.bob(frame))
+                light = tuple(min(255, v + 34) for v in color[:3]) + (255,)
+                c.limb(pts, color, self.outline, light)
 
     def frame(self, frame):
         legs = Canvas(self.w, self.h)
@@ -62,12 +80,28 @@ class Bug:
         body = Canvas(self.w, self.h)
         self.body(body, frame)
         body.outline(self.outline)
-        out = legs
-        out.paste(body)
-        self.details(out, frame)
+        out = legs.copy()
+        # Body, markings and light move together; the planted feet stay on the board.
+        self.details(body, frame)
         glow = Canvas(self.w, self.h)
         self.glow(glow, frame)
-        return out, glow
+        # A low-opacity warm rim reads as a friendly shell in the dark, not floating eyes.
+        # It belongs to the shell only, so neither legs nor antennas turn into neon trails.
+        for y in range(1, self.h - 1):
+            for x in range(1, self.w - 1):
+                if body.opaque(x, y) and body.get(x, y) != self.outline:
+                    if (not body.opaque(x - 1, y - 1) or body.get(x - 1, y) == self.outline) and not glow.opaque(x, y):
+                        glow.set(x, y, self.warm)
+        shifted_glow = Canvas(self.w, self.h)
+        out.paste(body, 0, self.bob(frame))
+        # Keep a coloured bridge through the shell outline at every hip. A black
+        # outline painted over a tiny limb otherwise makes the feet look detached.
+        for y in range(self.h):
+            for x in range(self.w):
+                if legs.opaque(x, y) and body.get(x, y - self.bob(frame)) == self.outline:
+                    out.set(x, y, legs.get(x, y))
+        shifted_glow.paste(glow, 0, self.bob(frame))
+        return out, shifted_glow
 
 
 def sym(c, h, pts, col):
@@ -95,13 +129,19 @@ class Glitch(Bug):
 
     def details(self, c, f):
         c.line(2, 6, 6, 6, self.shell[1])
-        sym(c, self.h, [(11, 4), (12, 3)], self.leg)
-        c.points([(10, 5), (10, 7)], hexc("ff4d4d"))
+        for side in (0, 1):
+            pts = [(10, 5), (11, 4), (12, 3 - self.feeler(f))]
+            c.polyline([(x, mirror_y(self.h, y)) for x, y in pts] if side else pts, self.leg)
+        c.points([(10, 5), (10, 7)], hexc("ffd39a"))
+        jaw = self.jaw(f)
+        for side in (0, 1):
+            pts = [(10, 6), (11, 5 - jaw // 2), (12, 5 - jaw)]
+            c.polyline([(x, mirror_y(self.h, y)) for x, y in pts] if side else pts, self.leg)
         c.set(4, 4, hexc("ff4dd8"))
         c.set(5, 8, hexc("3df2ff"))
 
     def glow(self, c, f):
-        c.points([(10, 5), (10, 7)], hexc("ff4d4d"))
+        c.points([(10, 5), (10, 7)], hexc("ffd39a"))
         c.set(4, 4, hexc("ff4dd8", 170))
         c.set(5, 8, hexc("3df2ff", 170))
 
@@ -114,14 +154,14 @@ class Spider(Bug):
     w = h = 15
     abdomen = ramp("140810", "33121f", "55203a", "7d3355", "b0607f")
     head = ramp("120a0e", "24141b", "3a222c", "54333f", "7a5260")
-    leg = hexc("4f2a3c")
-    red = hexc("ff2d55")
+    leg = hexc("815368")
+    red = hexc("ff8d88")
 
     def legs(self, c, f):
         self.pair_legs(c, [
-            ((10, 6), (12, 3), (14, 2)),
-            ((9, 6), (10, 2), (11, 0)),
-            ((8, 6), (7, 2), (6, 0)),
+            ((10, 6), (12, 4), (13, 2)),
+            ((9, 6), (10, 3), (11, 1)),
+            ((8, 6), (7, 3), (6, 1)),
             ((8, 6), (5, 3), (3, 1)),
         ], self.leg, f, knee_swing=True)
 
@@ -132,13 +172,15 @@ class Spider(Bug):
     def details(self, c, f):
         # Hourglass, lying along the body.
         c.points([(3, 6), (3, 8), (4, 7), (5, 7), (6, 6), (6, 8)], self.red)
-        c.points([(11, 6), (11, 8), (12, 7)], self.red)
+        c.points([(11, 6), (11, 8)], hexc("ffe1b5"))
         jaw = self.jaw(f)
-        c.points([(12, 6 - jaw), (12, 8 + jaw)], self.leg)
+        for side in (0, 1):
+            pts = [(11, 7), (12, 6 - jaw // 2), (13, 6 - jaw)]
+            c.polyline([(x, mirror_y(self.h, y)) for x, y in pts] if side else pts, self.leg)
 
     def glow(self, c, f):
-        c.points([(11, 6), (11, 8), (12, 7)], self.red)
-        c.points([(4, 7), (5, 7)], hexc("ff2d55", 140))
+        c.points([(11, 6), (11, 8)], hexc("ffe1b5"))
+        c.points([(4, 7), (5, 7)], hexc("ff8d88", 140))
 
 
 # ----------------------------------------------------------------------------- 3. Beetle
@@ -161,7 +203,11 @@ class Beetle(Bug):
 
     def details(self, c, f):
         c.line(1, 6, 7, 6, self.shell[1])
-        sym(c, self.h, [(12, 4), (12, 3)], self.leg)
+        for side in (0, 1):
+            pts = [(11, 5), (12, 3 - self.feeler(f))]
+            c.polyline([(x, mirror_y(self.h, y)) for x, y in pts] if side else pts, self.leg)
+        jaw = self.jaw(f)
+        sym(c, self.h, [(12, 5 - jaw)], self.shield[3])
         c.points([(11, 5), (11, 7)], hexc("fff04d"))
 
     def glow(self, c, f):
@@ -178,13 +224,14 @@ class Armored(Bug):
     leg = hexc("56606c")
 
     def legs(self, c, f):
-        for i, x in enumerate(range(3, 12, 2)):
+        for i, x in enumerate((2, 5, 8, 11)):
             for side in (0, 1):
                 s = swing(f, (i + side) % 2)
-                y0, y1 = 3, 1
+                y0, y1 = 4, 1 + i % 2
                 if side:
                     y0, y1 = mirror_y(self.h, y0), mirror_y(self.h, y1)
-                c.line(x, y0, x + s, y1, self.leg)
+                lift = LIFT[(f + i * 4 + side * 4) % WALK_FRAMES] if f < WALK_FRAMES else 0
+                c.limb([(x, y0 + self.bob(f)), (x + s, y1 + (lift if not side else -lift))], self.leg, self.outline, self.plate[3])
 
     def body(self, c, f):
         c.dome(6.8, 7.5, 6.2, 4.6, self.plate)
@@ -198,7 +245,9 @@ class Armored(Bug):
                     if c.get(x + 1, y) in self.plate[2:4]:
                         c.set(x + 1, y, self.plate[self.plate.index(c.get(x + 1, y)) + 1])
         c.points([(13, 6), (13, 9)], hexc("ff6b3d"))
-        c.points([(14, 5), (14, 10)], self.leg)
+        for side in (0, 1):
+            pts = [(13, 6), (14, 5 - self.jaw(f))]
+            c.polyline([(x, mirror_y(self.h, y)) for x, y in pts] if side else pts, self.leg)
         c.points([(0, 6), (0, 9)], self.leg)
 
     def glow(self, c, f):
@@ -228,7 +277,10 @@ class Runner(Bug):
             for y in range(5, 10):
                 if c.get(x, y) in self.body_ramp[2:]:
                     c.set(x, y, self.body_ramp[1])
-        sym(c, self.h, [(13, 6), (14, 5), (14, 4), (14, 3)], self.leg)
+        for side in (0, 1):
+            pts = [(12, 6), (13, 5), (14, 3 - self.feeler(f))]
+            c.polyline([(x, mirror_y(self.h, y)) for x, y in pts] if side else pts, self.leg)
+        sym(c, self.h, [(13, 6 - self.jaw(f))], self.body_ramp[3])
         sym(c, self.h, [(0, 6), (0, 5)], self.leg)
         c.points([(12, 6), (12, 8)], hexc("ffffff"))
 
@@ -250,9 +302,6 @@ class Brute(Bug):
     def legs(self, c, f):
         legs = [((11, 6), (12, 3), (14, 2)), ((8, 5), (8, 2), (8, 1)), ((5, 5), (4, 2), (2, 1))]
         self.pair_legs(c, legs, self.leg, f)
-        # Second strand makes them thick.
-        thick = [((h[0], h[1]), (k[0] + 1, k[1]), (ft[0] + 1, ft[1])) for h, k, ft in legs]
-        self.pair_legs(c, thick, self.leg, f)
 
     def body(self, c, f):
         c.dome(6.6, 8.5, 5.8, 5.0, self.shell)
@@ -265,6 +314,7 @@ class Brute(Bug):
         c.line(1, 8, 9, 8, self.shell[1])
         c.points([(14, 8), (15, 8)], self.horn[2])
         c.points([(13, 6), (13, 10)], hexc("ffe14a"))
+        sym(c, self.h, [(14, 7 - self.jaw(f)), (15, 7 - self.jaw(f))], self.horn[2])
 
     def glow(self, c, f):
         c.points([(13, 6), (13, 10)], hexc("ffe14a"))
@@ -294,9 +344,11 @@ class Termite(Bug):
             for y in range(3, 10):
                 if c.get(x, y) in self.belly[2:]:
                     c.set(x, y, self.belly[1])
-        open_ = 1 if f in (1, 3, 4) else 0
+        open_ = self.jaw(f)
         # Pincers: base, then the tips curl inwards (wider apart when open).
-        c.points([(11, 5), (12, 5 - open_), (11, 7), (12, 7 + open_)], self.jaw_col)
+        for side in (0, 1):
+            pts = [(10, 5), (11, 5 - open_ // 2), (12, 5 - open_)]
+            c.limb([(x, mirror_y(self.h, y)) for x, y in pts] if side else pts, self.jaw_col, self.head[1])
         if not open_:
             c.points([(12, 6)], self.jaw_col)
         c.points([(10, 5), (10, 7)], hexc("ffe0a0"))
@@ -326,12 +378,15 @@ class Roach(Bug):
     def details(self, c, f):
         c.line(1, 7, 8, 7, self.wings[1])
         c.points([(11, 6), (11, 8)], self.wings[0])
-        sway = 1 if f in (0, 1) else 0
-        sym(c, self.h, [(13, 6), (14, 5), (14, 4 - sway), (14, 3 - sway), (13, 2 - sway), (13, 1 - sway)], self.leg)
-        c.points([(13, 7)], hexc("5a3018"))
+        sway = self.feeler(f)
+        for side in (0, 1):
+            pts = [(12, 6), (14, 4), (13, 1 + sway)]
+            c.polyline([(x, mirror_y(self.h, y)) for x, y in pts] if side else pts, self.leg)
+        c.points([(13, 6), (13, 8)], hexc("ffd3a0"))
+        sym(c, self.h, [(14, 6 - self.jaw(f))], self.shield[2])
 
     def glow(self, c, f):
-        c.points([(13, 6), (13, 8)], hexc("ff8a3d", 160))
+        c.points([(13, 6), (13, 8)], hexc("ffd3a0", 220))
 
 
 # ----------------------------------------------------------------------------- Boss
@@ -348,7 +403,6 @@ class KernelPanic(Bug):
     def legs(self, c, f):
         legs = [((20, 10), (23, 5), (26, 3)), ((16, 9), (16, 4), (17, 1)), ((12, 9), (11, 4), (10, 1)), ((8, 10), (5, 5), (3, 3))]
         self.pair_legs(c, legs, self.leg, f, knee_swing=True)
-        self.pair_legs(c, [(h, (k[0] + 1, k[1]), (ft[0] + 1, ft[1])) for h, k, ft in legs], self.leg, f, knee_swing=True)
 
     def body(self, c, f):
         c.dome(11.5, 14.5, 10.0, 8.6, self.shell)

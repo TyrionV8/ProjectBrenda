@@ -1,9 +1,9 @@
-"""Bosses (one per level) and their minions. Same sheet layout as the bugs: 6 frames
-(4 walking, 2 chewing), row 0 the sprite, row 1 its emissive pixels.
+"""Bosses (one per level) and minions. Same 15-column layout as the bugs:
+8 walking, 6 chewing, 1 idle; row 0 colour, row 1 emissive pixels.
 """
 import math
 
-from bugs import Bug, mirror_y, swing, sym
+from bugs import Bug, WALK_FRAMES, LIFT, mirror_y, swing, sym
 from pixel import Canvas, hexc, ramp
 
 
@@ -14,7 +14,7 @@ class TrojanHorse(Bug):
     w = h = 27
     wood = ramp("2a1606", "5a3410", "8a5420", "b87a3a", "e6b878")
     dark = hexc("2a1606")
-    red = hexc("ff3b3b")
+    red = hexc("ff9a68")
 
     def legs(self, c, f):
         for i, x in enumerate((7, 17)):
@@ -23,12 +23,12 @@ class TrojanHorse(Bug):
                 y0, y1 = 9, 5
                 if side:
                     y0, y1 = mirror_y(self.h, y0), mirror_y(self.h, y1)
-                c.line(x, y0, x + s, y1, self.wood[1])
-                c.line(x + 1, y0, x + 1 + s, y1, self.wood[1])
+                c.limb([(x, y0 + self.bob(f)), (x + s, y1)], self.wood[2], self.dark, self.wood[3])
                 # Wheel.
                 wy = y1 - 1 if not side else y1
                 c.rect(x - 1 + s, wy, 4, 2, self.dark)
-                c.set(x + s, wy, hexc("6a6a6a"))
+                spoke = f % 4 if f < WALK_FRAMES else 0
+                c.set(x - 1 + s + spoke, wy + (spoke // 2 + f // 4) % 2, hexc("9a8a70"))
 
     def body(self, c, f):
         c.dome(12.0, 13.5, 8.0, 4.8, self.wood)
@@ -45,12 +45,13 @@ class TrojanHorse(Bug):
         c.points([(18, 13), (19, 13), (20, 13), (21, 13)], self.dark)
         sym(c, self.h, [(21, 11)], self.wood[3])
         sym(c, self.h, [(24, 12)], self.red)
+        sym(c, self.h, [(25, 12 - self.jaw(f))], self.wood[1])
         # Cracks with the payload glowing through.
         c.points([(9, 12), (10, 13), (14, 15), (15, 14), (12, 11)], self.red)
 
     def glow(self, c, f):
         sym(c, self.h, [(24, 12)], self.red)
-        c.points([(9, 12), (10, 13), (14, 15), (15, 14), (12, 11)], hexc("ff3b3b", 200))
+        c.points([(9, 12), (10, 13), (14, 15), (15, 14), (12, 11)], hexc("ff9a68", 200))
 
 
 class TrojanDisguise(Bug):
@@ -66,12 +67,14 @@ class TrojanDisguise(Bug):
         c.rect(2, 2, 2, 13, self.box[3])
         c.rect(2, 13, 13, 2, self.box[1])
         c.rect(13, 4, 2, 11, self.box[1])
-        c.set(3, 3, self.box[4])
+        c.set(3 + f % 3, 3, self.box[4])
 
     def details(self, c, f):
         c.rect(7, 2, 3, 13, self.ribbon)
         c.rect(2, 7, 13, 3, self.ribbon)
-        c.points([(7, 1), (6, 0), (9, 1), (10, 0), (8, 2)], self.ribbon)
+        # Connected bow loops, lifting one pixel as the box bobs.
+        c.polyline([(8, 2), (6, 1), (5, 1 + self.feeler(f)), (7, 2)], self.ribbon)
+        c.polyline([(8, 2), (10, 1), (11, 1 + self.feeler(f)), (9, 2)], self.ribbon)
         c.rect(8, 8, 1, 1, hexc("fff6c0"))
 
     def glow(self, c, f):
@@ -85,7 +88,7 @@ class Keylogger(Bug):
     w = h = 25
     shell = ramp("15181c", "2c3138", "4a525c", "6f7a86", "aeb8c4")
     key = hexc("c9d0d8")
-    red = hexc("ff2d3d")
+    red = hexc("ff9a78")
 
     def legs(self, c, f):
         self.pair_legs(c, [((15, 7), (17, 4), (20, 3)), ((11, 6), (11, 3), (11, 1)), ((7, 7), (5, 4), (2, 3))], self.shell[1], f)
@@ -103,13 +106,16 @@ class Keylogger(Bug):
         c.points([(14, 9), (10, 13)], self.red)
         c.rect(20, 12, 2, 1, self.red)
         # Cable feelers.
-        wiggle = 1 if f in (0, 1) else 0
-        sym(c, self.h, [(22, 10), (23, 9), (23, 8 - wiggle), (24, 7 - wiggle)], hexc("1d2228"))
+        wiggle = self.feeler(f)
+        for side in (0, 1):
+            pts = [(21, 10), (23, 9), (24, 7 - wiggle)]
+            c.limb([(x, mirror_y(self.h, y)) for x, y in pts] if side else pts, self.shell[3], self.shell[0])
+        sym(c, self.h, [(22, 11 - self.jaw(f)), (23, 11 - self.jaw(f))], self.shell[2])
 
     def glow(self, c, f):
         c.rect(20, 12, 2, 1, self.red)
         if f % 2 == 0:
-            c.rect(20, 11, 2, 3, hexc("ff2d3d", 120))
+            c.rect(20, 11, 2, 3, hexc("ff9a78", 100))
 
 
 class Mitm(Bug):
@@ -138,9 +144,12 @@ class Mitm(Bug):
         c.points([(5, 10), (8, 10), (11, 10)], hexc("3dff6a"))
         c.set(11 if f % 2 else 8, 10, hexc("ffb43d"))
         # Antennas with tips.
-        sym(c, self.h, [(19, 10), (20, 9), (21, 8), (22, 7), (23, 6)], hexc("c9d0d8"))
+        for side in (0, 1):
+            pts = [(19, 10), (21, 8), (23, 6 - self.feeler(f))]
+            c.polyline([(x, mirror_y(self.h, y)) for x, y in pts] if side else pts, hexc("c9d0d8"))
         sym(c, self.h, [(23, 5), (24, 6)], hexc("ff3d6e"))
         c.points([(19, 12), (19, 13)], hexc("ff3d6e"))
+        sym(c, self.h, [(20, 11 - self.jaw(f)), (21, 11 - self.jaw(f))], self.body_ramp[3])
 
     def glow(self, c, f):
         c.points([(5, 10), (8, 10), (11, 10)], hexc("3dff6a"))
@@ -191,10 +200,11 @@ class Rootkit(Bug):
         self.pair_legs(c, [((11, 10), (10, 6), (13, 3)), ((8, 10), (6, 6), (3, 4))], self.shell[3], f, knee_swing=True)
         # Raptorial forelegs, folded forward.
         for side in (0, 1):
-            pts = [(16, 10), (19, 7), (22, 8), (23, 10)]
+            jaw = self.jaw(f)
+            pts = [(16, 10 + self.bob(f)), (19, 7 - jaw // 2), (22, 8 - jaw), (23, 10 - jaw)]
             if side:
                 pts = [(x, mirror_y(self.h, y)) for x, y in pts]
-            c.polyline(pts, self.shell[3])
+            c.limb(pts, self.shell[3], self.outline, self.shell[4])
 
     def body(self, c, f):
         c.dome(8.0, 12.5, 7.4, 3.6, self.shell)
@@ -229,7 +239,6 @@ class Ransomware(Bug):
     def legs(self, c, f):
         legs = [((18, 7), (20, 4), (23, 3)), ((13, 6), (13, 3), (14, 1)), ((8, 7), (6, 4), (3, 3))]
         self.pair_legs(c, legs, self.shell[1], f)
-        self.pair_legs(c, [(h, (k[0] + 1, k[1]), (ft[0] + 1, ft[1])) for h, k, ft in legs], self.shell[1], f)
 
     def body(self, c, f):
         c.dome(11.5, 13.5, 9.4, 7.6, self.shell)
@@ -250,6 +259,7 @@ class Ransomware(Bug):
         c.rect(8, 18, 8, 1, self.gold[1])
         c.rect(11, 15, 2, 2, self.gold[0])
         sym(c, self.h, [(23, 12)], hexc("ff2d3d"))
+        sym(c, self.h, [(24, 12 - self.jaw(f)), (25, 11 - self.jaw(f))], self.chain)
 
     def glow(self, c, f):
         if f % 2 == 0:
@@ -266,7 +276,7 @@ class Worm(Bug):
     seg_r = (3.8, 3.6, 3.3, 3.0, 2.6, 2.2)
 
     def offsets(self, f):
-        phase = (f % 4) * math.pi / 2 if f < 4 else 0
+        phase = f * math.pi / 4 if f < WALK_FRAMES else (self.jaw(f) * math.pi / 8)
         return [int(round(math.sin(i * 1.2 + phase) * 1.2)) for i in range(self.segs)]
 
     def legs(self, c, f):
@@ -274,8 +284,9 @@ class Worm(Bug):
         for i in range(1, self.segs):
             x = self.w - 6 - i * 4
             cy = self.h // 2 + off[i]
-            c.set(x, cy - int(self.seg_r[i]) - 1, self.skin[1])
-            c.set(x, cy + int(self.seg_r[i]) + 1, self.skin[1])
+            for side in (-1, 1):
+                y = cy + side * int(self.seg_r[i])
+                c.limb([(x, y + self.bob(f)), (x + swing(f, i % 2), y + side)], self.skin[2], self.skin[0], self.skin[3])
 
     def body(self, c, f):
         off = self.offsets(f)
@@ -288,15 +299,16 @@ class Worm(Bug):
         cy = self.h // 2 + off[0]
         jaw = self.jaw(f)
         x0 = self.w - 6
-        c.points([(x0 + 3, cy - 1 - jaw), (x0 + 3, cy + 1 + jaw), (x0 + 4, cy - 2 - jaw), (x0 + 4, cy + 2 + jaw)], self.skin[0])
-        c.points([(x0 + 1, cy - 2), (x0 + 1, cy + 2)], hexc("ff3b3b"))
+        for side in (-1, 1):
+            c.polyline([(x0 + 2, cy + side), (x0 + 3, cy + side * (1 + jaw)), (x0 + 4, cy + side * (2 + jaw))], self.skin[1])
+        c.points([(x0 + 1, cy - 2), (x0 + 1, cy + 2)], hexc("ffbd8a"))
         for i in range(1, self.segs):
             c.set(self.w - 6 - i * 4, self.h // 2 + off[i], hexc("d6ff4d"))
 
     def glow(self, c, f):
         off = self.offsets(f)
         cy = self.h // 2 + off[0]
-        c.points([(self.w - 5, cy - 2), (self.w - 5, cy + 2)], hexc("ff3b3b"))
+        c.points([(self.w - 5, cy - 2), (self.w - 5, cy + 2)], hexc("ffbd8a"))
         for i in range(1, self.segs):
             c.set(self.w - 6 - i * 4, self.h // 2 + off[i], hexc("d6ff4d", 200))
 
@@ -321,7 +333,10 @@ class Packet(Bug):
             for side in (0, 1):
                 s = swing(f, (i + side) % 2)
                 y = 1 if not side else 7
-                c.set(x + s, y, self.block[1])
+                lift = LIFT[(f + (i + side) * 4) % WALK_FRAMES] if f < WALK_FRAMES else 0
+                y += lift if not side else -lift
+                hip = 2 if not side else 6
+                c.limb([(x, hip + self.bob(f)), (x + s, y)], self.block[3], self.block[0])
 
     def body(self, c, f):
         c.rect(2, 2, 5, 5, self.block[2])
@@ -329,10 +344,12 @@ class Packet(Bug):
         c.rect(6, 2, 1, 5, self.block[1])
 
     def details(self, c, f):
-        c.rect(3, 4, 3, 1, hexc("ffffff"))
+        c.rect(3, 4, 3, 1, hexc("ffe8c6"))
+        if self.chewing(f):
+            c.set(7, 4 - self.jaw(f), self.block[4])
 
     def glow(self, c, f):
-        c.rect(3, 4, 3, 1, hexc("ff8aa0"))
+        c.rect(3, 4, 3, 1, hexc("ffc58b"))
 
 
 BOSSES = [TrojanHorse(), TrojanDisguise(), Keylogger(), Mitm(), Ddos(), Rootkit(), Ransomware(), Worm(), WormCopy(), Packet()]

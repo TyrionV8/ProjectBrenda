@@ -75,8 +75,14 @@ board cell is 16 art pixels. The game screen, menu background and editor render 
 a low-resolution `PixelWorld` (a `SubViewport` at 1/3 scale, upscaled with sharp pixels), so
 sprites, lines, particles and lights all share that grid. Keep new art at 1:1 in art pixels.
 
-* `assets/sprites/bugs/ID.png` — 6 frames per row (walk ×4, chew ×2); row 1 holds the
-  emissive pixels (eyes) drawn additively. Bugs face right and turn in 90° steps.
+* `assets/sprites/bugs/ID.png` — 15 columns: walk ×8 (0–7), chew ×6 (8–13), rest (14).
+  Row 0 is colour; row 1 holds emissive eyes, markings and a subtle warm shell rim drawn
+  additively. Walking follows distance travelled; chewing plays at 12 frames per second,
+  and a stationary bug rests after 0.12 seconds without chewing. Frame sizes and collision
+  radii are unchanged. Bugs face right and turn in 90° steps.
+* Animated enemy miniatures also use the board's 3× pixel scale. Small list entries show
+  clipped portraits aligned with the head; larger boxes show the whole animal. The pixel
+  size stays fixed when a boss is too large for its entry.
 * `assets/sprites/turrets/` — a shared 16×16 socket, one head per turret (head + emissive
   frame) and `ID_icon.png` for menus. Heads stay upright; the game draws the barrels as
   pixel lines pointing where the turret aims (the laser turns its sprite in 90° steps).
@@ -84,7 +90,9 @@ sprites, lines, particles and lights all share that grid. Keep new art at 1:1 in
 * Board, route, components and the CPU are painted pixel by pixel in code (`View/Pixel/PixelCanvas`,
   `ComponentArt`), with a 3×5 pixel font (`MicroFont`) for markings.
 * `tools/sprites/make_sprites.py` generates the sprite sheets from the designs next to it
-  (`--preview FILE` writes a zoomed contact sheet). The PNGs can also be edited by hand.
+  (`--preview FILE.png` writes zoomed contact sheets, including all eight bosses and
+  minions, and `_animation.gif` / `_bosses_animation.gif` lit/dark animation comparisons).
+  The PNGs can also be edited by hand.
 
 **Lighting.** LEDs (light-emitting diodes) are ordinary level components: `led` is a
 surface-mount device (SMD) and `led_5mm` is a through-hole dome. Their coloured lenses stay

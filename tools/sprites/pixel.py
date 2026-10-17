@@ -68,6 +68,21 @@ class Canvas:
         for a, b in zip(pts, pts[1:]):
             self.line(a[0], a[1], b[0], b[1], c)
 
+    def limb(self, pts, color, shadow, highlight=None):
+        """A connected two-pixel limb: lit strand, underside, joint and planted toe.
+
+        Unlike disconnected point decorations, both strands follow the same polyline.
+        The shadow is offset vertically, preserving slim silhouettes at tiny sizes.
+        """
+        self.polyline([(x, y + 1) for x, y in pts], shadow)
+        self.polyline(pts, color)
+        if len(pts) > 2:
+            x, y = pts[1]
+            self.set(x, y, highlight or color)
+        x, y = pts[-1]
+        self.line(x, y, x + 1, y, highlight or color)
+        self.line(x, y + 1, x + 1, y + 1, shadow)
+
     def ellipse_pixels(self, cx, cy, rx, ry):
         for y in range(self.h):
             for x in range(self.w):

@@ -5,13 +5,16 @@ using Godot;
 namespace HardwareDefence.View;
 
 /// <summary>
-/// A bug's pixel-art sprite (assets/sprites/bugs/ID.png, made by tools/sprites): 4 walking
-/// and 2 chewing frames, an additive layer for glowing eyes and a drop shadow. It turns in
+/// A bug's pixel-art sprite (assets/sprites/bugs/ID.png, made by tools/sprites): 8 walking,
+/// 6 chewing and one resting frame, additive shell markings and a drop shadow. It turns in
 /// 90 degree steps so its pixels stay on the grid.
 /// </summary>
 public partial class BugBody : Node2D
 {
-	public const int Frames = 6;
+	public const int WalkFrames = 8;
+	public const int ChewFrames = 6;
+	public const int IdleFrame = WalkFrames + ChewFrames;
+	public const int Frames = IdleFrame + 1;
 	static readonly Shader FlashShader = GD.Load<Shader>("res://assets/shaders/flash.gdshader");
 	static readonly Dictionary<string, Texture2D> Sheets = new();
 
@@ -24,6 +27,7 @@ public partial class BugBody : Node2D
 	Sprite2D _sprite;
 	Sprite2D _glow;
 	float _bite;
+	float _rest;
 	float _facing;
 
 	public BugBody(EnemyDef def) => Def = def;
@@ -114,10 +118,14 @@ public partial class BugBody : Node2D
 
 	public void Animate(float distance, float delta)
 	{
-		Gait += distance;
-		_bite = Chewing ? _bite + delta * 7 : 0;
-		var step = 5 + Def.Radius * 0.35f;
-		var frame = Chewing ? 4 + (int)_bite % 2 : (int)(Gait / step) % 4;
+		Gait += Mathf.Max(distance, 0);
+		_bite = Chewing ? _bite + delta * 12 : 0;
+		_rest = distance > 0.001f ? 0 : _rest + delta;
+		// Preserve the original stride length: twice as many drawings, half the
+		// distance per drawing. A short grace period avoids idle flicker on snapshots.
+		var step = (5 + Def.Radius * 0.35f) / 2;
+		var frame = Chewing ? WalkFrames + (int)_bite % ChewFrames
+			: _rest >= 0.12f ? IdleFrame : (int)(Gait / step) % WalkFrames;
 		_shadow.Frame = _sprite.Frame = frame;
 		_glow.Frame = Frames + frame;
 	}
