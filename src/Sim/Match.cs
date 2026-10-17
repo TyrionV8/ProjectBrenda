@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Brenda.Data;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.Sim;
+namespace HardwareDefence.Sim;
 
 public enum MatchMode
 {

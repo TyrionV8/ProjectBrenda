@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Godot;
 
-namespace Brenda.Data;
+namespace HardwareDefence.Data;
 
 /// <summary>One upgradable stat of a turret. Each bought level adds <see cref="PerLevel"/> to <see cref="Stat"/>.</summary>
 public sealed class UpgradeDef

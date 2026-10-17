@@ -1,8 +1,8 @@
-using Brenda.Data;
-using Brenda.View;
+using HardwareDefence.Data;
+using HardwareDefence.View;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>A turret drawn large with its head slowly scanning; used on the upgrade screen.</summary>
 public partial class TurretPreview : Control

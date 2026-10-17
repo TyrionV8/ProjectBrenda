@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using Godot;
 
-namespace Brenda.Data;
+namespace HardwareDefence.Data;
 
 /// <summary>A bug type from data/enemies.json. Speeds are in pixels per second.</summary>
 public sealed class EnemyDef

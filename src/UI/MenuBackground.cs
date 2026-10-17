@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using Brenda.Data;
-using Brenda.Sim;
-using Brenda.View;
+using HardwareDefence.Data;
+using HardwareDefence.Sim;
+using HardwareDefence.View;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>Living circuit board behind the menus: flowing route, blinking LEDs and bugs crawling by.</summary>
 public partial class MenuBackground : CanvasLayer
@@ -29,7 +29,7 @@ public partial class MenuBackground : CanvasLayer
 				new() { Type = "capacitor", Cell = new[] { 10, 5 }, Size = new[] { 2, 2 } },
 				new() { Type = "port", Cell = new[] { 25, 1 }, Size = new[] { 2, 2 }, Label = "rj45" },
 				new() { Type = "resistor", Cell = new[] { 17, 7 }, Size = new[] { 2, 1 } },
-				new() { Type = "bga", Cell = new[] { 24, 7 }, Size = new[] { 3, 3 }, Label = "BRENDA" },
+				new() { Type = "bga", Cell = new[] { 24, 7 }, Size = new[] { 3, 3 }, Label = "HWD" },
 				new() { Type = "led", Cell = new[] { 3, 11 }, Color = "3dff6a" },
 				new() { Type = "led", Cell = new[] { 4, 11 }, Color = "ff3344" },
 				new() { Type = "led", Cell = new[] { 5, 11 }, Color = "3dff6a" },

@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>"+3"-style text that pops, rises and fades.</summary>
 public partial class FloatingText : Node2D

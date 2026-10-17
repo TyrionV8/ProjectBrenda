@@ -1,8 +1,8 @@
 using System;
-using Brenda.Autoload;
+using HardwareDefence.Autoload;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>Small helpers to build menus in code with consistent feedback (hover sound + pop).</summary>
 public static class Ui

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Brenda.Data;
-using Brenda.Sim;
+using HardwareDefence.Data;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.Game;
+namespace HardwareDefence.Game;
 
 /// <summary>
 /// Where the game screen gets the match from: a local simulation (campaign, versus vs AI,

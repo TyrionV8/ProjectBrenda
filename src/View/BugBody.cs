@@ -1,7 +1,7 @@
-using Brenda.Data;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>Procedural top-down bug, facing +X. Legs follow a tripod gait driven by <see cref="Gait"/>.</summary>
 public partial class BugBody : Node2D

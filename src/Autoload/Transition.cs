@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Godot;
 
-namespace Brenda.Autoload;
+namespace HardwareDefence.Autoload;
 
 /// <summary>Scene changes with a short "signal lost" fade.</summary>
 public partial class Transition : CanvasLayer

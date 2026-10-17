@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Brenda.Data;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.Editor;
+namespace HardwareDefence.Editor;
 
 /// <summary>
 /// The level being edited, with undo/redo and where it is saved. Static so it survives a

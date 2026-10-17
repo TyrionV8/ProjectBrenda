@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Brenda.Data;
-using Brenda.Sim;
+using HardwareDefence.Data;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>A turret on screen: socket, rotating head, coloured light, status LED and (laser) beam.</summary>
 public partial class TurretView : Node2D

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using Brenda.Data;
-using Brenda.UI;
+using HardwareDefence.Data;
+using HardwareDefence.UI;
 using Godot;
 
-namespace Brenda.Editor;
+namespace HardwareDefence.Editor;
 
 /// <summary>
 /// One wave as a timeline with a lane per bug type: click to add a bug at that time, drag to

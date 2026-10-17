@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Brenda.Data;
+namespace HardwareDefence.Data;
 
 /// <summary>Board geometry. Gameplay uses board-local pixels: (0, 0) is the corner of cell (0, 0).</summary>
 public static class Grid

@@ -1,8 +1,8 @@
-using Brenda.Autoload;
-using Brenda.Game;
+using HardwareDefence.Autoload;
+using HardwareDefence.Game;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>Title screen.</summary>
 public partial class MainMenu : Control
@@ -24,10 +24,6 @@ public partial class MainMenu : Control
 		column.Position = new Vector2(110, 50);
 		column.CustomMinimumSize = new Vector2(520, 0);
 		AddChild(column);
-		var project = Ui.Label("PROJECT", "HeaderLabel");
-		project.AddThemeColorOverride("font_color", UiTheme.Dim);
-		project.AddThemeFontSizeOverride("font_size", 34);
-		column.AddChild(project);
 		column.AddChild(new GlitchTitle());
 		column.AddChild(Ui.Label("Stop the bugs before they reach the CPU.", "DimLabel"));
 		column.AddChild(Ui.Spacer(14));

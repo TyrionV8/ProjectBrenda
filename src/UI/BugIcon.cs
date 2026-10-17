@@ -1,8 +1,8 @@
-using Brenda.Data;
-using Brenda.View;
+using HardwareDefence.Data;
+using HardwareDefence.View;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>A small animated bug for lists (spawn queue, bug palette).</summary>
 public partial class BugIcon : Control

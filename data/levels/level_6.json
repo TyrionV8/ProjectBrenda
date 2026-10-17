@@ -51,7 +51,7 @@
   {"type": "battery", "cell": [16, 14], "size": [2, 2]},
   {"type": "header", "cell": [8, 14], "size": [2, 1]},
   {"type": "led", "cell": [6, 14], "size": [1, 1], "color": "3dff6a"},
-  {"type": "label", "cell": [1, 15], "size": [5, 1], "label": "BRENDA BOOK"},
+  {"type": "label", "cell": [1, 15], "size": [5, 1], "label": "HWD BOOK"},
   {"type": "smd", "cell": [14, 12], "size": [1, 1]},
   {"type": "capacitor", "cell": [4, 2], "size": [1, 1]},
   {"type": "resistor", "cell": [17, 2], "size": [2, 1]},

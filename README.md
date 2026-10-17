@@ -1,4 +1,6 @@
-# Project Brenda (Godot 4 .NET)
+# Hardware Defence
+
+*(Codename during development: Project Brenda.)*
 
 Tower defense on a circuit board: bugs crawl along the copper trace, chewing the components
 they pass, and the player defends the CPU with turrets. Made with **Godot 4.7 .NET** (C#);
@@ -9,7 +11,7 @@ it started as a GameMaker prototype, which was retired once the Godot version re
 
 1. Install **Godot 4.7 .NET** and the **.NET 8 SDK** (or newer).
 2. Open `project.godot` in the Godot editor and press F5 (the first run builds the C#
-   project). Or open `ProjectBrenda.sln` in Rider/VS Code/Visual Studio to edit the code.
+   project). Or open `HardwareDefence.sln` in Rider/VS Code/Visual Studio to edit the code.
 
 Controls: pick a turret on the right (or `1`–`5`) and click a free cell; the laser asks for a
 second click to aim it. Right click / `Esc` / CANCEL stops placing. `F` changes game speed,
@@ -31,7 +33,7 @@ click a bug (or `1`–`7`) to send it.
 ## Code layout
 
 ```
-  project.godot, ProjectBrenda.csproj/.sln
+  project.godot, HardwareDefence.csproj/.sln
   data/            turrets.json, enemies.json, versus.json, levels/level_N.json
   assets/          art (SVG), fx textures, shaders, audio, fonts, ui/theme.tres
   scenes/          one scene per screen (the scripts build their nodes in code)

@@ -1,10 +1,10 @@
 using System.Linq;
-using Brenda.Autoload;
-using Brenda.Data;
-using Brenda.Game;
+using HardwareDefence.Autoload;
+using HardwareDefence.Data;
+using HardwareDefence.Game;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>Level selection: unlocked levels lead to the upgrade screen, as in the original.</summary>
 public partial class LevelSelect : Control

@@ -1,9 +1,9 @@
 using System.Linq;
-using Brenda.Data;
-using Brenda.Editor;
+using HardwareDefence.Data;
+using HardwareDefence.Editor;
 using Godot;
 
-namespace Brenda.Tests;
+namespace HardwareDefence.Tests;
 
 public sealed class EditorTests : TestSuite
 {

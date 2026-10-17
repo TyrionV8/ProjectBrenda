@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using Brenda.Autoload;
-using Brenda.Data;
-using Brenda.Game;
+using HardwareDefence.Autoload;
+using HardwareDefence.Data;
+using HardwareDefence.Game;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>Spend upgrade points between levels, then start the next level.</summary>
 public partial class UpgradeScreen : Control

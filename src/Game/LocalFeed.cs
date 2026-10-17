@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Brenda.Autoload;
-using Brenda.Data;
-using Brenda.Sim;
+using HardwareDefence.Autoload;
+using HardwareDefence.Data;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.Game;
+namespace HardwareDefence.Game;
 
 /// <summary>Runs the simulation on this machine. Optional bots play the other side (or both).</summary>
 public class LocalFeed : IMatchFeed

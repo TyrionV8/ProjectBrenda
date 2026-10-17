@@ -1,4 +1,4 @@
-namespace Brenda.Sim;
+namespace HardwareDefence.Sim;
 
 /// <summary>
 /// Versus mode: the defender (host) builds turrets, the attacker spends energy to send

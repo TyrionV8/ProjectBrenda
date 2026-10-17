@@ -1,7 +1,7 @@
-using Brenda.Sim;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>The processor the player defends. Shows its integrity as a ring of segments.</summary>
 public partial class CpuView : Node2D

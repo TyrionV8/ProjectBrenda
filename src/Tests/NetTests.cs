@@ -1,11 +1,11 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Brenda.Data;
-using Brenda.Net;
-using Brenda.Sim;
+using HardwareDefence.Data;
+using HardwareDefence.Net;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.Tests;
+namespace HardwareDefence.Tests;
 
 /// <summary>A host and a remote client talking over a real localhost WebSocket.</summary>
 public sealed class NetTests : TestSuite

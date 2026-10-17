@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
-namespace Brenda.Sim;
+namespace HardwareDefence.Sim;
 
 /// <summary>A polyline that can be sampled by distance travelled (the bug route).</summary>
 public sealed class PathLine

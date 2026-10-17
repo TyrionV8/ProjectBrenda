@@ -1,8 +1,8 @@
-using Brenda.Autoload;
-using Brenda.Data;
+using HardwareDefence.Autoload;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>Inventory slot for one turret type: preview, name, cost and hotkey.</summary>
 public partial class TurretSlot : Button

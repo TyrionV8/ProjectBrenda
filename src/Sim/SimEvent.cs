@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Brenda.Sim;
+namespace HardwareDefence.Sim;
 
 public enum EventKind
 {

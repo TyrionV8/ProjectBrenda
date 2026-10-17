@@ -54,7 +54,7 @@
   {"type": "smd", "cell": [9, 9], "size": [1, 1]},
   {"type": "crystal", "cell": [6, 9], "size": [2, 1], "label": "25.000"},
   {"type": "led", "cell": [20, 14], "size": [1, 1], "color": "3dff6a"},
-  {"type": "label", "cell": [2, 0], "size": [3, 1], "label": "BRENDA"},
+  {"type": "label", "cell": [2, 0], "size": [3, 1], "label": "HWD"},
   {"type": "capacitor", "cell": [20, 12], "size": [1, 1]},
   {"type": "smd", "cell": [19, 8], "size": [1, 1]},
   {"type": "smd", "cell": [16, 13], "size": [1, 1]},

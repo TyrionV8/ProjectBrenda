@@ -47,7 +47,7 @@
   {"type": "smd", "cell": [9, 1], "size": [1, 1]},
   {"type": "chip", "cell": [11, 0], "size": [2, 2], "label": "BIOS"},
   {"type": "smd", "cell": [13, 1], "size": [1, 1]},
-  {"type": "label", "cell": [5, 11], "size": [6, 1], "label": "BRENDA RTX"},
+  {"type": "label", "cell": [5, 11], "size": [6, 1], "label": "HWD RTX"},
   {"type": "capacitor", "cell": [2, 14], "size": [1, 1]},
   {"type": "smd", "cell": [2, 6], "size": [1, 1]},
   {"type": "smd", "cell": [2, 5], "size": [1, 1]},

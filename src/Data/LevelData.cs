@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using Godot;
 
-namespace Brenda.Data;
+namespace HardwareDefence.Data;
 
 public sealed class ComponentData
 {

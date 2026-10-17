@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Brenda.Data;
-using Brenda.Sim;
+using HardwareDefence.Data;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.Net;
+namespace HardwareDefence.Net;
 
 /// <summary>
 /// WebSocket server for versus matches. The host runs the simulation; remote players (people

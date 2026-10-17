@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>Up to three stars (level rating).</summary>
 public partial class StarRow : Control

@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
-using Brenda.Data;
-using Brenda.Game;
-using Brenda.Sim;
+using HardwareDefence.Data;
+using HardwareDefence.Game;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.Tests;
+namespace HardwareDefence.Tests;
 
 /// <summary>Runs the real game screen for a while (headless) to catch view errors.</summary>
 public sealed class SceneTests : TestSuite

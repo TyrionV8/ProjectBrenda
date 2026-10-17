@@ -1,9 +1,9 @@
-using Brenda.Autoload;
-using Brenda.Editor;
-using Brenda.Game;
+using HardwareDefence.Autoload;
+using HardwareDefence.Editor;
+using HardwareDefence.Game;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>Player-made levels (saved by the editor in user://levels): play, edit or delete them.</summary>
 public partial class CustomLevels : Control

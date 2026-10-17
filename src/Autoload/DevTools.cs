@@ -2,14 +2,14 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Brenda.Data;
-using Brenda.Game;
-using Brenda.Sim;
-using Brenda.Tests;
-using Brenda.UI;
+using HardwareDefence.Data;
+using HardwareDefence.Game;
+using HardwareDefence.Sim;
+using HardwareDefence.Tests;
+using HardwareDefence.UI;
 using Godot;
 
-namespace Brenda.Autoload;
+namespace HardwareDefence.Autoload;
 
 /// <summary>
 /// Developer entry points, only active with command-line user arguments:

@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>Solder mask colours for each PCB theme.</summary>
 public sealed record BoardTheme(Color Center, Color Edge, Color Decor, Color Silk)

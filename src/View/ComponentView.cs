@@ -1,7 +1,7 @@
-using Brenda.Data;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>
 /// One board component. Redraws only when its health changes; smokes when badly damaged;

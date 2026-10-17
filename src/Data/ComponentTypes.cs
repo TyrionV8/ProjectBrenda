@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
-namespace Brenda.Data;
+namespace HardwareDefence.Data;
 
 /// <summary>Gameplay properties of each kind of board component.</summary>
 public sealed record ComponentType(

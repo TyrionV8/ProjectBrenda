@@ -141,7 +141,7 @@
   {"type": "smd", "cell": [17, 7], "size": [1, 1]},
   {"type": "smd", "cell": [13, 4], "size": [1, 1]},
   {"type": "crystal", "cell": [17, 9], "size": [2, 1], "label": "12.000"},
-  {"type": "label", "cell": [7, 3], "size": [3, 1], "label": "BRENDA-60"},
+  {"type": "label", "cell": [7, 3], "size": [3, 1], "label": "HWD-60"},
   {"type": "smd", "cell": [18, 11], "size": [1, 1]},
   {"type": "smd", "cell": [17, 10], "size": [1, 1]},
   {"type": "inductor", "cell": [9, 6], "size": [1, 1]},

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>Tiny glowing "electrons" running along the board's decorative traces.</summary>
 public partial class DecorPulses : Node2D

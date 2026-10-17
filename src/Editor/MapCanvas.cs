@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Brenda.Data;
-using Brenda.View;
+using HardwareDefence.Data;
+using HardwareDefence.View;
 using Godot;
 
-namespace Brenda.Editor;
+namespace HardwareDefence.Editor;
 
 public enum MapTool
 {
@@ -319,7 +319,7 @@ public partial class MapCanvas : Node2D
 
 	void DrawOverlay()
 	{
-		var font = Brenda.UI.UiTheme.PixelBold;
+		var font = HardwareDefence.UI.UiTheme.PixelBold;
 		// Components that break the rules (on the route, overlapping...) are outlined in red.
 		var route = new HashSet<Vector2I>(Level.PathCells());
 		for (var i = 0; i < Level.Components.Count; i++)
@@ -330,8 +330,8 @@ public partial class MapCanvas : Node2D
 				_overlay.DrawRect(rect.Grow(-1), new Color(1, 0.2f, 0.25f, 0.9f), false, 3);
 			if (i == Selected)
 			{
-				_overlay.DrawRect(rect.Grow(2), new Color(Brenda.UI.UiTheme.Cyan, 0.25f));
-				_overlay.DrawRect(rect.Grow(2), Brenda.UI.UiTheme.Cyan, false, 2);
+				_overlay.DrawRect(rect.Grow(2), new Color(HardwareDefence.UI.UiTheme.Cyan, 0.25f));
+				_overlay.DrawRect(rect.Grow(2), HardwareDefence.UI.UiTheme.Cyan, false, 2);
 			}
 		}
 		// Route points.
@@ -341,7 +341,7 @@ public partial class MapCanvas : Node2D
 			var p = Grid.CellCenter(points[i]);
 			var last = i == points.Count - 1;
 			_overlay.DrawCircle(p, 11, new Color(0, 0, 0, 0.7f));
-			_overlay.DrawArc(p, 11, 0, Mathf.Tau, 24, last ? Brenda.UI.UiTheme.Cyan : i == 0 ? Brenda.UI.UiTheme.Red : Brenda.UI.UiTheme.Gold, 2, true);
+			_overlay.DrawArc(p, 11, 0, Mathf.Tau, 24, last ? HardwareDefence.UI.UiTheme.Cyan : i == 0 ? HardwareDefence.UI.UiTheme.Red : HardwareDefence.UI.UiTheme.Gold, 2, true);
 			var text = (i + 1).ToString();
 			var w = font.GetStringSize(text, HorizontalAlignment.Left, -1, 11).X;
 			_overlay.DrawString(font, p + new Vector2(-w / 2, 4), text, HorizontalAlignment.Left, -1, 11, Colors.White);
@@ -352,13 +352,13 @@ public partial class MapCanvas : Node2D
 		switch (Tool)
 		{
 			case MapTool.Route:
-				_overlay.DrawRect(hover.Grow(-2), new Color(Brenda.UI.UiTheme.Gold, 0.9f), false, 2);
+				_overlay.DrawRect(hover.Grow(-2), new Color(HardwareDefence.UI.UiTheme.Gold, 0.9f), false, 2);
 				if (points.Count > 0 && _hover != points[^1])
 				{
 					var from = Grid.CellCenter(points[^1]);
 					var to = Grid.CellCenter(_hover);
 					var corner = new Vector2(to.X, from.Y);
-					var dash = new Color(Brenda.UI.UiTheme.Gold, 0.7f);
+					var dash = new Color(HardwareDefence.UI.UiTheme.Gold, 0.7f);
 					_overlay.DrawDashedLine(from, corner, dash, 3, 8);
 					_overlay.DrawDashedLine(corner, to, dash, 3, 8);
 				}

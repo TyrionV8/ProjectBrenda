@@ -39,7 +39,7 @@
   {"type": "inductor", "cell": [17, 8], "size": [1, 1]},
   {"type": "mosfet", "cell": [16, 6], "size": [1, 1]},
   {"type": "fingers", "cell": [2, 15], "size": [15, 1]},
-  {"type": "label", "cell": [3, 14], "size": [6, 1], "label": "BRENDA BLASTER"},
+  {"type": "label", "cell": [3, 14], "size": [6, 1], "label": "HWD BLASTER"},
   {"type": "shield", "cell": [17, 13], "size": [3, 1], "label": "EMI"},
   {"type": "resistor", "cell": [5, 0], "size": [2, 1]},
   {"type": "smd", "cell": [17, 14], "size": [1, 1]},

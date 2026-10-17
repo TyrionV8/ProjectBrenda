@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>Expanding ring that fades out.</summary>
 public partial class Shockwave : Node2D

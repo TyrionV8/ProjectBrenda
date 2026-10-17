@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Brenda.Data;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.Sim;
+namespace HardwareDefence.Sim;
 
 public sealed class Bug
 {

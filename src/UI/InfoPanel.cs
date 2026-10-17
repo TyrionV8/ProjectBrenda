@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Brenda.Data;
-using Brenda.Sim;
-using Brenda.View;
+using HardwareDefence.Data;
+using HardwareDefence.Sim;
+using HardwareDefence.View;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>The left HUD column: level/wave and incoming bugs (campaign) or timer and energy (versus), board and CPU health.</summary>
 public partial class InfoPanel : PanelContainer

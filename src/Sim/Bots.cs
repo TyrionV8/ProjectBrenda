@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Brenda.Data;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.Sim;
+namespace HardwareDefence.Sim;
 
 /// <summary>
 /// A simple defender: whenever it can afford the next turret in its plan, it builds it on

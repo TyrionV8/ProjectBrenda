@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>Shared textures and materials for glows and lights.</summary>
 public static class FxUtil

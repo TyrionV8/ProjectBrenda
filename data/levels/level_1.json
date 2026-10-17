@@ -38,7 +38,7 @@
   {"type": "smd", "cell": [19, 7], "size": [1, 1]},
   {"type": "resistor", "cell": [17, 7], "size": [2, 1]},
   {"type": "chip", "cell": [16, 12], "size": [2, 2], "label": "LM1117"},
-  {"type": "label", "cell": [14, 13], "size": [6, 1], "label": "BRENDA UNO"},
+  {"type": "label", "cell": [14, 13], "size": [6, 1], "label": "HWD UNO"},
   {"type": "hole", "cell": [19, 10], "size": [1, 1]},
   {"type": "jumper", "cell": [19, 4], "size": [1, 1], "color": "2f6fd6"},
   {"type": "resistor", "cell": [20, 1], "size": [1, 2]},

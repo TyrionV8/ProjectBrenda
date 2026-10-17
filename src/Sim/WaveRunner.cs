@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Brenda.Data;
+using HardwareDefence.Data;
 
-namespace Brenda.Sim;
+namespace HardwareDefence.Sim;
 
 public enum WaveState
 {

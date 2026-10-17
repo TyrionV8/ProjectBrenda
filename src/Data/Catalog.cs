@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-namespace Brenda.Data;
+namespace HardwareDefence.Data;
 
 /// <summary>All read-only game data: turret and bug types and the built-in levels.</summary>
 public static class Catalog

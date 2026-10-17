@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Brenda.Data;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.Autoload;
+namespace HardwareDefence.Autoload;
 
 /// <summary>Campaign progress: unlocked levels, stars, upgrades and points. Saved in user://save.json.</summary>
 public static class GameState

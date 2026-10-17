@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Brenda.Autoload;
+namespace HardwareDefence.Autoload;
 
 /// <summary>Full-screen post-processing (vignette, scanlines, aberration) and the red damage pulse.</summary>
 public partial class PostFx : CanvasLayer

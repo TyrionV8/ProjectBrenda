@@ -1,8 +1,8 @@
 using System;
-using Brenda.Data;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>
 /// Procedural drawings of board components, plus their damage states. Everything is drawn

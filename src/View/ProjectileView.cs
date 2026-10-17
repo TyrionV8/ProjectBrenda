@@ -1,7 +1,7 @@
-using Brenda.Sim;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>Bullets, bombs and frost orbs, drawn from snapshots.</summary>
 public partial class ProjectileView : Node2D

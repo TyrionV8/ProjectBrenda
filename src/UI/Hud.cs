@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Brenda.Autoload;
-using Brenda.Data;
-using Brenda.Game;
-using Brenda.Sim;
+using HardwareDefence.Autoload;
+using HardwareDefence.Data;
+using HardwareDefence.Game;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>
 /// In-game interface. The left column is shared; the right column is the turret inventory

@@ -1,9 +1,9 @@
 using System;
-using Brenda.Autoload;
-using Brenda.Data;
+using HardwareDefence.Autoload;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>One upgrade on the upgrade screen: icon, name, level blocks and a "+" to buy.</summary>
 public partial class UpgradeRow : Button

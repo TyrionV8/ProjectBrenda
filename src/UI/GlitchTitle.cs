@@ -1,19 +1,27 @@
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
-/// <summary>Big title with a neon glow, RGB split and the occasional glitch burst.</summary>
+/// <summary>Big title with a neon glow, RGB split and the occasional glitch burst. "\n" starts a new line.</summary>
 public partial class GlitchTitle : Control
 {
-	public string Text = "BRENDA";
-	public int FontSize = 120;
+	public string Text = "HARDWARE\nDEFENCE";
+	public int FontSize = 96;
 	public Color Color = UiTheme.Cyan;
 	float _t;
 	float _burst;
 
+	string[] _lines;
+
+	float LineHeight => FontSize * 1.05f;
+
 	public override void _Ready()
 	{
-		CustomMinimumSize = UiTheme.PixelBold.GetStringSize(Text, HorizontalAlignment.Left, -1, FontSize) + new Vector2(20, 10);
+		_lines = Text.Split('\n');
+		var width = 0f;
+		foreach (var line in _lines)
+			width = Mathf.Max(width, UiTheme.PixelBold.GetStringSize(line, HorizontalAlignment.Left, -1, FontSize).X);
+		CustomMinimumSize = new Vector2(width + 20, LineHeight * (_lines.Length - 1) + FontSize + 10);
 		MouseFilter = MouseFilterEnum.Ignore;
 	}
 
@@ -29,14 +37,18 @@ public partial class GlitchTitle : Control
 	public override void _Draw()
 	{
 		var font = UiTheme.PixelBold;
-		var b = new Vector2(10, FontSize * 0.85f);
-		var jitter = new Vector2((float)GD.RandRange(-6, 6) * _burst, 0);
-		for (var i = 0; i < 6; i++)
-			DrawString(font, b + Vector2.FromAngle(i * Mathf.Tau / 6) * 4, Text, HorizontalAlignment.Left, -1, FontSize, new Color(Color, 0.08f));
 		var split = 2 + 10 * _burst;
-		DrawString(font, b + jitter + new Vector2(-split, 0), Text, HorizontalAlignment.Left, -1, FontSize, new Color(1, 0.2f, 0.4f, 0.55f));
-		DrawString(font, b + jitter + new Vector2(split, 0), Text, HorizontalAlignment.Left, -1, FontSize, new Color(0.2f, 0.6f, 1, 0.55f));
-		DrawString(font, b + jitter, Text, HorizontalAlignment.Left, -1, FontSize, Color.Lerp(Colors.White, 0.35f + 0.1f * Mathf.Sin(_t * 3)));
+		for (var l = 0; l < _lines.Length; l++)
+		{
+			var text = _lines[l];
+			var b = new Vector2(10, FontSize * 0.85f + l * LineHeight);
+			var jitter = new Vector2((float)GD.RandRange(-6, 6) * _burst, 0);
+			for (var i = 0; i < 6; i++)
+				DrawString(font, b + Vector2.FromAngle(i * Mathf.Tau / 6) * 4, text, HorizontalAlignment.Left, -1, FontSize, new Color(Color, 0.08f));
+			DrawString(font, b + jitter + new Vector2(-split, 0), text, HorizontalAlignment.Left, -1, FontSize, new Color(1, 0.2f, 0.4f, 0.55f));
+			DrawString(font, b + jitter + new Vector2(split, 0), text, HorizontalAlignment.Left, -1, FontSize, new Color(0.2f, 0.6f, 1, 0.55f));
+			DrawString(font, b + jitter, text, HorizontalAlignment.Left, -1, FontSize, Color.Lerp(Colors.White, 0.35f + 0.1f * Mathf.Sin(_t * 3)));
+		}
 		if (_burst <= 0.3f)
 			return;
 		var rng = new RandomNumberGenerator { Seed = (ulong)(_t * 30) };

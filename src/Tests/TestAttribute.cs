@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Brenda.Tests;
+namespace HardwareDefence.Tests;
 
 /// <summary>Marks a test method (sync or async Task). Run with `-- --test`.</summary>
 [AttributeUsage(AttributeTargets.Method)]

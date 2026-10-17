@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using Brenda.Autoload;
-using Brenda.Data;
-using Brenda.Game;
-using Brenda.Net;
-using Brenda.Sim;
+using HardwareDefence.Autoload;
+using HardwareDefence.Data;
+using HardwareDefence.Game;
+using HardwareDefence.Net;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>
 /// Versus lobby: play against the computer, host a match (you defend, the other player attacks)

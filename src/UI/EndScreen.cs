@@ -1,8 +1,8 @@
-using Brenda.Autoload;
-using Brenda.Game;
+using HardwareDefence.Autoload;
+using HardwareDefence.Game;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>Shown after the last level (with the original prototype's message).</summary>
 public partial class EndScreen : Control

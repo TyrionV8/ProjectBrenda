@@ -1,10 +1,10 @@
 using System.Linq;
-using Brenda.Autoload;
-using Brenda.Data;
-using Brenda.Sim;
+using HardwareDefence.Autoload;
+using HardwareDefence.Data;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.Tests;
+namespace HardwareDefence.Tests;
 
 public sealed class DataTests : TestSuite
 {

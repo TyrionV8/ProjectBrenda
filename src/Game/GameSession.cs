@@ -1,9 +1,9 @@
 using System;
-using Brenda.Autoload;
-using Brenda.Data;
-using Brenda.Sim;
+using HardwareDefence.Autoload;
+using HardwareDefence.Data;
+using HardwareDefence.Sim;
 
-namespace Brenda.Game;
+namespace HardwareDefence.Game;
 
 /// <summary>How the next game screen should start (set by menus before changing scene).</summary>
 public static class GameSession

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using Brenda.Data;
-using Brenda.Game;
-using Brenda.Sim;
+using HardwareDefence.Data;
+using HardwareDefence.Game;
+using HardwareDefence.Sim;
 
-namespace Brenda.Net;
+namespace HardwareDefence.Net;
 
 /// <summary>
 /// Hosts a versus match: runs the simulation locally (like <see cref="LocalFeed"/>) and serves

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Brenda.Autoload;
-using Brenda.Data;
+using HardwareDefence.Autoload;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.Game;
+namespace HardwareDefence.Game;
 
 /// <summary>
 /// Placing turrets: a ghost follows the pointer, snapped to the grid. Click/tap to build; the

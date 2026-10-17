@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>The game's UI theme. Built in code and saved to assets/ui/theme.tres (`-- --build-theme`).</summary>
 public static class UiTheme

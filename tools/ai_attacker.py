@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Example AI for Project Brenda's versus mode: plays the attacker over WebSocket.
+"""Example AI for Hardware Defence's versus mode: plays the attacker over WebSocket.
 
 Start a host first (the game's Versus > Host game, or headless):
     godot --headless --path . -- --server --level=3 --defender=bot

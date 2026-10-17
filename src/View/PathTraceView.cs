@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>
 /// The bug route drawn as a wide copper trace with data pulses flowing to the CPU,

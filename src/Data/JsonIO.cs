@@ -2,7 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Godot;
 
-namespace Brenda.Data;
+namespace HardwareDefence.Data;
 
 /// <summary>JSON settings shared by data files, saves and the network protocol (snake_case keys).</summary>
 public static class JsonIO

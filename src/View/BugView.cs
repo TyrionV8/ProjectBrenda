@@ -1,8 +1,8 @@
-using Brenda.Data;
-using Brenda.Sim;
+using HardwareDefence.Data;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>A bug on screen, updated from snapshots. The root draws the health bar; the body rotates.</summary>
 public partial class BugView : Node2D

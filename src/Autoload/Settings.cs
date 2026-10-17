@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
-namespace Brenda.Autoload;
+namespace HardwareDefence.Autoload;
 
 /// <summary>Player settings (volumes, fullscreen, screen effects, player name), saved in user://settings.cfg.</summary>
 public partial class Settings : Node

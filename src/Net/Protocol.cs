@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
-using Brenda.Data;
-using Brenda.Sim;
+using HardwareDefence.Data;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.Net;
+namespace HardwareDefence.Net;
 
 /// <summary>
 /// One JSON message of the versus protocol (see docs/PROTOCOL.md). A single flat type keeps it

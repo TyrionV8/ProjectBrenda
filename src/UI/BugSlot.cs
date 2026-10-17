@@ -1,8 +1,8 @@
-using Brenda.Autoload;
-using Brenda.Data;
+using HardwareDefence.Autoload;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>Attacker palette entry: bug, name, energy cost and unlock countdown.</summary>
 public partial class BugSlot : Button

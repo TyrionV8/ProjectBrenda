@@ -1,7 +1,7 @@
-using Brenda.Data;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.Sim;
+namespace HardwareDefence.Sim;
 
 /// <summary>Turret behaviours and projectiles (converted from the prototype: 30 steps = 1 s).</summary>
 public sealed partial class Match

@@ -1,8 +1,8 @@
 using System;
-using Brenda.Autoload;
+using HardwareDefence.Autoload;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>Volume sliders and display options. Raises <see cref="Closed"/> when the player goes back.</summary>
 public partial class SettingsPanel : PanelContainer

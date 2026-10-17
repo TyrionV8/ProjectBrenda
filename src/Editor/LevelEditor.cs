@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Brenda.Autoload;
-using Brenda.Data;
-using Brenda.Game;
-using Brenda.UI;
+using HardwareDefence.Autoload;
+using HardwareDefence.Data;
+using HardwareDefence.Game;
+using HardwareDefence.UI;
 using Godot;
 
-namespace Brenda.Editor;
+namespace HardwareDefence.Editor;
 
 /// <summary>
 /// In-game level editor. MAP mode edits the route and components on the real board; WAVES mode

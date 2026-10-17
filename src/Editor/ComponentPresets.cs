@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Brenda.Editor;
+namespace HardwareDefence.Editor;
 
 /// <summary>Named colours offered by the editor for LEDs, capacitors, slots, switches...</summary>
 public static class ComponentPresets

@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
-using Brenda.Autoload;
-using Brenda.Data;
-using Brenda.Sim;
-using Brenda.UI;
-using Brenda.View;
+using HardwareDefence.Autoload;
+using HardwareDefence.Data;
+using HardwareDefence.Sim;
+using HardwareDefence.UI;
+using HardwareDefence.View;
 using Godot;
 
-namespace Brenda.Game;
+namespace HardwareDefence.Game;
 
 /// <summary>
 /// Plays one match. Everything on screen is rebuilt from the feed's snapshot each frame, and

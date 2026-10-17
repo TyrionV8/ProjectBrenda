@@ -1,9 +1,9 @@
 using System.Linq;
-using Brenda.Data;
-using Brenda.Sim;
+using HardwareDefence.Data;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.Tests;
+namespace HardwareDefence.Tests;
 
 /// <summary>Plays the simulation headless — no rendering, so whole levels take milliseconds.</summary>
 public sealed class SimTests : TestSuite

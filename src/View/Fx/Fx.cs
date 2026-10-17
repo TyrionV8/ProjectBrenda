@@ -1,8 +1,8 @@
 using System;
-using Brenda.Data;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>Spawns short-lived visual effects. Lives inside the board, so positions are board-local.</summary>
 public partial class Fx : Node2D

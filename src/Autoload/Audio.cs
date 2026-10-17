@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
-namespace Brenda.Autoload;
+namespace HardwareDefence.Autoload;
 
 /// <summary>Music with cross-fades and a small pool of one-shot sound players.</summary>
 public partial class Audio : Node

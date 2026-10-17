@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Brenda.Data;
+using HardwareDefence.Data;
 using Godot;
 
-namespace Brenda.View;
+namespace HardwareDefence.View;
 
 /// <summary>
 /// The printed circuit board: solder mask, decorative traces and silkscreen (drawn once
@@ -141,7 +141,7 @@ public partial class BoardView : Node2D
 		}
 		DrawRect(new Rect2(new Vector2(10, 10), size - new Vector2(20, 20)), new Color(Theme.Silk, Theme.Silk.A * 0.35f), false, 1.5f);
 		var title = Level?.Title?.ToUpperInvariant() ?? "";
-		DrawString(ComponentArt.SilkFont, new Vector2(60, size.Y - 16), $"PROJECT BRENDA  {title}  REV 0.5", HorizontalAlignment.Left, -1, 12, new Color(Theme.Silk, Theme.Silk.A * 0.8f));
+		DrawString(ComponentArt.SilkFont, new Vector2(60, size.Y - 16), $"HARDWARE DEFENCE  {title}  REV 0.7", HorizontalAlignment.Left, -1, 12, new Color(Theme.Silk, Theme.Silk.A * 0.8f));
 		if (!_showGrid)
 			return;
 		for (var x = 1; x < Cols; x++)

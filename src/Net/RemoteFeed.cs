@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Brenda.Data;
-using Brenda.Game;
-using Brenda.Sim;
+using HardwareDefence.Data;
+using HardwareDefence.Game;
+using HardwareDefence.Sim;
 using Godot;
 
-namespace Brenda.Net;
+namespace HardwareDefence.Net;
 
 /// <summary>
 /// Plays a versus match hosted by someone else. Receives state updates, interpolates them a

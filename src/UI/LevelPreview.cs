@@ -1,8 +1,8 @@
-using Brenda.Data;
-using Brenda.View;
+using HardwareDefence.Data;
+using HardwareDefence.View;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>Miniature of a level: board, route, components and the CPU.</summary>
 public partial class LevelPreview : Control

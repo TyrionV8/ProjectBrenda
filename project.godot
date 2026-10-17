@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Project Brenda"
+config/name="Hardware Defence"
 config/description="Tower defense on a circuit board: stop the bugs before they reach the CPU."
 run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.7", "C#", "GL Compatibility")
@@ -39,7 +39,7 @@ window/handheld/orientation=0
 
 [dotnet]
 
-project/assembly_name="ProjectBrenda"
+project/assembly_name="HardwareDefence"
 
 [gui]
 

@@ -1,9 +1,9 @@
-using Brenda.Data;
-using Brenda.UI;
-using Brenda.View;
+using HardwareDefence.Data;
+using HardwareDefence.UI;
+using HardwareDefence.View;
 using Godot;
 
-namespace Brenda.Editor;
+namespace HardwareDefence.Editor;
 
 /// <summary>Palette entry that shows a miniature of the component.</summary>
 public partial class ComponentButton : Button

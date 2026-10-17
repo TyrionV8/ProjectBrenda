@@ -1,7 +1,7 @@
-using Brenda.Game;
+using HardwareDefence.Game;
 using Godot;
 
-namespace Brenda.UI;
+namespace HardwareDefence.UI;
 
 /// <summary>Pause overlay (campaign pauses the game; online matches keep running).</summary>
 public partial class PauseMenu : CanvasLayer
