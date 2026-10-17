@@ -42,7 +42,7 @@ public partial class DevTools : Node
 		else if (args.Contains("--test"))
 			Callable.From(() => { _ = RunTests(Arg(args, "--filter", "")); }).CallDeferred();
 		else if (args.Any(a => a.StartsWith("--capture=")))
-			Callable.From(() => { _ = Capture(Arg(args, "--capture", "").Split(','), Arg(args, "--out", "user://shots")); }).CallDeferred();
+			Callable.From(() => { _ = CaptureOrQuit(Arg(args, "--capture", "").Split(','), Arg(args, "--out", "user://shots")); }).CallDeferred();
 	}
 
 	static string Arg(string[] args, string key, string fallback) =>
@@ -181,6 +181,20 @@ public partial class DevTools : Node
 		GetTree().Quit(failures > 0 ? 1 : 0);
 	}
 
+	/// <summary>Errors in an awaited task would otherwise vanish and leave the game running.</summary>
+	async Task CaptureOrQuit(string[] shots, string outDir)
+	{
+		try
+		{
+			await Capture(shots, outDir);
+		}
+		catch (Exception e)
+		{
+			GD.PrintErr($"capture failed: {e}");
+			GetTree().Quit(1);
+		}
+	}
+
 	async Task Capture(string[] shots, string outDir)
 	{
 		DirAccess.MakeDirRecursiveAbsolute(outDir);
@@ -251,7 +265,9 @@ public partial class DevTools : Node
 						return feed;
 					};
 					await Goto(GameSession.GameScene, 0.3f);
-					var screen = GetTree().CurrentScene as GameScreen;
+					while (GetTree().CurrentScene is not GameScreen)
+						await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+					var screen = (GameScreen)GetTree().CurrentScene;
 					if (parts[0] == "win")
 					{
 						Engine.TimeScale = 4;

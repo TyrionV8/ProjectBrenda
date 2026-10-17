@@ -86,6 +86,11 @@ sprites, lines, particles and lights all share that grid. Keep new art at 1:1 in
 * `tools/sprites/make_sprites.py` generates the sprite sheets from the designs next to it
   (`--preview FILE` writes a zoomed contact sheet). The PNGs can also be edited by hand.
 
+**Lighting.** The board is dark; LEDs along the route (one every 3 cells, alternating sides,
+derived from the route so every player agrees on them) light it with wide pools of light.
+Bugs chew them as they pass, and the board goes darker as they burn out. Big lit surfaces
+(board, route) are drawn in tiles because a 2D light reaches at most 16 lights per item.
+
 The 8 bugs: Glitch, Spider, Termite (weak, eats the board fast), Beetle, Armored Worm,
 Roach (fast), Runner and Brute, plus the boss.
 

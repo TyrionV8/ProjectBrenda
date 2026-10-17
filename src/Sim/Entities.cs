@@ -107,6 +107,8 @@ public sealed class BoardComponent
 	public float MaxHp;
 	public float Hp;
 	public bool Destroyed;
+	/// <summary>An LED lighting the route (see LevelData.PathLeds): doesn't count for board integrity.</summary>
+	public bool Light;
 
 	public bool Chewable => MaxHp > 0 && !Destroyed;
 	public float Ratio => MaxHp <= 0 ? 1 : Hp / MaxHp;

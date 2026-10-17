@@ -222,6 +222,39 @@ public sealed class PixelCanvas
 	public void TextCentered(float cx, float cy, string text, Color c) =>
 		MicroFont.Draw(this, (int)MathF.Floor(cx - MicroFont.Width(text) / 2f), (int)MathF.Floor(cy - MicroFont.Height / 2f), text, c);
 
+	/// <summary>A copy of part of the canvas.</summary>
+	public PixelCanvas Region(int x, int y, int w, int h)
+	{
+		var c = new PixelCanvas(w, h);
+		for (var yy = 0; yy < h; yy++)
+			for (var xx = 0; xx < w; xx++)
+				c._px[yy * w + xx] = Get(x + xx, y + yy);
+		return c;
+	}
+
+	/// <summary>
+	/// The canvas as a grid of sprites (art pixel scale) under one node. 2D lights affect at most
+	/// 16 lights per canvas item, so big lit surfaces are split up for every light to reach them.
+	/// Fully transparent tiles are skipped.
+	/// </summary>
+	public Node2D ToTiles(int tile = 32)
+	{
+		var root = new Node2D();
+		for (var ty = 0; ty < Height; ty += tile)
+			for (var tx = 0; tx < Width; tx += tile)
+			{
+				var part = Region(tx, ty, Math.Min(tile, Width - tx), Math.Min(tile, Height - ty));
+				if (Array.TrueForAll(part._px, p => p.A <= 0.01f))
+					continue;
+				root.AddChild(new Sprite2D
+				{
+					Texture = part.ToTexture(), Centered = false, Scale = Vector2.One * PixelWorld.Scale,
+					Position = new Vector2(tx, ty) * PixelWorld.Scale,
+				});
+			}
+		return root;
+	}
+
 	public Image ToImage()
 	{
 		var bytes = new byte[Width * Height * 4];

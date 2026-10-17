@@ -44,16 +44,15 @@ public partial class MenuBackground : CanvasLayer
 		};
 		var world = new PixelWorld();
 		AddChild(world);
-		world.Root.AddChild(new CanvasModulate { Color = new Color(0.55f, 0.6f, 0.72f) });
+		world.Root.AddChild(new CanvasModulate { Color = new Color(0.075f, 0.08f, 0.11f) });
 		var board = new BoardView();
 		world.Root.AddChild(board);
 		board.Setup(level, 29, 16, 7);
-		var trace = new PathTraceView();
+		var trace = new PathTraceView { BoardCells = new Vector2I(29, 16) };
 		board.AddChild(trace);
 		trace.Setup(level.PathPoints(), level.EntryPoint());
-		trace.SetIntensity(0.8f);
 		_path = new PathLine(level.PathPoints());
-		_bugLayer = new Node2D();
+		_bugLayer = new Node2D { ZIndex = 2 };
 		board.AddChild(_bugLayer);
 		for (var i = 0; i < 4; i++)
 			Spawn((float)GD.RandRange(0, _path.Length * 0.9));

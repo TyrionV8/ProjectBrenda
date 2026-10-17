@@ -16,6 +16,9 @@ namespace HardwareDefence.Game;
 public partial class GameScreen : Node2D
 {
 	static readonly float[] Speeds = { 1, 2, 4, 8 };
+	/// <summary>Ambient light with every LED working, and with all of them burnt out.</summary>
+	static readonly Color AmbientLit = new(0.075f, 0.08f, 0.11f);
+	static readonly Color AmbientDark = new(0.03f, 0.032f, 0.045f);
 
 	public IMatchFeed Feed { get; private set; }
 	public BuildController Build { get; private set; }
@@ -23,6 +26,8 @@ public partial class GameScreen : Node2D
 	public bool Playing => _state == MatchState.Playing && Feed.Current != null && string.IsNullOrEmpty(Feed.Status);
 
 	PixelWorld _world;
+	CanvasModulate _ambient;
+	float _lightLevel = 1;
 	Camera2D _camera;
 	BoardView _board;
 	PathTraceView _trace;
@@ -56,7 +61,8 @@ public partial class GameScreen : Node2D
 		var world = _world.Root;
 		var backdrop = new ColorRect { Color = new Color(0.0235f, 0.0431f, 0.0745f), Position = new Vector2(-40, -40), Size = new Vector2(1446, 848), MouseFilter = Control.MouseFilterEnum.Ignore };
 		world.AddChild(backdrop);
-		world.AddChild(new CanvasModulate { Color = new Color(0.5f, 0.55f, 0.68f) });
+		_ambient = new CanvasModulate { Color = AmbientLit };
+		world.AddChild(_ambient);
 
 		_board = new BoardView { Position = Grid.Origin };
 		world.AddChild(_board);
@@ -66,10 +72,10 @@ public partial class GameScreen : Node2D
 		_trace.Setup(level.PathPoints(), level.EntryPoint());
 		_cpu = new CpuView { Position = Grid.CellCenter(level.CpuCell), Label = level.CoreLabel ?? "CPU" };
 		_board.AddChild(_cpu);
-		_turretLayer = new Node2D();
-		_bugLayer = new Node2D();
-		_projectileLayer = new Node2D();
-		_fx = new Fx();
+		_turretLayer = new Node2D { ZIndex = 2 };
+		_bugLayer = new Node2D { ZIndex = 2 };
+		_projectileLayer = new Node2D { ZIndex = 2 };
+		_fx = new Fx { ZIndex = 2 };
 		_board.AddChild(_turretLayer);
 		_board.AddChild(_bugLayer);
 		_board.AddChild(_projectileLayer);
@@ -118,7 +124,7 @@ public partial class GameScreen : Node2D
 		SyncBugs(snap, dt);
 		SyncTurrets(snap);
 		SyncProjectiles(snap, dt);
-		SyncComponents(snap);
+		SyncComponents(snap, dt);
 		_cpu.Hp = snap.CpuHp;
 		foreach (var e in Feed.DrainEvents())
 			HandleEvent(e);
@@ -278,15 +284,33 @@ public partial class GameScreen : Node2D
 		}
 	}
 
-	void SyncComponents(Snapshot snap)
+	void SyncComponents(Snapshot snap, float dt)
 	{
 		var count = Mathf.Min(snap.Components.Count, _board.Components.Count);
+		var lights = 0;
+		var lit = 0;
 		for (var i = 0; i < count; i++)
 		{
 			var c = _board.Components[i];
 			var kind = c.Data.Kind;
 			c.SetHp(snap.Components[i], kind.HpPerCell * c.Data.Size[0] * c.Data.Size[1]);
+			if (c.Data.Type != "led")
+				continue;
+			lights++;
+			lit += snap.Components[i] < 0 ? 0 : 1;
 		}
+		// The route LEDs follow the level's components in the snapshot.
+		for (var i = 0; i < _board.Leds.Count && count + i < snap.Components.Count; i++)
+		{
+			var hp = snap.Components[count + i];
+			_board.Leds[i].SetHp(hp, Match.PathLedHp);
+			lights++;
+			lit += hp < 0 ? 0 : 1;
+		}
+		// The board gets darker as its lights burn out.
+		var level = lights == 0 ? 1 : (float)lit / lights;
+		_lightLevel = Mathf.MoveToward(_lightLevel, level, dt * 0.5f);
+		_ambient.Color = AmbientDark.Lerp(AmbientLit, _lightLevel);
 	}
 
 	void LaserSparks(Snapshot snap, float dt)
@@ -378,22 +402,29 @@ public partial class GameScreen : Node2D
 				{
 					var c = _board.Components[e.Id];
 					_fx.ComponentDestroyed(c.Rect, ComponentArt.MainColor(c.Data));
+					Audio.Play("explode", "SFX", -9);
 				}
-				Audio.Play("explode", "SFX", -9);
+				else if (e.Id - _board.Components.Count < _board.Leds.Count)
+				{
+					var led = _board.Leds[e.Id - _board.Components.Count];
+					_fx.Sparks(led.Position, led.Color, 10, 110, 0.35f, 0.4f);
+					_fx.LightFlash(led.Position, led.Color, 2, 0.8f, 0.3f);
+					Audio.Play("crunch", "SFX", -8, 0.3f);
+				}
 				break;
 			case EventKind.Chew:
 				if (e.Id < _board.Components.Count)
 					_fx.Debris(e.Pos, ComponentArt.MainColor(_board.Components[e.Id].Data), 3, 50);
+				else if (e.Id - _board.Components.Count < _board.Leds.Count)
+					_fx.Debris(e.Pos, new Color("d8d2c4"), 2, 40);
 				Audio.Play("crunch", "SFX", -14, 0.2f);
 				break;
 			case EventKind.WaveCountdown:
 				Hud.ShowBanner($"WAVE {e.Id} CLEARED", "Next wave incoming");
-				_trace.SetIntensity(0.45f);
 				break;
 			case EventKind.WaveStarted:
 				Hud.ShowBanner($"WAVE {e.Id + 1}", $"{Feed.Level.EnemyCount(e.Id)} bugs");
 				Audio.Play("wave", "SFX", -2);
-				_trace.SetIntensity(1);
 				break;
 		}
 	}

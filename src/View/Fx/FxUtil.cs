@@ -6,6 +6,8 @@ namespace HardwareDefence.View;
 public static class FxUtil
 {
 	public static readonly Texture2D LightTexture = GD.Load<Texture2D>("res://assets/fx/light_soft.png");
+	/// <summary>Broad, flat falloff: lights a wide area without a huge (and costly) light rect.</summary>
+	public static readonly Texture2D WideLightTexture = GD.Load<Texture2D>("res://assets/fx/light_wide.png");
 	public static readonly Texture2D GlowTexture = GD.Load<Texture2D>("res://assets/fx/glow.png");
 	public static readonly Texture2D PixelTexture = GD.Load<Texture2D>("res://assets/fx/pixel.png");
 
@@ -27,9 +29,9 @@ public static class FxUtil
 		return new Sprite2D { Texture = GlowTexture, Material = Additive, Modulate = color, Scale = Vector2.One * scale };
 	}
 
-	public static PointLight2D Light(Color color, float energy = 1, float size = 1)
+	public static PointLight2D Light(Color color, float energy = 1, float size = 1, Texture2D texture = null)
 	{
-		return new PointLight2D { Texture = LightTexture, Color = color, Energy = energy, TextureScale = size };
+		return new PointLight2D { Texture = texture ?? LightTexture, Color = color, Energy = energy, TextureScale = size };
 	}
 
 	public static void DrawGlow(CanvasItem ci, Vector2 center, float size, Color color) =>

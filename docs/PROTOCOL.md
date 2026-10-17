@@ -71,7 +71,7 @@ blocking components or on the 3 × 3 cells around the CPU.
 | `bugs` | `[{id, type, x, y, angle, hp, slowed, chewing, progress}]` — `progress` is the distance walked along the route. |
 | `turrets` | `[{id, type, cell, direction, head}]` |
 | `projectiles` | `[{id, kind (bullet/bomb/orb), source, x, y, h, a}]` |
-| `components` | Remaining HP of each `level.components[i]` (-1 = destroyed). |
+| `components` | Remaining HP of each `level.components[i]` (-1 = destroyed), followed by the LEDs along the route (2 HP each; their positions come from the route, see `LevelData.PathLeds`). LEDs don't count for `integrity` and give no energy. |
 
 ## Events
 

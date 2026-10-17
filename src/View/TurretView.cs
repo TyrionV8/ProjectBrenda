@@ -76,7 +76,7 @@ public partial class TurretView : Node2D
 		AddChild(_headGlow);
 		if (Def.Behavior == "laser")
 			_headSprite.Rotation = _headGlow.Rotation = Mathf.Snapped(Direction, Mathf.Pi / 2);
-		_light = FxUtil.Light(Def.Color, 1, 0.85f);
+		_light = FxUtil.Light(Def.Color, 1, 0.6f);
 		AddChild(_light);
 		_status = FxUtil.GlowSprite(Def.Color, 0.12f);
 		_status.Position = new Vector2(5, 5) * Px;
