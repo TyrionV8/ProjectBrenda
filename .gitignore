@@ -1,1 +1,13 @@
-builds/
+# Godot 4
+.godot/
+__pycache__/
+/android/
+*.translation
+export_credentials.cfg
+/builds/
+# .NET
+.mono/
+.vs/
+bin/
+obj/
+*.user
