@@ -40,13 +40,13 @@ public partial class VersusMenu : Control
 		foreach (var level in Catalog.Levels)
 		{
 			_levels.Add(level);
-			_level.AddItem(level.Title);
+			Loc.AddItem(_level, level.Title);
 		}
 		foreach (var (path, level) in Catalog.CustomLevels())
 			if (level.Validate(new List<string>(Catalog.Enemies.Keys)).Count == 0)
 			{
 				_levels.Add(level);
-				_level.AddItem($"{level.Title} (custom)");
+				Loc.AddItem(_level, $"{level.Title} (custom)");
 			}
 		box.AddChild(Row("Board", _level));
 		box.AddChild(Ui.Divider());
@@ -128,7 +128,7 @@ public partial class VersusMenu : Control
 		if (_joining == null)
 			return;
 		_joining.Process((float)delta);
-		_status.Text = _joining.Status;
+		Loc.Set(_status, _joining.Status);
 		_status.Modulate = _joining.LastError != null ? UiTheme.Red : UiTheme.Cyan;
 		if (!_joining.Joined)
 			return;

@@ -94,7 +94,7 @@ public partial class UpgradeScreen : Control
 
 	void Refresh()
 	{
-		_balance.Text = $"${GameState.Balance}";
+		Loc.Set(_balance, $"${GameState.Balance}");
 		foreach (var (def, preview, unlock) in _cards)
 		{
 			var available = GameState.IsTurretAvailable(def);
@@ -131,7 +131,7 @@ public partial class UpgradeScreen : Control
 			if (GameState.Unlock(def)) Audio.Ui("upgrade");
 			else Audio.Play("error", "UI");
 		});
-		unlock.TooltipText = $"Locked turret. Buy once for ${def.UnlockPrice}; upgrades are sold separately.";
+		Loc.Tooltip(unlock, $"Locked turret. Buy once for ${def.UnlockPrice}; upgrades are sold separately.");
 		box.AddChild(unlock);
 		_cards.Add((def, preview, unlock));
 		foreach (var up in def.Upgrades)
@@ -167,7 +167,7 @@ public partial class UpgradeScreen : Control
 			var limits = row.Turret.Limits.GetValueOrDefault(row.Upgrade.Stat) ?? new[] { float.MinValue, float.MaxValue };
 			text += $"  ->  {Format(row.Upgrade.Stat, Mathf.Clamp(current + row.Upgrade.PerLevel, limits[0], limits[1]))}  |  ${GameState.NextUpgradePrice(row.Turret, row.Upgrade)}";
 		}
-		_details.Text = text;
+		Loc.Set(_details, text);
 		_details.AddThemeColorOverride("font_color", UiTheme.TextColor);
 	}
 

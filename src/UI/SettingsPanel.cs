@@ -18,6 +18,14 @@ public partial class SettingsPanel : PanelContainer
 		AddChild(box);
 		box.AddChild(Ui.Label("SETTINGS", "HeaderLabel", HorizontalAlignment.Center));
 		box.AddChild(Ui.Spacer(6));
+  var languageRow = Ui.HBox();
+  languageRow.AddChild(Ui.Label("Language", "BodyLabel"));
+  var language = new OptionButton { Name = "LanguageOption", SizeFlagsHorizontal = SizeFlags.ExpandFill };
+  language.AddItem("English"); language.AddItem("Português brasileiro");
+  language.Selected = Settings.Instance.Language == "pt_BR" ? 1 : 0;
+  language.ItemSelected += index => Settings.Instance.SetLanguage(index == 1 ? "pt_BR" : "en");
+  languageRow.AddChild(language);
+  box.AddChild(languageRow);
 		foreach (var (bus, text) in new[] { ("Master", "Master volume"), ("Music", "Music"), ("SFX", "Effects"), ("UI", "Interface sounds") })
 			box.AddChild(Slider(bus, text));
 		box.AddChild(Ui.Spacer(4));
@@ -59,10 +67,10 @@ public partial class SettingsPanel : PanelContainer
 		top.AddChild(value);
 		row.AddChild(top);
 		var slider = new HSlider { MinValue = 0, MaxValue = 1, Step = 0.01, Value = Settings.Instance.Volumes[bus], CustomMinimumSize = new Vector2(0, 26) };
-		value.Text = $"{Mathf.RoundToInt(slider.Value * 100)}%";
+		Loc.Set(value, $"{Mathf.RoundToInt(slider.Value * 100)}%");
 		slider.ValueChanged += v =>
 		{
-			value.Text = $"{Mathf.RoundToInt(v * 100)}%";
+			Loc.Set(value, $"{Mathf.RoundToInt(v * 100)}%");
 			Settings.Instance.SetVolume(bus, (float)v);
 		};
 		slider.DragEnded += _ => Audio.Play("place", bus == "Master" ? "SFX" : bus);

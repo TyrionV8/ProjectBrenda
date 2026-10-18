@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using HardwareDefence.UI;
 
 namespace HardwareDefence.Autoload;
 
@@ -17,6 +18,8 @@ public partial class Settings : Node
 	public bool Fullscreen;
 	public bool ScreenFx = true;
 	public bool Tips = true;
+	public string Language { get; private set; } = DefaultLanguage(OS.GetLocaleLanguage());
+	public static string DefaultLanguage(string systemLanguage) => systemLanguage == "pt" ? "pt_BR" : "en";
 	public string PlayerName = "Player";
 	public string LastAddress = "127.0.0.1";
 
@@ -25,6 +28,7 @@ public partial class Settings : Node
 	public override void _Ready()
 	{
 		LoadFile();
+		SetLanguage(Language, persist: false);
 		foreach (var bus in Buses)
 			ApplyVolume(bus);
 		if (DisplayServer.GetName() == "headless")
@@ -71,6 +75,15 @@ public partial class Settings : Node
 		Changed?.Invoke();
 	}
 
+ public void SetLanguage(string language, bool persist = true)
+ {
+  Language = language == "pt_BR" ? "pt_BR" : "en";
+  TranslationServer.SetLocale(Language);
+  if (IsInsideTree()) Loc.Refresh(GetTree().Root);
+  if (persist) SaveFile();
+  Changed?.Invoke();
+ }
+
 	public void SetNetwork(string name, string address)
 	{
 		PlayerName = name;
@@ -105,6 +118,7 @@ public partial class Settings : Node
 		var cfg = new ConfigFile();
 		if (cfg.Load(Path) != Error.Ok)
 			return;
+		Language = (string)cfg.GetValue("interface", "language", Language);
 		foreach (var bus in Buses)
 			Volumes[bus] = (float)cfg.GetValue("audio", bus, Volumes[bus]);
 		Fullscreen = (bool)cfg.GetValue("display", "fullscreen", Fullscreen);
@@ -119,6 +133,7 @@ public partial class Settings : Node
 		var cfg = new ConfigFile();
 		foreach (var bus in Buses)
 			cfg.SetValue("audio", bus, Volumes[bus]);
+		cfg.SetValue("interface", "language", Language);
 		cfg.SetValue("gameplay", "tips", Tips);
 		cfg.SetValue("display", "fullscreen", Fullscreen);
 		cfg.SetValue("display", "screen_fx", ScreenFx);

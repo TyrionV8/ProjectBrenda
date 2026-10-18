@@ -98,7 +98,7 @@ public partial class MainMenu : Control
 		if (GameState.HasSave() && !_confirmReset)
 		{
 			_confirmReset = true;
-			_newGame.Text = "Erase progress?";
+			Loc.Set(_newGame, "Erase progress?");
 			_newGame.ThemeTypeVariation = "DangerButton";
 			return;
 		}

@@ -10,7 +10,8 @@ public static class Ui
 {
 	public static Button Button(string text, Action onPressed, string variation = "")
 	{
-		var b = new Button { Text = text };
+		var b = new Button();
+		Loc.Set(b, text);
 		if (variation != "")
 			b.ThemeTypeVariation = variation;
 		b.Pressed += () =>
@@ -32,7 +33,8 @@ public static class Ui
 
 	public static Label Label(string text, string variation = "", HorizontalAlignment align = HorizontalAlignment.Left)
 	{
-		var l = new Label { Text = text, HorizontalAlignment = align };
+		var l = new Label { HorizontalAlignment = align };
+		Loc.Set(l, text);
 		if (variation != "")
 			l.ThemeTypeVariation = variation;
 		return l;

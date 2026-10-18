@@ -69,7 +69,7 @@ public partial class UpgradeRow : Button
 		DrawRect(new Rect2(Vector2.Zero, Size), bg);
 		DrawRect(new Rect2(Vector2.Zero, Size), new Color(Turret.Color, hovered ? 0.55f : 0.18f), false, 1.5f);
 		DrawTextureRect(_icon, new Rect2(9, 11, 30, 30), false, level > 0 ? Turret.Color : new Color(Turret.Color, 0.5f));
-		var words = Upgrade.Label.ToUpperInvariant().Split(' ', 2);
+		var words = Loc.S(Upgrade.Label).ToUpperInvariant().Split(' ', 2);
 		for (var i = 0; i < words.Length; i++)
 			DrawString(UiTheme.PixelFont, new Vector2(48, 18 + i * 18), words[i], HorizontalAlignment.Left, Size.X - 54, UiTheme.PixelSmall, UiTheme.TextColor);
 		var bar = new Rect2(48, 43, Size.X - 96, 9);
@@ -78,7 +78,7 @@ public partial class UpgradeRow : Button
 		var filled = (float)level / Upgrade.MaxLevel * blocks;
 		for (var i = 0; i < blocks; i++)
 			DrawRect(new Rect2(bar.Position.X + i * bw, bar.Position.Y, bw - 1.5f, bar.Size.Y), i < filled ? Turret.Color : new Color(1, 1, 1, 0.08f));
-		DrawString(UiTheme.PixelFont, new Vector2(48, 70), maxed ? "MAX" : $"{level}/{Upgrade.MaxLevel}  ${GameState.NextUpgradePrice(Turret, Upgrade)}", HorizontalAlignment.Left, -1, UiTheme.PixelSmall, maxed ? UiTheme.Gold : UiTheme.Dim);
+		DrawString(UiTheme.PixelFont, new Vector2(48, 70), maxed ? Loc.S("MAX") : $"{level}/{Upgrade.MaxLevel}  ${GameState.NextUpgradePrice(Turret, Upgrade)}", HorizontalAlignment.Left, -1, UiTheme.PixelSmall, maxed ? UiTheme.Gold : UiTheme.Dim);
 		var plus = new Rect2(Size.X - 40, 40, 32, 32);
 		var plusColor = canBuy ? Turret.Color : new Color(0.4f, 0.45f, 0.5f, 0.4f);
 		DrawRect(plus, new Color(plusColor, 0.15f));

@@ -87,7 +87,7 @@ public partial class TutorialTips : PanelContainer
 		var id = _pending.Dequeue();
 		_queued.Remove(id);
 		if (!CanShow(id)) return;
-		_text.Text = Texts[id];
+		Loc.Set(_text, Texts[id]);
 		CurrentId = id;
 		Visible = true;
 		_remaining = 9;

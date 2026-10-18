@@ -19,6 +19,19 @@ cell; the laser asks for a second click to aim it. Right click / `Esc` / CANCEL 
 `G` shows the grid, `Esc` pauses. Everything also works with touch. In versus as the attacker,
 click a bug (or `1`–`9`) to send it.
 
+### Languages
+
+The interface supports English (`en`) and Brazilian Portuguese (`pt_BR`). Without a saved
+preference, a Portuguese system selects Brazilian Portuguese; other systems select English.
+Change **Settings → Language** to apply it immediately to the current interface, without
+restarting the scene, match or pause state. The choice is saved in `user://settings.cfg`
+under `interface/language`, alongside the existing preferences.
+
+Menus, gameplay labels, tips, bestiary, editor and built-in catalog names/descriptions are
+translated. Player-entered titles, names, addresses and editable data remain literal.
+Board markings, process names and terminal effects drawn with `MicroFont` keep their
+original English, as does the Hardware Defence name.
+
 ## Modes
 
 * **Campaign** — 8 boards (Dev Board → Server Board), with **3, 4, 6, 8, 11, 15, 20 and
@@ -260,6 +273,10 @@ godot --path . -- --capture=game:5:20 --out=/tmp/shots
 # bestiary with some discovered entries; game:1:6 also demonstrates the first hint
 godot --path . -- --capture=bestiary --out=/tmp/shots
 
+# Force the capture language temporarily, without saving a preference.
+godot --path . -- --capture=menu --lang=pt_BR --out=/tmp/shots/pt_BR
+godot --path . -- --capture=menu --lang=en --out=/tmp/shots/en
+
 # actual campaign victory and its cash record (the win:N mode remains a custom level)
 godot --path . -- --capture=campaignwin:1 --out=/tmp/shots
 
@@ -277,6 +294,25 @@ for inventory inspection; board 4 starts with a damaged component and a Repair B
 beside real weapons to show its effect, without changing combat statistics. These are
 demonstration setups, not unassisted campaign runs. For the full test suite, use isolated
 user-data directories: some general tests intentionally write campaign files.
+
+Translations live in `translations/strings.csv` (`keys,en,pt_BR`). Ordinary interface
+lookups use authored source text; catalog entries also have stable keys such as
+`TURRET_BLASTER_NAME` and corresponding source-text aliases. Keep both language values and
+the same numbered placeholders (`{0}`, `{1}`, etc.) when adding or editing a row. `Loc`
+retains the source text for in-place updates; custom drawing and dynamic messages use the
+same presentation lookup without modifying data or network messages.
+
+```bash
+# Check duplicate/missing values, placeholder compatibility and catalog keys.
+python3 tools/check_translations.py
+
+# Regenerate the language resources after changing the CSV file.
+godot --headless --path . --import
+```
+
+Version the CSV and its `.import` metadata; generated `.translation` files are ignored.
+Editor labels wrap at their native font sizes, and the wave header scrolls horizontally
+so all 25 tabs and the add-wave action remain reachable in either language.
 
 The same Linux test entry point is used locally and by GitHub Actions:
 

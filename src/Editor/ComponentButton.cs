@@ -20,7 +20,7 @@ public partial class ComponentButton : Button
 		Flat = true;
 		FocusMode = FocusModeEnum.None;
 		CustomMinimumSize = new Vector2(80, 70);
-		TooltipText = kind.Name;
+		Loc.Tooltip(this, kind.Name);
 		TextureFilter = TextureFilterEnum.Nearest;
 	}
 
@@ -53,6 +53,8 @@ public partial class ComponentButton : Button
 			"hole" => "MOUNT HOLE",
 			_ => ComponentTypes.Get(Type).Name.ToUpperInvariant(),
 		};
-		DrawString(UiTheme.PixelFont, new Vector2(4, Size.Y - 5), name, HorizontalAlignment.Center, Size.X - 8, UiTheme.PixelTiny, UiTheme.TextColor);
+		var captions = Ui.WrapText(UiTheme.PixelFont, Loc.S(name), UiTheme.PixelTiny, Size.X - 8);
+  for (var i = 0; i < captions.Length; i++)
+   DrawString(UiTheme.PixelFont, new Vector2(4, Size.Y - 5 - (captions.Length - 1 - i) * 9), captions[i], HorizontalAlignment.Center, Size.X - 8, UiTheme.PixelTiny, UiTheme.TextColor);
 	}
 }

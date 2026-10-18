@@ -56,13 +56,13 @@ public partial class Hud : CanvasLayer
 		UpdateBossBar(s);
 		if (Attacker)
 		{
-			_energy.Text = Mathf.FloorToInt(s.Energy).ToString();
+			Loc.Set(_energy, Mathf.FloorToInt(s.Energy).ToString());
 			foreach (var slot in _bugSlots)
 				slot.Blocked = _screen.Feed.CannotSend(slot.Def);
 		}
 		else
 		{
-			_money.Text = s.Money.ToString();
+			Loc.Set(_money, s.Money.ToString());
 			foreach (var slot in _turretSlots)
 				slot.Affordable = s.Money >= slot.Def.Cost;
 		}
@@ -71,7 +71,7 @@ public partial class Hud : CanvasLayer
 	public void ShowWaiting(string text)
 	{
 		_waiting.Visible = true;
-		_waitingText.Text = text;
+		Loc.Set(_waitingText, text);
 	}
 
 	public void HideWaiting() => _waiting.Visible = false;
@@ -79,7 +79,7 @@ public partial class Hud : CanvasLayer
 	public void UpdateSpeed(float value)
 	{
 		if (_speed != null)
-			_speed.Text = $"{(int)value}x";
+			Loc.Set(_speed, $"{(int)value}x");
 	}
 
 	public void FlashMoney()
@@ -100,13 +100,15 @@ public partial class Hud : CanvasLayer
 		_cancel.Visible = def != null;
 		_hint.Visible = def != null;
 		if (def != null)
-			_hint.Text = $"{def.Name.ToUpperInvariant()}  -  click a free cell to build  -  right click to cancel";
+			Loc.Set(_hint, $"{def.Name.ToUpperInvariant()}  -  click a free cell to build  -  right click to cancel");
 	}
 
-	public void ShowBanner(string text, string sub = "")
+	public void ShowBanner(string text, string sub = "", bool rawTitle = false, bool rawSubtitle = false)
 	{
-		_banner.Text = text;
-		_bannerSub.Text = sub;
+		if (rawTitle) Loc.Raw(_banner, text);
+		else Loc.Set(_banner, text);
+		if (rawSubtitle) Loc.Raw(_bannerSub, sub);
+		else Loc.Set(_bannerSub, sub);
 		_banner.Scale = Vector2.One;
 		var tween = CreateTween().SetParallel();
 		tween.TweenProperty(_banner, "modulate:a", 1f, 0.25f);
@@ -281,12 +283,12 @@ public partial class Hud : CanvasLayer
 		if (_screen.Feed.IsLocalOnly)
 		{
 			_speed = Ui.Button("1x", _screen.CycleSpeed);
-			_speed.TooltipText = "Game speed (F)";
+			Loc.Tooltip(_speed, "Game speed (F)");
 			_speed.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
 			row.AddChild(_speed);
 		}
 		var menu = Ui.Button(_screen.Feed.IsLocalOnly ? "II" : "MENU", _screen.OpenMenu);
-		menu.TooltipText = "Pause (Esc)";
+		Loc.Tooltip(menu, "Pause (Esc)");
 		menu.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
 		row.AddChild(menu);
 		return row;

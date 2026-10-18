@@ -82,32 +82,32 @@ public partial class InfoPanel : PanelContainer
 		if (_versus)
 		{
 			var t = Mathf.CeilToInt(s.TimeLeft);
-			_top.Text = $"{t / 60}:{t % 60:00}";
+			Loc.Set(_top, $"{t / 60}:{t % 60:00}");
 			_top.AddThemeColorOverride("font_color", t <= 30 ? UiTheme.Gold : UiTheme.Cyan);
-			_middle.Text = $"{Mathf.FloorToInt(s.Energy)}\n+{s.EnergyRate:0.0}/s";
-			_status.Text = $"BUGS\n{s.Bugs.Count}";
+			Loc.Set(_middle, $"{Mathf.FloorToInt(s.Energy)}\n+{s.EnergyRate:0.0}/s");
+			Loc.Set(_status, $"BUGS\n{s.Bugs.Count}");
 			_energyBar.QueueRedraw();
 		}
 		else
 		{
-			_middle.Text = $"{Mathf.Min(s.Wave + 1, s.WaveCount)}/{s.WaveCount}";
+			Loc.Set(_middle, $"{Mathf.Min(s.Wave + 1, s.WaveCount)}/{s.WaveCount}");
 			switch (s.WaveState)
 			{
 				case "countdown":
-					_status.Text = $"NEXT\n{Mathf.Max(s.Countdown, 0):0.0}";
+					Loc.Set(_status, $"NEXT\n{Mathf.Max(s.Countdown, 0):0.0}");
 					_status.Modulate = UiTheme.Cyan;
 					break;
 				case "spawning":
 				case "waiting":
-					_status.Text = $"BUGS\n{s.Bugs.Count + s.Upcoming.Count}";
+					Loc.Set(_status, $"BUGS\n{s.Bugs.Count + s.Upcoming.Count}");
 					_status.Modulate = UiTheme.Red.Lerp(Colors.White, 0.3f);
 					break;
 				default:
-					_status.Text = "";
+					Loc.Set(_status, "");
 					break;
 			}
 		}
-		_integrity.Text = $"{Mathf.RoundToInt(s.Integrity * 100)}%";
+		Loc.Set(_integrity, $"{Mathf.RoundToInt(s.Integrity * 100)}%");
 		_integrity.Modulate = UiTheme.Red.Lerp(UiTheme.Green, Mathf.Clamp((s.Integrity - 0.5f) * 2, 0, 1));
 		var list = _versus ? s.Bugs.Select(b => b.Type).ToList() : s.Upcoming;
 		var key = $"{s.Wave}:{s.WaveState}:{string.Join(",", _versus ? list.GroupBy(x => x).Select(g => g.Key + g.Count()) : list)}";

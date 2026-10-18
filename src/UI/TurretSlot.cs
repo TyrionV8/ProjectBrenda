@@ -27,7 +27,7 @@ public partial class TurretSlot : Button
 		FocusMode = FocusModeEnum.None;
 		CustomMinimumSize = new Vector2(186, SlotHeight);
 		TextureFilter = TextureFilterEnum.Nearest;
-		TooltipText = $"{def.Name}\n{def.Description}";
+		Loc.Tooltip(this, $"{def.Name}\n{def.Description}");
 		MouseEntered += () =>
 		{
 			Audio.Ui("hover");
@@ -90,7 +90,7 @@ public partial class TurretSlot : Button
 		var mod = _affordable ? Colors.White : new Color(0.5f, 0.5f, 0.55f, 0.7f);
 		var size = _icon.GetSize() * View.PixelWorld.Scale;
 		DrawTextureRect(_icon, new Rect2((well.GetCenter() - size / 2).Floor(), size), false, mod);
-		var words = NameLines(Def.Name);
+		var words = NameLines(Loc.S(Def.Name));
 		for (var i = 0; i < words.Length; i++)
 			DrawString(UiTheme.PixelFont, new Vector2(TextLeft, 15 + i * 16), words[i], HorizontalAlignment.Left, Size.X - TextLeft - 4, NameSize, _affordable ? UiTheme.TextColor : UiTheme.Dim);
 		DrawString(UiTheme.PixelBold, new Vector2(TextLeft, 47), $"${Def.Cost}", HorizontalAlignment.Left, -1, UiTheme.PixelSmall, _affordable ? UiTheme.Gold : UiTheme.Red);

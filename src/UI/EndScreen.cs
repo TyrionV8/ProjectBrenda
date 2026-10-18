@@ -17,7 +17,7 @@ public partial class EndScreen : Control
 		box.Alignment = BoxContainer.AlignmentMode.Center;
 		box.AddChild(new GlitchTitle { Text = "SECURED", Color = UiTheme.Green, FontSize = 96, SizeFlagsHorizontal = SizeFlags.ShrinkCenter });
 		box.AddChild(Ui.Label("All circuits are safe. For now.", "BodyLabel", HorizontalAlignment.Center));
-		var msg = Ui.Label("Você é Brabo!!\nNão fizemos mais fases, este é só um protótipo.\nSe quer mais, faz o pix :)", "BodyLabel", HorizontalAlignment.Center);
+		var msg = Ui.Label("ENDING_MESSAGE", "BodyLabel", HorizontalAlignment.Center);
 		msg.AddThemeColorOverride("font_color", UiTheme.Gold);
 		box.AddChild(msg);
 		box.AddChild(Ui.Spacer(10));

@@ -20,7 +20,7 @@ public partial class GlitchTitle : Control
 		_lines = Text.Split('\n');
 		var width = 0f;
 		foreach (var line in _lines)
-			width = Mathf.Max(width, UiTheme.PixelBold.GetStringSize(line, HorizontalAlignment.Left, -1, FontSize).X);
+			width = Mathf.Max(width, UiTheme.PixelBold.GetStringSize(Loc.S(line), HorizontalAlignment.Left, -1, FontSize).X);
 		CustomMinimumSize = new Vector2(width + 20, LineHeight * (_lines.Length - 1) + FontSize + 10);
 		MouseFilter = MouseFilterEnum.Ignore;
 	}
@@ -40,7 +40,7 @@ public partial class GlitchTitle : Control
 		var split = 2 + 10 * _burst;
 		for (var l = 0; l < _lines.Length; l++)
 		{
-			var text = _lines[l];
+			var text = Loc.S(_lines[l]);
 			var b = new Vector2(10, FontSize * 0.85f + l * LineHeight);
 			var jitter = new Vector2((float)GD.RandRange(-6, 6) * _burst, 0);
 			for (var i = 0; i < 6; i++)

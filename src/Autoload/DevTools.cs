@@ -188,6 +188,8 @@ public partial class DevTools : Node
 		// entire lifetime, including result callbacks and capture failures.
 		using var captureSave = GameState.UseTemporarySave();
 		var previousTips = Settings.Instance.Tips;
+		var previousLanguage = Settings.Instance.Language;
+		Settings.Instance.SetLanguage(Arg(OS.GetCmdlineUserArgs(), "--lang", previousLanguage), persist: false);
 		if (shots.Any(shot => shot.StartsWith("game:1:"))) Settings.Instance.Tips = true;
 		try
 		{
@@ -198,7 +200,7 @@ public partial class DevTools : Node
 			GD.PrintErr($"capture failed: {e}");
 			GetTree().Quit(1);
 		}
-		finally { Settings.Instance.Tips = previousTips; }
+		finally { Settings.Instance.Tips = previousTips; Settings.Instance.SetLanguage(previousLanguage, persist: false); }
 	}
 
 	async Task Capture(string[] shots, string outDir)
@@ -217,7 +219,15 @@ public partial class DevTools : Node
 					foreach (var turret in Catalog.Turrets.Take(3)) GameState.SeeTurret(turret.Id);
 					await Goto("res://scenes/bestiary.tscn", 1.5f);
 					break;
-				case "menu":
+				case "settings":
+      await Goto(GameSession.MenuScene, 1.5f);
+      var settingsOverlay = new Control();
+      settingsOverlay.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+      settingsOverlay.AddChild(Ui.Dim());
+      settingsOverlay.AddChild(Ui.Centered(new SettingsPanel()));
+      GetTree().CurrentScene.AddChild(settingsOverlay);
+      break;
+     case "menu":
 					await Goto(GameSession.MenuScene, 2.5f);
 					break;
 				case "levels":

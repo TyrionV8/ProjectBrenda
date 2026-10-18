@@ -47,7 +47,7 @@ public sealed class BossFxTests : TestSuite
 			var view = Descendants(screen).OfType<BossFx>().Single();
 			CheckEq(view.Introductions.ArrivalCount, 1, "existing GameScreen sync automatically starts the introduction");
 			CheckEq(view.Introductions.Featured?.Tier, 2, "real screen uses the catalog tier");
-			Check(Descendants(screen.Hud).OfType<Label>().Any(label => label.Text == "INTRUSION DETECTED"),
+			Check(Descendants(screen.Hud).OfType<Label>().Any(label => label.Text == HardwareDefence.UI.Loc.S("INTRUSION DETECTED")),
 				"original BugSpawned warning remains alongside the new introduction");
 			screen._Process(0);
 			CheckEq(view.Introductions.ArrivalCount, 1, "another real-screen sync does not restart it");

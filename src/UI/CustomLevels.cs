@@ -48,13 +48,15 @@ public partial class CustomLevels : Control
 			row.AddChild(new LevelPreview(level, false, new Vector2(126, 96)));
 			var info = Ui.VBox(2);
 			info.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-			info.AddChild(Ui.Label(level.Title.ToUpperInvariant(), "SmallHeader"));
+			var title = Ui.Label("", "SmallHeader");
+			Loc.Raw(title, level.Title.ToUpperInvariant());
+			info.AddChild(title);
 			info.AddChild(Ui.Label($"{level.Waves.Count} waves  -  {path.GetFile()}", "DimLabel"));
 			row.AddChild(info);
 			var problems = level.Validate(System.Linq.Enumerable.ToList(Data.Catalog.Enemies.Keys));
 			var play = Ui.Button("Play", () => GameSession.StartCustom(level, GameSession.Kind.Custom, "res://scenes/custom_levels.tscn"));
 			play.Disabled = problems.Count > 0;
-			play.TooltipText = problems.Count > 0 ? string.Join("\n", problems) : "";
+			Loc.Tooltip(play, problems.Count > 0 ? string.Join("\n", problems) : "");
 			row.AddChild(play);
 			row.AddChild(Ui.Button("Versus", () => GameSession.StartVersusBot(level)));
 			row.AddChild(Ui.Button("Edit", () =>

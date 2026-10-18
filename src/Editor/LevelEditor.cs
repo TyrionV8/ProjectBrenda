@@ -31,6 +31,8 @@ public partial class LevelEditor : Control
 	readonly Dictionary<MapTool, Button> _toolButtons = new();
 	readonly List<ComponentButton> _palette = new();
 	HBoxContainer _waveTabs;
+	ScrollContainer _waveTabScroll;
+	const float WaveHeaderHeight = 72;
 	Control _waveHeader;
 	bool _confirmLeave;
 	Button _exit;
@@ -57,7 +59,7 @@ public partial class LevelEditor : Control
 		_boardLayer.AddChild(_canvas);
 		_canvas.SelectionChanged += _ => RefreshToolPanel();
 
-		_timeline = new WaveTimeline { Position = Grid.Origin + new Vector2(0, 54), Size = new Vector2(Grid.Size.X, Grid.Size.Y - 54), Visible = false };
+		_timeline = new WaveTimeline { Position = Grid.Origin + new Vector2(0, WaveHeaderHeight), Size = new Vector2(Grid.Size.X, Grid.Size.Y - WaveHeaderHeight), Visible = false };
 		AddChild(_timeline);
 		BuildWaveHeader();
 		BuildLeft();
@@ -77,11 +79,12 @@ public partial class LevelEditor : Control
 
 	void OnChanged()
 	{
-		_file.Text = EditorState.DisplayName;
+		if (EditorState.Path == null) Loc.Set(_file, EditorState.Dirty ? "unsaved *" : "unsaved");
+  else Loc.Raw(_file, EditorState.DisplayName);
 		var problems = EditorState.Level.Validate(Catalog.Enemies.Keys.ToList());
-		_status.Text = problems.Count == 0 ? "LEVEL OK" : $"{problems.Count} PROBLEM{(problems.Count > 1 ? "S" : "")}";
+		Loc.Set(_status, problems.Count == 0 ? "LEVEL OK" : $"{problems.Count} PROBLEM{(problems.Count > 1 ? "S" : "")}");
 		_status.Modulate = problems.Count == 0 ? UiTheme.Green : UiTheme.Red;
-		_status.TooltipText = problems.Count == 0 ? "Ready to play." : string.Join("\n", problems);
+		Loc.Tooltip(_status, problems.Count == 0 ? "Ready to play." : string.Join("\n", problems));
 		RefreshWaveTabs();
 		RefreshToolPanel();
 		_timeline.QueueRedraw();
@@ -94,15 +97,25 @@ public partial class LevelEditor : Control
 		var panel = new PanelContainer { ThemeTypeVariation = "SidePanel", Position = Vector2.Zero, Size = new Vector2(Grid.Origin.X, 768), ClipContents = true };
 		AddChild(panel);
 		panel.AddThemeStyleboxOverride("panel", UiTheme.Box(new Color(0.02f, 0.05f, 0.09f, 0.96f), new Color(UiTheme.Cyan, 0.25f), 0, 0, 8, 12));
-		var box = Ui.VBox(6);
+		var box = Ui.VBox(4);
 		panel.AddChild(box);
 		box.AddChild(Ui.Label("EDITOR", "SmallHeader", HorizontalAlignment.Center));
-		var modes = Ui.HBox(4);
+		var modes = Ui.HBox(0);
 		_mapTab = Tool("MAP", () => SetMode(false));
 		_waveTab = Tool("WAVES", () => SetMode(true));
 		modes.AddChild(_mapTab);
 		modes.AddChild(_waveTab);
 		box.AddChild(modes);
+  // Fit both whole words in the native 128px column without changing font size.
+  _mapTab.CustomMinimumSize = new Vector2(56, 0);
+  _waveTab.CustomMinimumSize = new Vector2(68, 0);
+  foreach (var button in new[] { _mapTab, _waveTab })
+   foreach (var state in new[] { "normal", "hover", "pressed", "disabled", "focus" })
+   {
+    var style = (StyleBox)button.GetThemeStylebox(state).Duplicate();
+    style.ContentMarginLeft = 3; style.ContentMarginRight = 3;
+    button.AddThemeStyleboxOverride(state, style);
+   }
 		box.AddChild(Ui.Divider());
 		box.AddChild(Ui.Label("TOOLS", "SmallHeader", HorizontalAlignment.Center));
 		foreach (var (tool, name, key) in new[] { (MapTool.Route, "Route", "1"), (MapTool.Place, "Place", "2"), (MapTool.Select, "Select", "3"), (MapTool.Erase, "Erase", "4") })
@@ -115,7 +128,7 @@ public partial class LevelEditor : Control
 		grid.AddThemeFontSizeOverride("font_size", UiTheme.PixelSmall);
 		grid.Toggled += on => _canvas.ShowGrid = on;
 		box.AddChild(grid);
-		var undo = Ui.HBox(4);
+		var undo = Ui.VBox(4);
 		undo.AddChild(Tool("Undo", EditorState.UndoStep));
 		undo.AddChild(Tool("Redo", EditorState.RedoStep));
 		box.AddChild(undo);
@@ -125,7 +138,7 @@ public partial class LevelEditor : Control
 		_status.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 		box.AddChild(_status);
 		box.AddChild(Ui.Divider());
-		box.AddChild(Tool("Settings", OpenSettings));
+		box.AddChild(Tool("Options", OpenSettings));
 		box.AddChild(Tool("New", NewLevel));
 		box.AddChild(Tool("Open", OpenBrowser));
 		box.AddChild(Tool("Save", () => Save(false)));
@@ -166,6 +179,8 @@ public partial class LevelEditor : Control
 	{
 		var b = Ui.Button(text, action, "ToolButton");
 		b.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+		b.ClipText = true;
+		b.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 		return b;
 	}
 
@@ -322,10 +337,10 @@ public partial class LevelEditor : Control
 		_h = Field(_toolPanel, "Height", 1, 12, 1, c.Size[1]);
 		_w.ValueChanged += v => Apply(d => d.Size = new[] { (int)v, d.Size[1] });
 		_h.ValueChanged += v => Apply(d => d.Size = new[] { d.Size[0], (int)v });
-		_color = new OptionButton();
+		_color = new OptionButton { FitToLongestItem = false, AutowrapMode = TextServer.AutowrapMode.WordSmart, SizeFlagsHorizontal = SizeFlags.ExpandFill };
 		for (var i = 0; i < ComponentPresets.Colors.Length; i++)
 		{
-			_color.AddItem(ComponentPresets.Colors[i].Name);
+			Loc.AddItem(_color, ComponentPresets.Colors[i].Name);
 			if (ComponentPresets.Colors[i].Hex == c.Color)
 				_color.Selected = i;
 		}
@@ -344,14 +359,17 @@ public partial class LevelEditor : Control
 
 	void BuildWaveHeader()
 	{
-		var header = new PanelContainer { ThemeTypeVariation = "SidePanel", Position = Grid.Origin, Size = new Vector2(Grid.Size.X, 54), Visible = false };
+		var header = new PanelContainer { ThemeTypeVariation = "SidePanel", Position = Grid.Origin, Name = "WaveHeader", Size = new Vector2(Grid.Size.X, WaveHeaderHeight), Visible = false };
 		_waveHeader = header;
 		AddChild(header);
 		var row = Ui.HBox(6);
 		header.AddChild(row);
 		row.AddChild(Ui.Label("WAVE", "SmallHeader"));
-		_waveTabs = Ui.HBox(4);
-		row.AddChild(_waveTabs);
+		_waveTabScroll = new ScrollContainer { Name = "WaveTabScroll", SizeFlagsHorizontal = SizeFlags.ExpandFill,
+   VerticalScrollMode = ScrollContainer.ScrollMode.Disabled, FollowFocus = true };
+  row.AddChild(_waveTabScroll);
+  _waveTabs = Ui.HBox(4);
+  _waveTabScroll.AddChild(_waveTabs);
 	}
 
 	void RefreshWaveTabs()
@@ -376,6 +394,10 @@ public partial class LevelEditor : Control
 			b.ButtonPressed = i == _timeline.Wave;
 			b.CustomMinimumSize = new Vector2(36, 0);
 			_waveTabs.AddChild(b);
+   if (b.ButtonPressed) Callable.From(() =>
+   {
+    if (GodotObject.IsInstanceValid(b) && b.IsInsideTree() && !b.IsQueuedForDeletion()) _waveTabScroll.EnsureControlVisible(b);
+   }).CallDeferred();
 		}
 		_waveTabs.AddChild(Ui.Button("+ wave", () =>
 		{
@@ -405,11 +427,11 @@ public partial class LevelEditor : Control
 		}, "DangerButton"));
 		box.AddChild(Ui.Divider());
 		box.AddChild(Ui.Label("FILL", "SmallHeader", HorizontalAlignment.Center));
-		var type = new OptionButton();
+		var type = new OptionButton { FitToLongestItem = false, AutowrapMode = TextServer.AutowrapMode.WordSmart, SizeFlagsHorizontal = SizeFlags.ExpandFill };
 		foreach (var e in Catalog.WaveEnemies)
 		{
 			// The complete name remains in the tooltip; this caption fits the narrow editor column.
-			type.AddItem(e.Name == "Man-in-the-Middle" ? "Man in Middle" : e.Name);
+			Loc.AddItem(type, e.Name);
 			type.SetItemTooltip(type.ItemCount - 1, e.Name);
 		}
 		box.AddChild(type);
@@ -434,18 +456,18 @@ public partial class LevelEditor : Control
 			var wave = _timeline.Wave < waves.Count ? waves[_timeline.Wave] : new List<SpawnData>();
 			var hp = wave.Sum(s => Catalog.Enemy(s.Enemy)?.MaxHp ?? 0);
 			var reward = wave.Sum(s => Catalog.Enemy(s.Enemy)?.Reward ?? 0);
-			summary.Text = $"This wave: {wave.Count} bugs, {hp:0} HP, ${reward} rewards, {(wave.Count > 0 ? wave.Max(s => s.Time) : 0):0.0}s\nLevel: {waves.Count} waves, {waves.Sum(w => w.Count)} bugs";
+			Loc.Set(summary, $"This wave: {wave.Count} bugs, {hp:0} HP, ${reward} rewards, {(wave.Count > 0 ? wave.Max(s => s.Time) : 0):0.0}s\nLevel: {waves.Count} waves, {waves.Sum(w => w.Count)} bugs");
 		};
 		return box;
 	}
 
 	static SpinBox Field(Container parent, string label, double min, double max, double step, double value)
 	{
-		var row = Ui.HBox(4);
+		var row = Ui.VBox(2);
 		var l = Ui.Label(label, "DimLabel");
 		l.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		row.AddChild(l);
-		var spin = new SpinBox { MinValue = min, MaxValue = max, Step = step, Value = value, CustomMinimumSize = new Vector2(76, 0) };
+		var spin = new SpinBox { MinValue = min, MaxValue = max, Step = step, Value = value, CustomMinimumSize = new Vector2(76, 0), SizeFlagsHorizontal = SizeFlags.ExpandFill };
 		row.AddChild(spin);
 		parent.AddChild(row);
 		return spin;
@@ -455,7 +477,7 @@ public partial class LevelEditor : Control
 
 	void Toast(string text, Color color)
 	{
-		_toast.Text = text;
+		Loc.Set(_toast, text);
 		_toast.Modulate = color;
 		var tween = CreateTween();
 		tween.TweenInterval(2.2f);
@@ -497,7 +519,7 @@ public partial class LevelEditor : Control
 		if (EditorState.Dirty && !_confirmLeave)
 		{
 			_confirmLeave = true;
-			_exit.Text = "Discard?";
+			Loc.Set(_exit, "Discard?");
 			_exit.AddThemeColorOverride("font_color", UiTheme.Red);
 			return;
 		}
@@ -533,16 +555,16 @@ public partial class LevelEditor : Control
 		var title = Row(box, "Title", new LineEdit { Text = level.Title });
 		var subtitle = Row(box, "Subtitle", new LineEdit { Text = level.Subtitle });
 		var core = Row(box, "Core label", new LineEdit { Text = level.CoreLabel });
-		var theme = new OptionButton();
+		var theme = new OptionButton { FitToLongestItem = false, AutowrapMode = TextServer.AutowrapMode.WordSmart, SizeFlagsHorizontal = SizeFlags.ExpandFill };
 		foreach (var name in View.BoardTheme.Names)
-			theme.AddItem(name);
+			Loc.AddItem(theme, name);
 		theme.Selected = Math.Max(Array.IndexOf(View.BoardTheme.Names, level.Theme), 0);
 		Row(box, "Board colour", theme);
 		var money = Row(box, "Start money", new SpinBox { MinValue = 0, MaxValue = 999, Value = level.StartMoney });
-		var music = new OptionButton();
+		var music = new OptionButton { FitToLongestItem = false, AutowrapMode = TextServer.AutowrapMode.WordSmart, SizeFlagsHorizontal = SizeFlags.ExpandFill };
 		var tracks = new[] { "music_level_1", "music_level_2", "music_level_3", "title", "ending" };
 		foreach (var t in tracks)
-			music.AddItem(t);
+			Loc.AddItem(music, t);
 		music.Selected = Math.Max(Array.IndexOf(tracks, level.Music), 0);
 		Row(box, "Music", music);
 		box.AddChild(Ui.Spacer(6));
@@ -609,10 +631,13 @@ public partial class LevelEditor : Control
 	{
 		var row = Ui.HBox(8);
 		var b = Ui.Button(title, open, "ToolButton");
+		if (delete != null) Loc.Raw(b, title);
 		b.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		b.Alignment = HorizontalAlignment.Left;
 		row.AddChild(b);
-		row.AddChild(Ui.Label(where, "DimLabel"));
+		var location = Ui.Label(where, "DimLabel");
+		if (delete != null) Loc.Raw(location, where);
+		row.AddChild(location);
 		if (delete != null)
 			row.AddChild(Ui.Button("x", delete, "DangerButton"));
 		return row;

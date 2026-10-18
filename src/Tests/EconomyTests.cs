@@ -211,6 +211,7 @@ public sealed class EconomyTests : TestSuite
 	public async Task NineTurretGridIncludesLockedFixturesAndKeepsPreviewSize()
 	{
 		using var save = new SaveScope();
+		var previousLanguage = Settings.Instance.Language;
 		GameState.Reset();
 		var fixtures = (List<TurretDef>)Catalog.Turrets;
 		var count = fixtures.Count;
@@ -225,12 +226,21 @@ public sealed class EconomyTests : TestSuite
 			Check(grids.Any(grid => grid.Columns == 3 && grid.GetChildCount() == 9), "scrollable grid contains all nine cards");
 			foreach (var preview in screen.FindChildren("*", "Control", true, false).OfType<TurretPreview>())
 				CheckEq(preview.CustomMinimumSize, new Vector2(110, 110), "preview unchanged");
-			var unlocks = screen.FindChildren("*", "Button", true, false).Cast<Button>().Where(button => button.Text.StartsWith("Unlock")).ToArray();
-			CheckEq(unlocks.Count(button => button.Visible), Catalog.Turrets.Count(t => t.UnlockPrice > 0), "all four real counter turrets show unlock button");
-			Check(unlocks.Where(button => button.Visible).All(button => button.Disabled), "unlock disabled without balance");
+			foreach (var language in new[] { "en", "pt_BR" })
+			{
+				Settings.Instance.SetLanguage(language, persist: false);
+				await SceneTests.Tree.ToSignal(SceneTests.Tree, SceneTree.SignalName.ProcessFrame);
+				var expectedCaptions = Catalog.Turrets.Where(t => t.UnlockPrice > 0)
+					.Select(t => Loc.S($"Unlock ${t.UnlockPrice}")).ToHashSet();
+				var unlocks = screen.FindChildren("*", "Button", true, false).Cast<Button>()
+					.Where(button => expectedCaptions.Contains(button.Text)).ToArray();
+				CheckEq(unlocks.Count(button => button.Visible), Catalog.Turrets.Count(t => t.UnlockPrice > 0), $"{language}: all four real counter turrets show unlock button");
+				Check(unlocks.Where(button => button.Visible).All(button => button.Disabled), $"{language}: unlock disabled without balance");
+			}
 		}
 		finally
 		{
+			Settings.Instance.SetLanguage(previousLanguage, persist: false);
 			screen?.QueueFree();
 			await SceneTests.Tree.ToSignal(SceneTests.Tree, SceneTree.SignalName.ProcessFrame);
 			fixtures.RemoveRange(count, fixtures.Count - count);

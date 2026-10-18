@@ -19,7 +19,7 @@ public partial class BugSlot : Button
 		Flat = true;
 		FocusMode = FocusModeEnum.None;
 		CustomMinimumSize = new Vector2(186, 56);
-		TooltipText = $"{def.Name}\nHP {def.MaxHp}  speed {def.Speed}  chews {def.ChewDps}/s";
+		Loc.Tooltip(this, $"{def.Name}\nHP {def.MaxHp}  speed {def.Speed}  chews {def.ChewDps}/s");
 		var icon = new BugIcon(def, 50) { Position = new Vector2(4, 3) };
 		AddChild(icon);
 		MouseEntered += () =>
@@ -66,7 +66,7 @@ public partial class BugSlot : Button
 			bg = bg.Lightened(0.08f);
 		var border = ready ? new Color(UiTheme.Magenta, hovered ? 0.8f : 0.35f) : new Color(1, 1, 1, 0.1f);
 		DrawStyleBox(UiTheme.Box(bg, border, 2, 8, 0, 0, new Color(0, 0, 0, 0.4f), 6), new Rect2(Vector2.Zero, Size));
-		var name = Def.Name.ToUpperInvariant();
+		var name = Loc.S(Def.Name).ToUpperInvariant();
 		var lines = UiTheme.PixelFont.GetStringSize(name, fontSize: UiTheme.PixelSmall).X <= Size.X - 60
 			? new[] { name } : name.Split(' ', 2);
 		for (var i = 0; i < lines.Length; i++)
