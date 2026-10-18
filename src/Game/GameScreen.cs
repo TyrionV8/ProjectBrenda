@@ -116,11 +116,11 @@ public partial class GameScreen : Node2D
 		Audio.PlayMusic(string.IsNullOrEmpty(level.Music) ? "music_level_1" : level.Music);
 		var subtitle = Feed.Mode == MatchMode.Versus ? (Feed.LocalSide == PlayerSide.Defender ? "Defend the CPU" : "Break into the CPU") : "Defend the CPU";
 		// Remote feeds deserialize levels, so reference equality cannot identify an official board.
-  var normalizedLevel = JsonIO.Write(level);
-  var customText = !Catalog.Levels.Any(official => official.Title == level.Title
-   && official.Subtitle == level.Subtitle && JsonIO.Write(official) == normalizedLevel);
-  Hud.ShowBanner(level.Title.ToUpperInvariant(), string.IsNullOrEmpty(level.Subtitle) ? subtitle : level.Subtitle,
-   rawTitle: customText, rawSubtitle: customText && !string.IsNullOrEmpty(level.Subtitle));
+		var normalizedLevel = JsonIO.Write(level);
+		var customText = !Catalog.Levels.Any(official => official.Title == level.Title
+			&& official.Subtitle == level.Subtitle && JsonIO.Write(official) == normalizedLevel);
+		Hud.ShowBanner(level.Title.ToUpperInvariant(), string.IsNullOrEmpty(level.Subtitle) ? subtitle : level.Subtitle,
+			rawTitle: customText, rawSubtitle: customText && !string.IsNullOrEmpty(level.Subtitle));
 	}
 
 	public override void _ExitTree()

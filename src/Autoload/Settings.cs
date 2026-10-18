@@ -75,14 +75,14 @@ public partial class Settings : Node
 		Changed?.Invoke();
 	}
 
- public void SetLanguage(string language, bool persist = true)
- {
-  Language = language == "pt_BR" ? "pt_BR" : "en";
-  TranslationServer.SetLocale(Language);
-  if (IsInsideTree()) Loc.Refresh(GetTree().Root);
-  if (persist) SaveFile();
-  Changed?.Invoke();
- }
+	public void SetLanguage(string language, bool persist = true)
+	{
+		Language = language == "pt_BR" ? "pt_BR" : "en";
+		TranslationServer.SetLocale(Language);
+		if (IsInsideTree()) Loc.Refresh(GetTree().Root);
+		if (persist) SaveFile();
+		Changed?.Invoke();
+	}
 
 	public void SetNetwork(string name, string address)
 	{

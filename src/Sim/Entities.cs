@@ -101,6 +101,8 @@ public sealed class Projectile
 	public bool Screened;
 	/// <summary>Has originated inside, or crossed, an active firewall range.</summary>
 	public bool Protected;
+	/// <summary>The firewall that protected it (credited when it saves the shot from a man-in-the-middle).</summary>
+	public int ProtectedBy;
 	/// <summary>Turret type that fired it (for colours).</summary>
 	public string Source;
 	public Vector2 Pos;

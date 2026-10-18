@@ -104,7 +104,7 @@ public partial class Bestiary : Control
 
 	static string N(float value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 	public static string EnemyAttributes(EnemyDef enemy) =>
-		$"HP (health): {N(enemy.MaxHp)}   |   Speed: {N(enemy.Speed)} px/s\nCPU (central processing unit) damage: {enemy.CpuDamage}\n" +
+		$"HP: {N(enemy.MaxHp)}   |   Speed: {N(enemy.Speed)} px/s\nCPU damage: {enemy.CpuDamage}\n" +
 		(enemy.DetourChance > 0 ? $"Detour chance: {N(enemy.DetourChance * 100)}%   |   Reach: {N(enemy.DetourRange)} cells\nChewing: {N(enemy.DetourChewTime)} s   |   Cooldown: {N(enemy.DetourCooldown)} s" : "Detours: never leaves the route");
 	public static string TurretAttributes(TurretDef turret) =>
 		$"Build cost: ${turret.Cost}   |   Base range: {N(turret.Stats.GetValueOrDefault(turret.NeedsDirection ? "beam_length" : "range"))} px\n" +

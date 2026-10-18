@@ -99,7 +99,7 @@ public sealed partial class Match
 	/// </summary>
 	bool Intercepted(Projectile p, Vector2 at)
 	{
-		if (p.Protected || p.Screened)
+		if (p.Screened)
 			return false;
 		foreach (var b in Bugs)
 		{
@@ -108,6 +108,13 @@ public sealed partial class Match
 			p.Screened = true;
 			if ((uint)p.Id * 2654435761u % 100 >= 50)
 				return false;
+			if (p.Protected)
+			{
+				// The firewall saved this one: that's when its shield shows.
+				var firewall = Turrets.Find(t => t.Id == p.ProtectedBy);
+				Events.Add(new SimEvent(EventKind.TurretAbility, p.ProtectedBy, at, firewall?.Range ?? 0, "block"));
+				return false;
+			}
 			Events.Add(new SimEvent(EventKind.BossAbility, b.Id, at, p.Id, "intercept"));
 			return true;
 		}

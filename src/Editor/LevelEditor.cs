@@ -80,7 +80,7 @@ public partial class LevelEditor : Control
 	void OnChanged()
 	{
 		if (EditorState.Path == null) Loc.Set(_file, EditorState.Dirty ? "unsaved *" : "unsaved");
-  else Loc.Raw(_file, EditorState.DisplayName);
+		else Loc.Raw(_file, EditorState.DisplayName);
 		var problems = EditorState.Level.Validate(Catalog.Enemies.Keys.ToList());
 		Loc.Set(_status, problems.Count == 0 ? "LEVEL OK" : $"{problems.Count} PROBLEM{(problems.Count > 1 ? "S" : "")}");
 		_status.Modulate = problems.Count == 0 ? UiTheme.Green : UiTheme.Red;
@@ -106,16 +106,16 @@ public partial class LevelEditor : Control
 		modes.AddChild(_mapTab);
 		modes.AddChild(_waveTab);
 		box.AddChild(modes);
-  // Fit both whole words in the native 128px column without changing font size.
-  _mapTab.CustomMinimumSize = new Vector2(56, 0);
-  _waveTab.CustomMinimumSize = new Vector2(68, 0);
-  foreach (var button in new[] { _mapTab, _waveTab })
-   foreach (var state in new[] { "normal", "hover", "pressed", "disabled", "focus" })
-   {
-    var style = (StyleBox)button.GetThemeStylebox(state).Duplicate();
-    style.ContentMarginLeft = 3; style.ContentMarginRight = 3;
-    button.AddThemeStyleboxOverride(state, style);
-   }
+		// Fit both whole words in the native 128px column without changing font size.
+		_mapTab.CustomMinimumSize = new Vector2(56, 0);
+		_waveTab.CustomMinimumSize = new Vector2(68, 0);
+		foreach (var button in new[] { _mapTab, _waveTab })
+			foreach (var state in new[] { "normal", "hover", "pressed", "disabled", "focus" })
+			{
+				var style = (StyleBox)button.GetThemeStylebox(state).Duplicate();
+				style.ContentMarginLeft = 3; style.ContentMarginRight = 3;
+				button.AddThemeStyleboxOverride(state, style);
+			}
 		box.AddChild(Ui.Divider());
 		box.AddChild(Ui.Label("TOOLS", "SmallHeader", HorizontalAlignment.Center));
 		foreach (var (tool, name, key) in new[] { (MapTool.Route, "Route", "1"), (MapTool.Place, "Place", "2"), (MapTool.Select, "Select", "3"), (MapTool.Erase, "Erase", "4") })
@@ -366,10 +366,10 @@ public partial class LevelEditor : Control
 		header.AddChild(row);
 		row.AddChild(Ui.Label("WAVE", "SmallHeader"));
 		_waveTabScroll = new ScrollContainer { Name = "WaveTabScroll", SizeFlagsHorizontal = SizeFlags.ExpandFill,
-   VerticalScrollMode = ScrollContainer.ScrollMode.Disabled, FollowFocus = true };
-  row.AddChild(_waveTabScroll);
-  _waveTabs = Ui.HBox(4);
-  _waveTabScroll.AddChild(_waveTabs);
+			VerticalScrollMode = ScrollContainer.ScrollMode.Disabled, FollowFocus = true };
+		row.AddChild(_waveTabScroll);
+		_waveTabs = Ui.HBox(4);
+		_waveTabScroll.AddChild(_waveTabs);
 	}
 
 	void RefreshWaveTabs()
@@ -394,10 +394,10 @@ public partial class LevelEditor : Control
 			b.ButtonPressed = i == _timeline.Wave;
 			b.CustomMinimumSize = new Vector2(36, 0);
 			_waveTabs.AddChild(b);
-   if (b.ButtonPressed) Callable.From(() =>
-   {
-    if (GodotObject.IsInstanceValid(b) && b.IsInsideTree() && !b.IsQueuedForDeletion()) _waveTabScroll.EnsureControlVisible(b);
-   }).CallDeferred();
+			if (b.ButtonPressed) Callable.From(() =>
+			{
+				if (GodotObject.IsInstanceValid(b) && b.IsInsideTree() && !b.IsQueuedForDeletion()) _waveTabScroll.EnsureControlVisible(b);
+			}).CallDeferred();
 		}
 		_waveTabs.AddChild(Ui.Button("+ wave", () =>
 		{

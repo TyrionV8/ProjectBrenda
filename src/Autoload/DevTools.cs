@@ -220,14 +220,14 @@ public partial class DevTools : Node
 					await Goto("res://scenes/bestiary.tscn", 1.5f);
 					break;
 				case "settings":
-      await Goto(GameSession.MenuScene, 1.5f);
-      var settingsOverlay = new Control();
-      settingsOverlay.SetAnchorsPreset(Control.LayoutPreset.FullRect);
-      settingsOverlay.AddChild(Ui.Dim());
-      settingsOverlay.AddChild(Ui.Centered(new SettingsPanel()));
-      GetTree().CurrentScene.AddChild(settingsOverlay);
-      break;
-     case "menu":
+						await Goto(GameSession.MenuScene, 1.5f);
+						var settingsOverlay = new Control();
+						settingsOverlay.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+						settingsOverlay.AddChild(Ui.Dim());
+						settingsOverlay.AddChild(Ui.Centered(new SettingsPanel()));
+						GetTree().CurrentScene.AddChild(settingsOverlay);
+						break;
+					case "menu":
 					await Goto(GameSession.MenuScene, 2.5f);
 					break;
 				case "levels":

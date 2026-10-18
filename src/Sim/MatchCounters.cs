@@ -55,8 +55,9 @@ public sealed partial class Match
 			if (t.Locked > 0) continue;
 			var nearest = Geometry2D.GetClosestPointToSegment(t.Pos, from, to);
 			if (nearest.DistanceTo(t.Pos) > t.Range) continue;
+			// Silent: the shield only shows when it actually saves the shot (see Intercepted).
 			p.Protected = true;
-			Events.Add(new SimEvent(EventKind.TurretAbility, t.Id, nearest, t.Range, "block"));
+			p.ProtectedBy = t.Id;
 			return;
 		}
 	}

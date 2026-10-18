@@ -54,7 +54,7 @@ public partial class ComponentButton : Button
 			_ => ComponentTypes.Get(Type).Name.ToUpperInvariant(),
 		};
 		var captions = Ui.WrapText(UiTheme.PixelFont, Loc.S(name), UiTheme.PixelTiny, Size.X - 8);
-  for (var i = 0; i < captions.Length; i++)
-   DrawString(UiTheme.PixelFont, new Vector2(4, Size.Y - 5 - (captions.Length - 1 - i) * 9), captions[i], HorizontalAlignment.Center, Size.X - 8, UiTheme.PixelTiny, UiTheme.TextColor);
+		for (var i = 0; i < captions.Length; i++)
+			DrawString(UiTheme.PixelFont, new Vector2(4, Size.Y - 5 - (captions.Length - 1 - i) * 9), captions[i], HorizontalAlignment.Center, Size.X - 8, UiTheme.PixelTiny, UiTheme.TextColor);
 	}
 }

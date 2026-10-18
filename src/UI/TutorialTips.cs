@@ -17,14 +17,14 @@ public partial class TutorialTips : PanelContainer
 	public static readonly IReadOnlyDictionary<string, string> Texts = new Dictionary<string, string>
 	{
 		[Build] = "Pick a turret on the right, then click a free board cell to build. Protect the copper route!",
-		[Wave] = "The wave is starting. Bugs follow the copper route toward your CPU (central processing unit).",
+		[Wave] = "The wave is starting. Bugs follow the copper route toward your CPU.",
 		[Detour] = "That bug left the route to chew a component. Your turrets can still hit it; cover the detour too.",
-		[Led] = "An LED (light-emitting diode) burnt out. Repair Bot can rebuild it and restore the light.",
+		[Led] = "An LED burnt out. Repair Bot can rebuild it and restore the light.",
 		[Victory] = VictoryText,
 		["boss_trojan"] = "Trojan incoming! Antivirus Scanner reveals its disguise. Keep damage ready for the bugs it drops.",
 		["boss_keylogger"] = "Keylogger steals money while alive. Focus your damage on it before your cash drains away.",
 		["boss_mitm"] = "Man-in-the-Middle intercepts shots. Firewall protects fire from turrets inside or across its range.",
-		["boss_ddos"] = "DDoS (distributed denial of service) floods the route with packets. Firewall deletes packets; area damage helps too.",
+		["boss_ddos"] = "DDoS floods the route with packets. Firewall deletes packets; area damage helps too.",
 		["boss_rootkit"] = "Rootkit hides from weapons. Antivirus Scanner exposes it while it stays inside scan range.",
 		["boss_ransomware"] = "Ransomware locks nearby turrets. Backup Drive speeds their recovery; cover your weapons with it.",
 		["boss_worm"] = "Worm forks into copies as health falls. Spread damage coverage and use area weapons for the copies.",

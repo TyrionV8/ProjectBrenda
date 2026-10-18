@@ -92,10 +92,12 @@ public partial class TurretSlot : Button
 		DrawTextureRect(_icon, new Rect2((well.GetCenter() - size / 2).Floor(), size), false, mod);
 		var words = NameLines(Loc.S(Def.Name));
 		for (var i = 0; i < words.Length; i++)
-			DrawString(UiTheme.PixelFont, new Vector2(TextLeft, 15 + i * 16), words[i], HorizontalAlignment.Left, Size.X - TextLeft - 4, NameSize, _affordable ? UiTheme.TextColor : UiTheme.Dim);
-		DrawString(UiTheme.PixelBold, new Vector2(TextLeft, 47), $"${Def.Cost}", HorizontalAlignment.Left, -1, UiTheme.PixelSmall, _affordable ? UiTheme.Gold : UiTheme.Red);
-		DrawRect(new Rect2(TextLeft + 55, 43, 18, 3), new Color(Def.Color, _affordable ? 0.9f : 0.3f));
-		DrawRect(new Rect2(Size.X - 26, Size.Y - 26, 18, 18), new Color(1, 1, 1, 0.08f));
-		DrawString(UiTheme.PixelFont, new Vector2(Size.X - 22, Size.Y - 12), _hotkey.ToString(), HorizontalAlignment.Left, -1, UiTheme.PixelSmall, UiTheme.Dim);
+			// 18 px apart: accented capitals (Ê, Ô, Í) reach above the cap height.
+			DrawString(UiTheme.PixelFont, new Vector2(TextLeft, 17 + i * 18), words[i], HorizontalAlignment.Left, Size.X - TextLeft - 4, NameSize, _affordable ? UiTheme.TextColor : UiTheme.Dim);
+		DrawString(UiTheme.PixelBold, new Vector2(TextLeft, 49), $"${Def.Cost}", HorizontalAlignment.Left, -1, UiTheme.PixelSmall, _affordable ? UiTheme.Gold : UiTheme.Red);
+		DrawRect(new Rect2(TextLeft + 55, 45, 18, 3), new Color(Def.Color, _affordable ? 0.9f : 0.3f));
+		// Hotkey on the price line, clear of two-line names (long in Portuguese).
+		DrawRect(new Rect2(Size.X - 24, Size.Y - 19, 18, 16), new Color(1, 1, 1, 0.08f));
+		DrawString(UiTheme.PixelFont, new Vector2(Size.X - 20, Size.Y - 5), _hotkey.ToString(), HorizontalAlignment.Left, -1, UiTheme.PixelSmall, UiTheme.Dim);
 	}
 }

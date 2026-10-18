@@ -18,7 +18,7 @@ Settings,Settings,Configurações
 Exit,Exit,Sair
 EXIT,EXIT,SAIR
 Stop the bugs before they reach the CPU.,Stop the bugs before they reach the CPU.,Impeça os bugs de chegar à CPU.
-STOP THE BUGS BEFORE THEY REACH THE CPU.,STOP THE BUGS BEFORE THEY REACH THE CPU.,IMPEÇA OS BUGS DE CHEGAR À CPU (UNIDADE CENTRAL DE PROCESSAMENTO).
+STOP THE BUGS BEFORE THEY REACH THE CPU.,STOP THE BUGS BEFORE THEY REACH THE CPU.,IMPEÇA OS BUGS DE CHEGAR À CPU.
 prototype - godot .net,prototype - godot .net,protótipo - godot .net
 PROTOTYPE - GODOT .NET,PROTOTYPE - GODOT .NET,PROTÓTIPO - GODOT .NET
 Erase progress?,Erase progress?,Apagar progresso?
@@ -67,8 +67,8 @@ Turrets,Turrets,Torretas
 TURRETS,TURRETS,TORRETAS
 Discover bugs in a match. Build or unlock turrets to reveal them.,Discover bugs in a match. Build or unlock turrets to reveal them.,Encontre bugs na partida. Construa ou desbloqueie torretas para descobri-las.
 DISCOVER BUGS IN A MATCH. BUILD OR UNLOCK TURRETS TO REVEAL THEM.,DISCOVER BUGS IN A MATCH. BUILD OR UNLOCK TURRETS TO REVEAL THEM.,ENCONTRE BUGS NA PARTIDA. CONSTRUA OU DESBLOQUEIE TORRETAS PARA DESCOBRI-LAS.
-A board intruder. Stop it before it reaches the CPU.,A board intruder. Stop it before it reaches the CPU.,Um invasor da placa. Impeça que chegue à CPU (unidade central de processamento).
-A BOARD INTRUDER. STOP IT BEFORE IT REACHES THE CPU.,A BOARD INTRUDER. STOP IT BEFORE IT REACHES THE CPU.,UM INVASOR DA PLACA. IMPEÇA QUE CHEGUE À CPU (UNIDADE CENTRAL DE PROCESSAMENTO).
+A board intruder. Stop it before it reaches the CPU.,A board intruder. Stop it before it reaches the CPU.,Um invasor da placa. Impeça que chegue à CPU.
+A BOARD INTRUDER. STOP IT BEFORE IT REACHES THE CPU.,A BOARD INTRUDER. STOP IT BEFORE IT REACHES THE CPU.,UM INVASOR DA PLACA. IMPEÇA QUE CHEGUE À CPU.
 Unidentified. Encounter this entry to reveal its name and attributes.,Unidentified. Encounter this entry to reveal its name and attributes.,Não identificado. Encontre este item para revelar seu nome e atributos.
 UNIDENTIFIED. ENCOUNTER THIS ENTRY TO REVEAL ITS NAME AND ATTRIBUTES.,UNIDENTIFIED. ENCOUNTER THIS ENTRY TO REVEAL ITS NAME AND ATTRIBUTES.,NÃO IDENTIFICADO. ENCONTRE ESTE ITEM PARA REVELAR SEU NOME E ATRIBUTOS.
 Detours: never leaves the route,Detours: never leaves the route,Desvios: nunca sai da rota
@@ -100,10 +100,10 @@ NEW DOWNLOAD,NEW DOWNLOAD,NOVO DOWNLOAD
 INTRUSION DETECTED,INTRUSION DETECTED,INVASÃO DETECTADA
 TROJAN.EXE  -  it was a trojan! Kill it before it drops its payload.,TROJAN.EXE  -  it was a trojan! Kill it before it drops its payload.,TROJAN.EXE  -  era um cavalo de Troia! Destrua-o antes que solte sua carga.
 TROJAN.EXE  -  IT WAS A TROJAN! KILL IT BEFORE IT DROPS ITS PAYLOAD.,TROJAN.EXE  -  IT WAS A TROJAN! KILL IT BEFORE IT DROPS ITS PAYLOAD.,TROJAN.EXE  -  ERA UM CAVALO DE TROIA! DESTRUA-O ANTES QUE SOLTE SUA CARGA.
-Defend the CPU,Defend the CPU,Defenda a CPU (unidade central de processamento)
-DEFEND THE CPU,DEFEND THE CPU,DEFENDA A CPU (UNIDADE CENTRAL DE PROCESSAMENTO)
-Break into the CPU,Break into the CPU,Invada a CPU (unidade central de processamento)
-BREAK INTO THE CPU,BREAK INTO THE CPU,INVADA A CPU (UNIDADE CENTRAL DE PROCESSAMENTO)
+Defend the CPU,Defend the CPU,Defenda a CPU
+DEFEND THE CPU,DEFEND THE CPU,DEFENDA A CPU
+Break into the CPU,Break into the CPU,Invada a CPU
+BREAK INTO THE CPU,BREAK INTO THE CPU,INVADA A CPU
 Next wave incoming,Next wave incoming,Próxima onda a caminho
 NEXT WAVE INCOMING,NEXT WAVE INCOMING,PRÓXIMA ONDA A CAMINHO
 YOU WIN,YOU WIN,VITÓRIA
@@ -131,8 +131,8 @@ NO CUSTOM LEVELS YET. MAKE ONE IN THE LEVEL EDITOR!,NO CUSTOM LEVELS YET. MAKE O
 Play,Play,Jogar
 Edit,Edit,Editar
 EDIT,EDIT,EDITAR
-One player defends the CPU and hosts the match. The other spends energy to send bugs. The defender wins if the CPU survives for 5 minutes.,One player defends the CPU and hosts the match. The other spends energy to send bugs. The defender wins if the CPU survives for 5 minutes.,Um jogador hospeda a partida e defende a CPU (unidade central de processamento). O outro gasta energia para enviar bugs. O defensor vence se a CPU resistir por 5 minutos.
-ONE PLAYER DEFENDS THE CPU AND HOSTS THE MATCH. THE OTHER SPENDS ENERGY TO SEND BUGS. THE DEFENDER WINS IF THE CPU SURVIVES FOR 5 MINUTES.,ONE PLAYER DEFENDS THE CPU AND HOSTS THE MATCH. THE OTHER SPENDS ENERGY TO SEND BUGS. THE DEFENDER WINS IF THE CPU SURVIVES FOR 5 MINUTES.,UM JOGADOR HOSPEDA A PARTIDA E DEFENDE A CPU (UNIDADE CENTRAL DE PROCESSAMENTO). O OUTRO GASTA ENERGIA PARA ENVIAR BUGS. O DEFENSOR VENCE SE A CPU RESISTIR POR 5 MINUTOS.
+One player defends the CPU and hosts the match. The other spends energy to send bugs. The defender wins if the CPU survives for 5 minutes.,One player defends the CPU and hosts the match. The other spends energy to send bugs. The defender wins if the CPU survives for 5 minutes.,Um jogador hospeda a partida e defende a CPU. O outro gasta energia para enviar bugs. O defensor vence se a CPU resistir por 5 minutos.
+ONE PLAYER DEFENDS THE CPU AND HOSTS THE MATCH. THE OTHER SPENDS ENERGY TO SEND BUGS. THE DEFENDER WINS IF THE CPU SURVIVES FOR 5 MINUTES.,ONE PLAYER DEFENDS THE CPU AND HOSTS THE MATCH. THE OTHER SPENDS ENERGY TO SEND BUGS. THE DEFENDER WINS IF THE CPU SURVIVES FOR 5 MINUTES.,UM JOGADOR HOSPEDA A PARTIDA E DEFENDE A CPU. O OUTRO GASTA ENERGIA PARA ENVIAR BUGS. O DEFENSOR VENCE SE A CPU RESISTIR POR 5 MINUTOS.
 Board,Board,Placa
 Against the computer,Against the computer,Contra o computador
 AGAINST THE COMPUTER,AGAINST THE COMPUTER,CONTRA O COMPUTADOR
@@ -146,8 +146,8 @@ Host game,Host game,Hospedar
 HOST GAME,HOST GAME,HOSPEDAR
 Host (you defend),Host (you defend),Hospedar (você defende)
 HOST (YOU DEFEND),HOST (YOU DEFEND),HOSPEDAR (VOCÊ DEFENDE)
-Others join with your IP address.,Others join with your IP address.,Outros entram pelo seu endereço IP (protocolo de internet).
-OTHERS JOIN WITH YOUR IP ADDRESS.,OTHERS JOIN WITH YOUR IP ADDRESS.,OUTROS ENTRAM PELO SEU ENDEREÇO IP (PROTOCOLO DE INTERNET).
+Others join with your IP address.,Others join with your IP address.,Outros entram pelo seu endereço IP.
+OTHERS JOIN WITH YOUR IP ADDRESS.,OTHERS JOIN WITH YOUR IP ADDRESS.,OUTROS ENTRAM PELO SEU ENDEREÇO IP.
 your name,your name,seu nome
 YOUR NAME,YOUR NAME,SEU NOME
 host:7777,host:7777,servidor:7777
@@ -563,54 +563,54 @@ UPGRADE_TECHNICIAN_SUPPORT_DESCRIPTION,Improves this support ability.,Melhora es
 ENEMY_BUG_NAME,Glitch,Falha
 Glitch,Glitch,Falha
 GLITCH,GLITCH,FALHA
-ENEMY_BUG_DESCRIPTION,A board intruder. Stop it before it reaches the CPU.,Um invasor da placa. Impeça que chegue à CPU (unidade central de processamento).
+ENEMY_BUG_DESCRIPTION,"A common glitch. Weak on its own, a nuisance in swarms; sometimes wanders off the route to nibble a part.","Uma falha comum. Fraca sozinha, irritante em bando; às vezes sai da rota para roer uma peça."
 ENEMY_SPIDER_NAME,Spider,Aranha
 Spider,Spider,Aranha
 SPIDER,SPIDER,ARANHA
-ENEMY_SPIDER_DESCRIPTION,A board intruder. Stop it before it reaches the CPU.,Um invasor da placa. Impeça que chegue à CPU (unidade central de processamento).
+ENEMY_SPIDER_DESCRIPTION,"Fragile, but its bite hurts the board more than a glitch's. Leaves the route now and then.","Frágil, mas sua mordida estraga a placa mais que a de uma falha. De vez em quando sai da rota."
 ENEMY_TERMITE_NAME,Termite,Cupim
 Termite,Termite,Cupim
 TERMITE,TERMITE,CUPIM
-ENEMY_TERMITE_DESCRIPTION,A board intruder. Stop it before it reaches the CPU.,Um invasor da placa. Impeça que chegue à CPU (unidade central de processamento).
+ENEMY_TERMITE_DESCRIPTION,Weak but always hungry: it leaves the route for almost every part it sees and chews through it fast.,"Fraco, mas sempre faminto: sai da rota por quase toda peça que vê e a rói rapidinho."
 ENEMY_BEETLE_NAME,Beetle,Besouro
 Beetle,Beetle,Besouro
 BEETLE,BEETLE,BESOURO
-ENEMY_BEETLE_DESCRIPTION,A board intruder. Stop it before it reaches the CPU.,Um invasor da placa. Impeça que chegue à CPU (unidade central de processamento).
+ENEMY_BEETLE_DESCRIPTION,A quick beetle with a hard shell. Takes a few hits before it goes down.,Um besouro ágil de casca dura. Aguenta alguns tiros antes de cair.
 ENEMY_TANK_NAME,Armored Worm,Verme blindado
 Armored Worm,Armored Worm,Verme blindado
 ARMORED WORM,ARMORED WORM,VERME BLINDADO
-ENEMY_TANK_DESCRIPTION,A board intruder. Stop it before it reaches the CPU.,Um invasor da placa. Impeça que chegue à CPU (unidade central de processamento).
+ENEMY_TANK_DESCRIPTION,"Very slow and heavily armoured. Given time, it gnaws through the biggest parts.","Bem lento e muito blindado. Com tempo, rói até as peças maiores."
 ENEMY_ROACH_NAME,Roach,Barata
 Roach,Roach,Barata
 ROACH,ROACH,BARATA
-ENEMY_ROACH_DESCRIPTION,A board intruder. Stop it before it reaches the CPU.,Um invasor da placa. Impeça que chegue à CPU (unidade central de processamento).
+ENEMY_ROACH_DESCRIPTION,The fastest thing on the board. It rarely stops to chew: it just runs for the CPU.,A coisa mais rápida da placa. Quase nunca para pra roer: corre direto para a CPU.
 ENEMY_RUNNER_NAME,Runner,Corredor
 Runner,Runner,Corredor
 RUNNER,RUNNER,CORREDOR
-ENEMY_RUNNER_DESCRIPTION,A board intruder. Stop it before it reaches the CPU.,Um invasor da placa. Impeça que chegue à CPU (unidade central de processamento).
+ENEMY_RUNNER_DESCRIPTION,"Slim, quick and tough. Hardly ever leaves the route.","Fino, veloz e resistente. Quase nunca sai da rota."
 ENEMY_BRUTE_NAME,Brute,Brutamontes
 Brute,Brute,Brutamontes
 BRUTE,BRUTE,BRUTAMONTES
-ENEMY_BRUTE_DESCRIPTION,A board intruder. Stop it before it reaches the CPU.,Um invasor da placa. Impeça que chegue à CPU (unidade central de processamento).
+ENEMY_BRUTE_DESCRIPTION,A huge rhinoceros beetle. Soaks up damage and wrecks the parts it reaches.,Um enorme besouro-rinoceronte. Aguenta muito dano e destrói as peças que alcança.
 ENEMY_TROJAN_NAME,Trojan Horse,Cavalo de Troia
 Trojan Horse,Trojan Horse,Cavalo de Troia
 TROJAN HORSE,TROJAN HORSE,CAVALO DE TROIA
 ENEMY_TROJAN_DESCRIPTION,Looks like a free download. Kill it and it drops its payload.,"Parece um download grátis. Ao morrer, solta sua carga de bugs."
 Looks like a free download. Kill it and it drops its payload.,Looks like a free download. Kill it and it drops its payload.,"Parece um download grátis. Ao morrer, solta sua carga de bugs."
 LOOKS LIKE A FREE DOWNLOAD. KILL IT AND IT DROPS ITS PAYLOAD.,LOOKS LIKE A FREE DOWNLOAD. KILL IT AND IT DROPS ITS PAYLOAD.,"PARECE UM DOWNLOAD GRÁTIS. AO MORRER, SOLTA SUA CARGA DE BUGS."
-ENEMY_KEYLOGGER_NAME,Keylogger,Registrador de teclas
+ENEMY_KEYLOGGER_NAME,Keylogger,Keylogger
 Keylogger,Keylogger,Registrador de teclas
 KEYLOGGER,KEYLOGGER,REGISTRADOR DE TECLAS
 ENEMY_KEYLOGGER_DESCRIPTION,Records every keystroke and steals $1 a second while it lives.,Registra cada tecla e rouba $1 por segundo enquanto vive.
 Records every keystroke and steals $1 a second while it lives.,Records every keystroke and steals $1 a second while it lives.,Registra cada tecla e rouba $1 por segundo enquanto vive.
 RECORDS EVERY KEYSTROKE AND STEALS $1 A SECOND WHILE IT LIVES.,RECORDS EVERY KEYSTROKE AND STEALS $1 A SECOND WHILE IT LIVES.,REGISTRA CADA TECLA E ROUBA $1 POR SEGUNDO ENQUANTO VIVE.
-ENEMY_MITM_NAME,Man-in-the-Middle,Interceptador
+ENEMY_MITM_NAME,Man-in-the-Middle,Man-in-the-Middle
 Man-in-the-Middle,Man-in-the-Middle,Interceptador
 MAN-IN-THE-MIDDLE,MAN-IN-THE-MIDDLE,INTERCEPTADOR
 ENEMY_MITM_DESCRIPTION,Sits between your turrets and their targets: intercepts half the shots near it.,Fica entre as torretas e seus alvos: intercepta metade dos tiros próximos.
 Sits between your turrets and their targets: intercepts half the shots near it.,Sits between your turrets and their targets: intercepts half the shots near it.,Fica entre as torretas e seus alvos: intercepta metade dos tiros próximos.
 SITS BETWEEN YOUR TURRETS AND THEIR TARGETS: INTERCEPTS HALF THE SHOTS NEAR IT.,SITS BETWEEN YOUR TURRETS AND THEIR TARGETS: INTERCEPTS HALF THE SHOTS NEAR IT.,FICA ENTRE AS TORRETAS E SEUS ALVOS: INTERCEPTA METADE DOS TIROS PRÓXIMOS.
-ENEMY_DDOS_NAME,DDoS Botnet,Rede DDoS
+ENEMY_DDOS_NAME,DDoS Botnet,Botnet DDoS
 DDoS Botnet,DDoS Botnet,Rede DDoS
 DDOS BOTNET,DDOS BOTNET,REDE DDOS
 ENEMY_DDOS_DESCRIPTION,Floods the route with junk packets.,Inunda a rota com pacotes inúteis.
@@ -622,19 +622,19 @@ ROOTKIT,ROOTKIT,ROOTKIT
 ENEMY_ROOTKIT_DESCRIPTION,"Hides from your turrets every few seconds: no aim, no damage.","Esconde-se das torretas a cada poucos segundos: sem mira, sem dano."
 "Hides from your turrets every few seconds: no aim, no damage.","Hides from your turrets every few seconds: no aim, no damage.","Esconde-se das torretas a cada poucos segundos: sem mira, sem dano."
 "HIDES FROM YOUR TURRETS EVERY FEW SECONDS: NO AIM, NO DAMAGE.","HIDES FROM YOUR TURRETS EVERY FEW SECONDS: NO AIM, NO DAMAGE.","ESCONDE-SE DAS TORRETAS A CADA POUCOS SEGUNDOS: SEM MIRA, SEM DANO."
-ENEMY_RANSOMWARE_NAME,Ransomware,Sequestrador
+ENEMY_RANSOMWARE_NAME,Ransomware,Ransomware
 Ransomware,Ransomware,Sequestrador
 RANSOMWARE,RANSOMWARE,SEQUESTRADOR
 ENEMY_RANSOMWARE_DESCRIPTION,Encrypts the turrets around it: they can't fire until it wears off.,Criptografa as torretas ao redor: elas param de atirar até o efeito passar.
 Encrypts the turrets around it: they can't fire until it wears off.,Encrypts the turrets around it: they can't fire until it wears off.,Criptografa as torretas ao redor: elas param de atirar até o efeito passar.
 ENCRYPTS THE TURRETS AROUND IT: THEY CAN'T FIRE UNTIL IT WEARS OFF.,ENCRYPTS THE TURRETS AROUND IT: THEY CAN'T FIRE UNTIL IT WEARS OFF.,CRIPTOGRAFA AS TORRETAS AO REDOR: ELAS PARAM DE ATIRAR ATÉ O EFEITO PASSAR.
-ENEMY_WORM_NAME,Worm,Verme
+ENEMY_WORM_NAME,Worm,Worm
 Worm,Worm,Verme
 WORM,WORM,VERME
 ENEMY_WORM_DESCRIPTION,Copies itself as it gets hurt.,Cria cópias de si mesmo conforme perde vida.
 Copies itself as it gets hurt.,Copies itself as it gets hurt.,Cria cópias de si mesmo conforme perde vida.
 COPIES ITSELF AS IT GETS HURT.,COPIES ITSELF AS IT GETS HURT.,CRIA CÓPIAS DE SI MESMO CONFORME PERDE VIDA.
-ENEMY_BOSS_NAME,Kernel Panic,Pânico do núcleo
+ENEMY_BOSS_NAME,Kernel Panic,Kernel Panic
 Kernel Panic,Kernel Panic,Pânico do núcleo
 KERNEL PANIC,KERNEL PANIC,PÂNICO DO NÚCLEO
 ENEMY_BOSS_DESCRIPTION,Crashes the system: every turret freezes for a moment.,Derruba o sistema: todas as torretas travam por um instante.
@@ -643,11 +643,11 @@ CRASHES THE SYSTEM: EVERY TURRET FREEZES FOR A MOMENT.,CRASHES THE SYSTEM: EVERY
 ENEMY_PACKET_NAME,Packet,Pacote
 Packet,Packet,Pacote
 PACKET,PACKET,PACOTE
-ENEMY_PACKET_DESCRIPTION,A board intruder. Stop it before it reaches the CPU.,Um invasor da placa. Impeça que chegue à CPU (unidade central de processamento).
-ENEMY_WORM_COPY_NAME,Worm Copy,Cópia do verme
+ENEMY_PACKET_DESCRIPTION,"Junk data from a DDoS flood. Harmless to the CPU, but it soaks up your shots.","Lixo de dados de um ataque DDoS. Não fere a CPU, mas gasta seus tiros."
+ENEMY_WORM_COPY_NAME,Worm Copy,Cópia do Worm
 Worm Copy,Worm Copy,Cópia do verme
 WORM COPY,WORM COPY,CÓPIA DO VERME
-ENEMY_WORM_COPY_DESCRIPTION,A board intruder. Stop it before it reaches the CPU.,Um invasor da placa. Impeça que chegue à CPU (unidade central de processamento).
+ENEMY_WORM_COPY_DESCRIPTION,"A copy forked by the Worm. Smaller, just as hungry.","Uma cópia criada pelo Worm. Menor, mas igualmente faminta."
 LEVEL_1_TITLE,Dev Board,Placa de testes
 Dev Board,Dev Board,Placa de testes
 DEV BOARD,DEV BOARD,PLACA DE TESTES
@@ -722,10 +722,10 @@ LOCKED TURRET. BUY ONCE FOR ${0}; UPGRADES ARE SOLD SEPARATELY.,LOCKED TURRET. B
 {0} (CUSTOM),{0} (CUSTOM),{0} (PERSONALIZADA)
 Your address: {0},Your address: {0},Seu endereço: {0}
 YOUR ADDRESS: {0},YOUR ADDRESS: {0},SEU ENDEREÇO: {0}
-HP (health): {0}   |   Speed: {1} px/s,HP (health): {0}   |   Speed: {1} px/s,PV (pontos de vida): {0}   |   Velocidade: {1} px/s
-HP (HEALTH): {0}   |   SPEED: {1} PX/S,HP (HEALTH): {0}   |   SPEED: {1} PX/S,PV (PONTOS DE VIDA): {0}   |   VELOCIDADE: {1} PX/S
-CPU (central processing unit) damage: {0},CPU (central processing unit) damage: {0},Dano à CPU (unidade central de processamento): {0}
-CPU (CENTRAL PROCESSING UNIT) DAMAGE: {0},CPU (CENTRAL PROCESSING UNIT) DAMAGE: {0},DANO À CPU (UNIDADE CENTRAL DE PROCESSAMENTO): {0}
+HP: {0}   |   Speed: {1} px/s,HP: {0}   |   Speed: {1} px/s,Vida: {0}   |   Velocidade: {1} px/s
+HP: {0}   |   SPEED: {1} PX/S,HP: {0}   |   SPEED: {1} PX/S,VIDA: {0}   |   VELOCIDADE: {1} PX/S
+CPU damage: {0},CPU damage: {0},Dano à CPU: {0}
+CPU DAMAGE: {0},CPU DAMAGE: {0},DANO À CPU: {0}
 Detour chance: {0}%   |   Reach: {1} cells,Detour chance: {0}%   |   Reach: {1} cells,Chance de desvio: {0}%   |   Alcance: {1} células
 DETOUR CHANCE: {0}%   |   REACH: {1} CELLS,DETOUR CHANCE: {0}%   |   REACH: {1} CELLS,CHANCE DE DESVIO: {0}%   |   ALCANCE: {1} CÉLULAS
 Chewing: {0} s   |   Cooldown: {1} s,Chewing: {0} s   |   Cooldown: {1} s,Mastigação: {0} s   |   Intervalo: {1} s
@@ -824,15 +824,15 @@ UNKNOWN BUG TYPE '{0}'.,UNKNOWN BUG TYPE '{0}'.,TIPO DE BUG DESCONHECIDO: '{0}'.
 TIP_FIRST_BUILD,"Pick a turret on the right, then click a free board cell to build. Protect the copper route!",Escolha uma torreta à direita e clique em uma célula livre para construir. Proteja a rota de cobre!
 "Pick a turret on the right, then click a free board cell to build. Protect the copper route!","Pick a turret on the right, then click a free board cell to build. Protect the copper route!",Escolha uma torreta à direita e clique em uma célula livre para construir. Proteja a rota de cobre!
 "PICK A TURRET ON THE RIGHT, THEN CLICK A FREE BOARD CELL TO BUILD. PROTECT THE COPPER ROUTE!","PICK A TURRET ON THE RIGHT, THEN CLICK A FREE BOARD CELL TO BUILD. PROTECT THE COPPER ROUTE!",ESCOLHA UMA TORRETA À DIREITA E CLIQUE EM UMA CÉLULA LIVRE PARA CONSTRUIR. PROTEJA A ROTA DE COBRE!
-TIP_FIRST_WAVE,The wave is starting. Bugs follow the copper route toward your CPU (central processing unit).,A onda está começando. Os bugs seguem a rota de cobre até a CPU (unidade central de processamento).
-The wave is starting. Bugs follow the copper route toward your CPU (central processing unit).,The wave is starting. Bugs follow the copper route toward your CPU (central processing unit).,A onda está começando. Os bugs seguem a rota de cobre até a CPU (unidade central de processamento).
-THE WAVE IS STARTING. BUGS FOLLOW THE COPPER ROUTE TOWARD YOUR CPU (CENTRAL PROCESSING UNIT).,THE WAVE IS STARTING. BUGS FOLLOW THE COPPER ROUTE TOWARD YOUR CPU (CENTRAL PROCESSING UNIT).,A ONDA ESTÁ COMEÇANDO. OS BUGS SEGUEM A ROTA DE COBRE ATÉ A CPU (UNIDADE CENTRAL DE PROCESSAMENTO).
+TIP_FIRST_WAVE,The wave is starting. Bugs follow the copper route toward your CPU.,A onda está começando. Os bugs seguem a rota de cobre até a CPU.
+The wave is starting. Bugs follow the copper route toward your CPU.,The wave is starting. Bugs follow the copper route toward your CPU.,A onda está começando. Os bugs seguem a rota de cobre até a CPU.
+THE WAVE IS STARTING. BUGS FOLLOW THE COPPER ROUTE TOWARD YOUR CPU.,THE WAVE IS STARTING. BUGS FOLLOW THE COPPER ROUTE TOWARD YOUR CPU.,A ONDA ESTÁ COMEÇANDO. OS BUGS SEGUEM A ROTA DE COBRE ATÉ A CPU.
 TIP_FIRST_DETOUR,That bug left the route to chew a component. Your turrets can still hit it; cover the detour too.,Esse bug saiu da rota para mastigar um componente. Suas torretas ainda podem atingi-lo; proteja o desvio também.
 That bug left the route to chew a component. Your turrets can still hit it; cover the detour too.,That bug left the route to chew a component. Your turrets can still hit it; cover the detour too.,Esse bug saiu da rota para mastigar um componente. Suas torretas ainda podem atingi-lo; proteja o desvio também.
 THAT BUG LEFT THE ROUTE TO CHEW A COMPONENT. YOUR TURRETS CAN STILL HIT IT; COVER THE DETOUR TOO.,THAT BUG LEFT THE ROUTE TO CHEW A COMPONENT. YOUR TURRETS CAN STILL HIT IT; COVER THE DETOUR TOO.,ESSE BUG SAIU DA ROTA PARA MASTIGAR UM COMPONENTE. SUAS TORRETAS AINDA PODEM ATINGI-LO; PROTEJA O DESVIO TAMBÉM.
-TIP_FIRST_LED,An LED (light-emitting diode) burnt out. Repair Bot can rebuild it and restore the light.,Um LED (diodo emissor de luz) queimou. O Robô técnico pode reconstruí-lo e restaurar a luz.
-An LED (light-emitting diode) burnt out. Repair Bot can rebuild it and restore the light.,An LED (light-emitting diode) burnt out. Repair Bot can rebuild it and restore the light.,Um LED (diodo emissor de luz) queimou. O Robô técnico pode reconstruí-lo e restaurar a luz.
-AN LED (LIGHT-EMITTING DIODE) BURNT OUT. REPAIR BOT CAN REBUILD IT AND RESTORE THE LIGHT.,AN LED (LIGHT-EMITTING DIODE) BURNT OUT. REPAIR BOT CAN REBUILD IT AND RESTORE THE LIGHT.,UM LED (DIODO EMISSOR DE LUZ) QUEIMOU. O ROBÔ TÉCNICO PODE RECONSTRUÍ-LO E RESTAURAR A LUZ.
+TIP_FIRST_LED,An LED burnt out. Repair Bot can rebuild it and restore the light.,Um LED queimou. O Robô técnico pode reconstruí-lo e restaurar a luz.
+An LED burnt out. Repair Bot can rebuild it and restore the light.,An LED burnt out. Repair Bot can rebuild it and restore the light.,Um LED queimou. O Robô técnico pode reconstruí-lo e restaurar a luz.
+AN LED BURNT OUT. REPAIR BOT CAN REBUILD IT AND RESTORE THE LIGHT.,AN LED BURNT OUT. REPAIR BOT CAN REBUILD IT AND RESTORE THE LIGHT.,UM LED QUEIMOU. O ROBÔ TÉCNICO PODE RECONSTRUÍ-LO E RESTAURAR A LUZ.
 TIP_FIRST_VICTORY_BALANCE,Your remaining money becomes upgrade balance. A better replay credits only the improvement.,"O dinheiro restante vira saldo de melhorias. Ao repetir a fase, só a diferença acima do recorde é creditada."
 Your remaining money becomes upgrade balance. A better replay credits only the improvement.,Your remaining money becomes upgrade balance. A better replay credits only the improvement.,"O dinheiro restante vira saldo de melhorias. Ao repetir a fase, só a diferença acima do recorde é creditada."
 YOUR REMAINING MONEY BECOMES UPGRADE BALANCE. A BETTER REPLAY CREDITS ONLY THE IMPROVEMENT.,YOUR REMAINING MONEY BECOMES UPGRADE BALANCE. A BETTER REPLAY CREDITS ONLY THE IMPROVEMENT.,"O DINHEIRO RESTANTE VIRA SALDO DE MELHORIAS. AO REPETIR A FASE, SÓ A DIFERENÇA ACIMA DO RECORDE É CREDITADA."
@@ -845,9 +845,9 @@ KEYLOGGER STEALS MONEY WHILE ALIVE. FOCUS YOUR DAMAGE ON IT BEFORE YOUR CASH DRA
 TIP_BOSS_MITM,Man-in-the-Middle intercepts shots. Firewall protects fire from turrets inside or across its range.,O Interceptador desvia tiros. O Firewall protege disparos feitos dentro ou através de seu alcance.
 Man-in-the-Middle intercepts shots. Firewall protects fire from turrets inside or across its range.,Man-in-the-Middle intercepts shots. Firewall protects fire from turrets inside or across its range.,O Interceptador desvia tiros. O Firewall protege disparos feitos dentro ou através de seu alcance.
 MAN-IN-THE-MIDDLE INTERCEPTS SHOTS. FIREWALL PROTECTS FIRE FROM TURRETS INSIDE OR ACROSS ITS RANGE.,MAN-IN-THE-MIDDLE INTERCEPTS SHOTS. FIREWALL PROTECTS FIRE FROM TURRETS INSIDE OR ACROSS ITS RANGE.,O INTERCEPTADOR DESVIA TIROS. O FIREWALL PROTEGE DISPAROS FEITOS DENTRO OU ATRAVÉS DE SEU ALCANCE.
-TIP_BOSS_DDOS,DDoS (distributed denial of service) floods the route with packets. Firewall deletes packets; area damage helps too.,DDoS (negação de serviço distribuída) enche a rota de pacotes. O Firewall elimina pacotes; dano em área também ajuda.
-DDoS (distributed denial of service) floods the route with packets. Firewall deletes packets; area damage helps too.,DDoS (distributed denial of service) floods the route with packets. Firewall deletes packets; area damage helps too.,DDoS (negação de serviço distribuída) enche a rota de pacotes. O Firewall elimina pacotes; dano em área também ajuda.
-DDOS (DISTRIBUTED DENIAL OF SERVICE) FLOODS THE ROUTE WITH PACKETS. FIREWALL DELETES PACKETS; AREA DAMAGE HELPS TOO.,DDOS (DISTRIBUTED DENIAL OF SERVICE) FLOODS THE ROUTE WITH PACKETS. FIREWALL DELETES PACKETS; AREA DAMAGE HELPS TOO.,DDOS (NEGAÇÃO DE SERVIÇO DISTRIBUÍDA) ENCHE A ROTA DE PACOTES. O FIREWALL ELIMINA PACOTES; DANO EM ÁREA TAMBÉM AJUDA.
+TIP_BOSS_DDOS,DDoS floods the route with packets. Firewall deletes packets; area damage helps too.,DDoS enche a rota de pacotes. O Firewall elimina pacotes; dano em área também ajuda.
+DDoS floods the route with packets. Firewall deletes packets; area damage helps too.,DDoS floods the route with packets. Firewall deletes packets; area damage helps too.,DDoS enche a rota de pacotes. O Firewall elimina pacotes; dano em área também ajuda.
+DDOS FLOODS THE ROUTE WITH PACKETS. FIREWALL DELETES PACKETS; AREA DAMAGE HELPS TOO.,DDOS FLOODS THE ROUTE WITH PACKETS. FIREWALL DELETES PACKETS; AREA DAMAGE HELPS TOO.,DDOS ENCHE A ROTA DE PACOTES. O FIREWALL ELIMINA PACOTES; DANO EM ÁREA TAMBÉM AJUDA.
 TIP_BOSS_ROOTKIT,Rootkit hides from weapons. Antivirus Scanner exposes it while it stays inside scan range.,O Rootkit se esconde das armas. O Antivírus o expõe enquanto ele estiver no alcance de varredura.
 Rootkit hides from weapons. Antivirus Scanner exposes it while it stays inside scan range.,Rootkit hides from weapons. Antivirus Scanner exposes it while it stays inside scan range.,O Rootkit se esconde das armas. O Antivírus o expõe enquanto ele estiver no alcance de varredura.
 ROOTKIT HIDES FROM WEAPONS. ANTIVIRUS SCANNER EXPOSES IT WHILE IT STAYS INSIDE SCAN RANGE.,ROOTKIT HIDES FROM WEAPONS. ANTIVIRUS SCANNER EXPOSES IT WHILE IT STAYS INSIDE SCAN RANGE.,O ROOTKIT SE ESCONDE DAS ARMAS. O ANTIVÍRUS O EXPÕE ENQUANTO ELE ESTIVER NO ALCANCE DE VARREDURA.
@@ -890,3 +890,13 @@ unsaved *,unsaved *,não salvo *
 Options,Options,Opções
 OPTIONS,OPTIONS,OPÇÕES
 HOST_ADDRESS_OR,or,ou
+"A common glitch. Weak on its own, a nuisance in swarms; sometimes wanders off the route to nibble a part.","A common glitch. Weak on its own, a nuisance in swarms; sometimes wanders off the route to nibble a part.","Uma falha comum. Fraca sozinha, irritante em bando; às vezes sai da rota para roer uma peça."
+"Fragile, but its bite hurts the board more than a glitch's. Leaves the route now and then.","Fragile, but its bite hurts the board more than a glitch's. Leaves the route now and then.","Frágil, mas sua mordida estraga a placa mais que a de uma falha. De vez em quando sai da rota."
+Weak but always hungry: it leaves the route for almost every part it sees and chews through it fast.,Weak but always hungry: it leaves the route for almost every part it sees and chews through it fast.,"Fraco, mas sempre faminto: sai da rota por quase toda peça que vê e a rói rapidinho."
+A quick beetle with a hard shell. Takes a few hits before it goes down.,A quick beetle with a hard shell. Takes a few hits before it goes down.,Um besouro ágil de casca dura. Aguenta alguns tiros antes de cair.
+"Very slow and heavily armoured. Given time, it gnaws through the biggest parts.","Very slow and heavily armoured. Given time, it gnaws through the biggest parts.","Bem lento e muito blindado. Com tempo, rói até as peças maiores."
+The fastest thing on the board. It rarely stops to chew: it just runs for the CPU.,The fastest thing on the board. It rarely stops to chew: it just runs for the CPU.,A coisa mais rápida da placa. Quase nunca para pra roer: corre direto para a CPU.
+"Slim, quick and tough. Hardly ever leaves the route.","Slim, quick and tough. Hardly ever leaves the route.","Fino, veloz e resistente. Quase nunca sai da rota."
+A huge rhinoceros beetle. Soaks up damage and wrecks the parts it reaches.,A huge rhinoceros beetle. Soaks up damage and wrecks the parts it reaches.,Um enorme besouro-rinoceronte. Aguenta muito dano e destrói as peças que alcança.
+"Junk data from a DDoS flood. Harmless to the CPU, but it soaks up your shots.","Junk data from a DDoS flood. Harmless to the CPU, but it soaks up your shots.","Lixo de dados de um ataque DDoS. Não fere a CPU, mas gasta seus tiros."
+"A copy forked by the Worm. Smaller, just as hungry.","A copy forked by the Worm. Smaller, just as hungry.","Uma cópia criada pelo Worm. Menor, mas igualmente faminta."

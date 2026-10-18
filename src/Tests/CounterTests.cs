@@ -109,6 +109,38 @@ public sealed class CounterTests : TestSuite
 	}
 
 	[Test]
+	public void FirewallShieldOnlyShowsWhenItSavesAShot()
+	{
+		// Without a man-in-the-middle, protecting shots is silent (no effect spam, no network events).
+		var quiet = Arena();
+		var gun = Build(quiet, "blaster", 4, 3);
+		gun.Stats["range"] = 2000;
+		Build(quiet, "firewall", 4, 4);
+		quiet.SpawnBug("tank", 260);
+		Run(quiet, 3);
+		Check(quiet.Events.Any(e => e.Kind == EventKind.TurretFired), "the gun fired through the firewall");
+		Check(!quiet.Events.Any(e => e.Kind == EventKind.TurretAbility && e.Type == "block"), "no shield events without a MITM");
+
+		// A protected shot that the MITM would have intercepted is credited to the firewall.
+		var m = Arena();
+		var firewall = Build(m, "firewall");
+		firewall.Stats["range"] = 60;
+		var boss = m.SpawnBug("mitm", 400);
+		var saved = 0;
+		for (var id = 1; id <= 20; id++)
+		{
+			var shot = new Projectile { Id = id, Kind = ProjectileKind.Bullet, Pos = firewall.Pos, Vel = new Vector2(1, 0), MaxDistance = 1000 };
+			boss.Pos = firewall.Pos;
+			m.Projectiles.Add(shot);
+			m.Step(Match.StepTime);
+			saved += m.Events.Count(e => e.Kind == EventKind.TurretAbility && e.Type == "block" && e.Id == firewall.Id);
+			Check(!m.Events.Any(e => e.Type == "intercept"), $"shot {id} not intercepted");
+			m.Events.Clear();
+		}
+		Check(saved > 0, "the firewall is credited for the shots it saved");
+	}
+
+	[Test]
 	public void LockedFirewallCannotProtectOrDeletePackets()
 	{
 		var m = Arena(); var firewall = Build(m, "firewall"); firewall.Locked = 2;
