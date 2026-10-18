@@ -15,8 +15,8 @@ it started as a GameMaker prototype, which was retired once the Godot version re
    project). Or open `HardwareDefence.sln` in Rider/VS Code/Visual Studio to edit the code.
 
 Controls: pick a turret on the right (or `1`–`9`, in visible-list order) and click a free
-cell; the laser asks for a second click to aim it. Right click / `Esc` / CANCEL stops placing. `F` changes game speed,
-`G` shows the grid, `Esc` pauses. Everything also works with touch. In versus as the attacker,
+cell; the laser asks for a second click to aim it. Right click / `Esc` / CANCEL stops placing.
+`F` changes game speed, `G` shows the grid, `Esc` pauses. Everything also works with touch. In versus as the attacker,
 click a bug (or `1`–`9`) to send it.
 
 ### Languages
@@ -35,13 +35,12 @@ original English, as does the Hardware Defence name.
 ## Modes
 
 * **Campaign** — 8 boards (Dev Board → Server Board), with **3, 4, 6, 8, 11, 15, 20 and
-  25 waves** respectively. A victory earns 1–3 stars from board
-  integrity and credits the remaining match money to the upgrade balance. Each board keeps
+  25 waves** respectively. A victory earns 1–3 stars from board integrity and credits the
+  remaining match money to the upgrade balance. Each board keeps
   its best remaining-money result: a worse replay gives no credit, a better replay gives
   only the difference. Spend this balance on progressively priced upgrades and permanent
   counter-turret unlocks. Each match still begins with that level's normal starting money;
-  defeat, custom levels and versus give
-  no campaign credit.
+  defeat, custom levels and versus give no campaign credit.
 * **Versus** — one player defends and hosts, the other spends energy to send bugs. Play
   against the built-in AI, host a match or join one. Online play uses a small WebSocket/JSON
   protocol that AIs can use too: see [docs/PROTOCOL.md](docs/PROTOCOL.md) and
@@ -116,8 +115,8 @@ reproducible; the `Match` constructor accepts an optional seed.
 `python3 tools/make_waves.py` deterministically regenerates only the eight boards' wave
 lists, preserving their routes, components, lighting and other data. `--check` verifies
 them without writing files; regeneration replaces manual edits to those wave lists.
-Each group contains 5–8 ordinary bugs, spaced 1.5–2 seconds
-apart, and later boards introduce more species. The boss is the last spawn of the last
+Each group contains 5–8 ordinary bugs, spaced 1.5–2 seconds apart, and later boards
+introduce more species. The boss is the last spawn of the last
 wave, with 15 extra seconds of preparation. Waves wait for their previous creatures to
 leave the board, so additional waves do not form one continuous queue. See
 [`tools/README.md`](tools/README.md) for generation and measured population checks.
@@ -167,8 +166,8 @@ sprites, lines, particles and lights all share that grid. Keep new art at 1:1 in
   dim them, change the status colour and hide the laser beam. The beam remains additive.
   Antivirus Scanner, Firewall, Backup Drive and Repair Bot use green scan lines, orange
   shields, blue recovery pulses and warm repair beams on the same pixel grid. The generator
-  has art defaults by id, overridden by `turrets.json` entries when available. Upgrade-screen preview sizes stay
-  unchanged.
+  has art defaults by id, overridden by `turrets.json` entries when available.
+  Upgrade-screen preview sizes stay unchanged.
 * `assets/sprites/icons/` — 10×10 white UI icons (tinted by the UI), shown at 3×.
   Includes `scan`, `shield`, `restore` and `repair` for the counter-turrets.
 * Board, route, components and the CPU are painted pixel by pixel in code (`View/Pixel/PixelCanvas`,

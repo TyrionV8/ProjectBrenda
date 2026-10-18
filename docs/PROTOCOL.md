@@ -67,11 +67,16 @@ blocking components or on the 3 × 3 cells around the CPU.
 | field | meaning |
 |-------|---------|
 | `time` | Seconds since the start. |
+| `mode` | `campaign` or `versus`; custom levels use the campaign wave runner. |
 | `state` | `playing`, `defender_won` or `attacker_won`. |
 | `money` | Defender's money. |
 | `energy`, `energy_rate` | Attacker's energy and its regeneration per second. |
 | `cpu_hp` | 10 at the start; the attacker wins at 0 in the same simulation step. Boss escape damage is 5/7/9 on boards 1–3 and 10 on boards 4–8, including Kernel Panic sent in versus. Packets cause zero damage; other minions retain their ordinary damage. |
-| `time_left` | Seconds until the defender wins. |
+| `time_left` | Seconds until the defender wins in versus; zero in campaign. |
+| `wave`, `wave_count` | Current zero-based campaign wave index and total wave count. |
+| `wave_state`, `countdown` | `countdown`, `spawning`, `waiting` or `done`; `countdown` is the remaining preparation time while in the countdown state. |
+| `upcoming` | Enemy ids still scheduled in the current campaign wave, in spawn order. |
+| `stars` | Zero until a defender victory, then 1–3 from remaining component integrity. Campaign saves use this rating; it is also present in versus snapshots without granting campaign credit. |
 | `integrity` | Share of component HP still standing. Components take chewing damage only during a bug's detour, never automatically from passing bugs on the route. |
 | `bugs` | `[{id, type, x, y, angle, hp, slowed, chewing, off_route, progress, cloaked, exposed, revealed}]` — `x`, `y` and `angle` are the real position/direction. `off_route` is true while approaching a component, chewing, or returning. `progress` stays frozen at the exit point until the bug returns exactly there. `chewing` is true only for actual chewing, not travel; `cloaked`: a rootkit hiding (can't be targeted or hurt); `exposed`: revealed by an active scanner in range, making effective `cloaked` false without resetting its internal cloak cycle; `revealed`: a trojan permanently without its disguise. |
 | `turrets` | `[{id, type, cell, direction, head, locked, immune}]` — `locked`: encrypted (ransomware) or crashed (kernel panic), it can't fire or provide external support; `immune`: briefly protected against new locks after backup-assisted recovery. |
@@ -91,6 +96,17 @@ Kinds: `bug_spawned`, `bug_died` (value = reward), `bug_escaped`, `turret_built`
 `restore` or `repair`. Its position is the scanner centre for `scan`, otherwise the target
 position. `value` is the support radius for scan/block/restore, or the component index for
 repair. Component revival is reflected by `snapshot.components`, without a separate event.
+
+`wave_started` carries the zero-based index of the wave that began; its UI wave number
+is `id + 1`. `wave_countdown` carries the zero-based index of the next wave during its
+preparation countdown; its `id` also equals the number of waves just completed.
+`match_ended.id` is 1 for a defender win and 2 for an
+attacker win; its `value` is the final `stars` field (zero on defeat).
+
+Language selection affects local presentation only. Field names, ids, role names and
+protocol error messages retain their original values; clients can translate messages
+when displaying them. Campaign discoveries and shown tutorial tips are local save data,
+not additions to the network protocol.
 
 ## Rules
 
