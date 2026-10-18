@@ -1,0 +1,902 @@
+keys,en,pt_BR
+SETTINGS,SETTINGS,CONFIGURAÇÕES
+Back,Back,Voltar
+BACK,BACK,VOLTAR
+Continue,Continue,Continuar
+CONTINUE,CONTINUE,CONTINUAR
+New Game,New Game,Novo jogo
+NEW GAME,NEW GAME,NOVO JOGO
+Select Level,Select Level,Escolher fase
+SELECT LEVEL,SELECT LEVEL,ESCOLHER FASE
+Versus,Versus,Confronto
+VERSUS,VERSUS,CONFRONTO
+Level Editor,Level Editor,Editor de fases
+LEVEL EDITOR,LEVEL EDITOR,EDITOR DE FASES
+Bestiary,Bestiary,Bestiário
+BESTIARY,BESTIARY,BESTIÁRIO
+Settings,Settings,Configurações
+Exit,Exit,Sair
+EXIT,EXIT,SAIR
+Stop the bugs before they reach the CPU.,Stop the bugs before they reach the CPU.,Impeça os bugs de chegar à CPU.
+STOP THE BUGS BEFORE THEY REACH THE CPU.,STOP THE BUGS BEFORE THEY REACH THE CPU.,IMPEÇA OS BUGS DE CHEGAR À CPU.
+prototype - godot .net,prototype - godot .net,protótipo - godot .net
+PROTOTYPE - GODOT .NET,PROTOTYPE - GODOT .NET,PROTÓTIPO - GODOT .NET
+Erase progress?,Erase progress?,Apagar progresso?
+ERASE PROGRESS?,ERASE PROGRESS?,APAGAR PROGRESSO?
+Master volume,Master volume,Volume geral
+MASTER VOLUME,MASTER VOLUME,VOLUME GERAL
+Music,Music,Música
+MUSIC,MUSIC,MÚSICA
+Effects,Effects,Efeitos
+EFFECTS,EFFECTS,EFEITOS
+Interface sounds,Interface sounds,Sons da interface
+INTERFACE SOUNDS,INTERFACE SOUNDS,SONS DA INTERFACE
+Full screen,Full screen,Tela cheia
+FULL SCREEN,FULL SCREEN,TELA CHEIA
+"Screen effects (scanlines, vignette)","Screen effects (scanlines, vignette)","Efeitos de tela (linhas, vinheta)"
+"SCREEN EFFECTS (SCANLINES, VIGNETTE)","SCREEN EFFECTS (SCANLINES, VIGNETTE)","EFEITOS DE TELA (LINHAS, VINHETA)"
+Tips,Tips,Dicas
+TIPS,TIPS,DICAS
+Language,Language,Idioma
+LANGUAGE,LANGUAGE,IDIOMA
+Custom levels,Custom levels,Fases personalizadas
+CUSTOM LEVELS,CUSTOM LEVELS,FASES PERSONALIZADAS
+PLAY,PLAY,JOGAR
+LOCKED,LOCKED,BLOQUEADA
+UPGRADES,UPGRADES,MELHORIAS
+BALANCE,BALANCE,SALDO
+Main Menu,Main Menu,Menu principal
+MAIN MENU,MAIN MENU,MENU PRINCIPAL
+Spend your best remaining cash from each campaign level. Click + to buy.,Spend your best remaining cash from each campaign level. Click + to buy.,Gaste o melhor saldo restante de cada fase. Clique em + para comprar.
+SPEND YOUR BEST REMAINING CASH FROM EACH CAMPAIGN LEVEL. CLICK + TO BUY.,SPEND YOUR BEST REMAINING CASH FROM EACH CAMPAIGN LEVEL. CLICK + TO BUY.,GASTE O MELHOR SALDO RESTANTE DE CADA FASE. CLIQUE EM + PARA COMPRAR.
+PAUSED,PAUSED,PAUSADO
+Resume,Resume,Retomar
+RESUME,RESUME,RETOMAR
+Restart,Restart,Reiniciar
+RESTART,RESTART,REINICIAR
+Quit,Quit,Sair
+QUIT,QUIT,SAIR
+Leave match,Leave match,Sair da partida
+LEAVE MATCH,LEAVE MATCH,SAIR DA PARTIDA
+MENU,MENU,MENU
+Bugs,Bugs,Bugs
+BUGS,BUGS,BUGS
+Bosses,Bosses,Chefões
+BOSSES,BOSSES,CHEFÕES
+Turrets,Turrets,Torretas
+TURRETS,TURRETS,TORRETAS
+Discover bugs in a match. Build or unlock turrets to reveal them.,Discover bugs in a match. Build or unlock turrets to reveal them.,Encontre bugs na partida. Construa ou desbloqueie torretas para descobri-las.
+DISCOVER BUGS IN A MATCH. BUILD OR UNLOCK TURRETS TO REVEAL THEM.,DISCOVER BUGS IN A MATCH. BUILD OR UNLOCK TURRETS TO REVEAL THEM.,ENCONTRE BUGS NA PARTIDA. CONSTRUA OU DESBLOQUEIE TORRETAS PARA DESCOBRI-LAS.
+A board intruder. Stop it before it reaches the CPU.,A board intruder. Stop it before it reaches the CPU.,Um invasor da placa. Impeça que chegue à CPU.
+A BOARD INTRUDER. STOP IT BEFORE IT REACHES THE CPU.,A BOARD INTRUDER. STOP IT BEFORE IT REACHES THE CPU.,UM INVASOR DA PLACA. IMPEÇA QUE CHEGUE À CPU.
+Unidentified. Encounter this entry to reveal its name and attributes.,Unidentified. Encounter this entry to reveal its name and attributes.,Não identificado. Encontre este item para revelar seu nome e atributos.
+UNIDENTIFIED. ENCOUNTER THIS ENTRY TO REVEAL ITS NAME AND ATTRIBUTES.,UNIDENTIFIED. ENCOUNTER THIS ENTRY TO REVEAL ITS NAME AND ATTRIBUTES.,NÃO IDENTIFICADO. ENCONTRE ESTE ITEM PARA REVELAR SEU NOME E ATRIBUTOS.
+Detours: never leaves the route,Detours: never leaves the route,Desvios: nunca sai da rota
+DETOURS: NEVER LEAVES THE ROUTE,DETOURS: NEVER LEAVES THE ROUTE,DESVIOS: NUNCA SAI DA ROTA
+Available from the start,Available from the start,Disponível desde o início
+AVAILABLE FROM THE START,AVAILABLE FROM THE START,DISPONÍVEL DESDE O INÍCIO
+FIELD TIP,FIELD TIP,DICA
+Dismiss,Dismiss,Fechar
+DISMISS,DISMISS,FECHAR
+CASH,CASH,DINHEIRO
+ENERGY,ENERGY,ENERGIA
+TIME,TIME,TEMPO
+LEVEL,LEVEL,FASE
+ATTACKER,ATTACKER,ATACANTE
+WAVE,WAVE,ONDA
+ON BOARD,ON BOARD,NA PLACA
+INCOMING,INCOMING,A CAMINHO
+BOARD,BOARD,PLACA
+Game speed (F),Game speed (F),Velocidade do jogo (F)
+GAME SPEED (F),GAME SPEED (F),VELOCIDADE DO JOGO (F)
+Pause (Esc),Pause (Esc),Pausar (Esc)
+PAUSE (ESC),PAUSE (ESC),PAUSAR (ESC)
+CANCEL,CANCEL,CANCELAR
+Leave,Leave,Sair
+LEAVE,LEAVE,SAIR
+NEW DOWNLOAD,NEW DOWNLOAD,NOVO DOWNLOAD
+"FREE_RAM.EXE  -  totally safe, double the RAM for free!","FREE_RAM.EXE  -  totally safe, double the RAM for free!","FREE_RAM.EXE  -  seguro, dobre sua memória de graça!"
+"FREE_RAM.EXE  -  TOTALLY SAFE, DOUBLE THE RAM FOR FREE!","FREE_RAM.EXE  -  TOTALLY SAFE, DOUBLE THE RAM FOR FREE!","FREE_RAM.EXE  -  SEGURO, DOBRE SUA MEMÓRIA DE GRAÇA!"
+INTRUSION DETECTED,INTRUSION DETECTED,INVASÃO DETECTADA
+TROJAN.EXE  -  it was a trojan! Kill it before it drops its payload.,TROJAN.EXE  -  it was a trojan! Kill it before it drops its payload.,TROJAN.EXE  -  era um cavalo de Troia! Destrua-o antes que solte sua carga.
+TROJAN.EXE  -  IT WAS A TROJAN! KILL IT BEFORE IT DROPS ITS PAYLOAD.,TROJAN.EXE  -  IT WAS A TROJAN! KILL IT BEFORE IT DROPS ITS PAYLOAD.,TROJAN.EXE  -  ERA UM CAVALO DE TROIA! DESTRUA-O ANTES QUE SOLTE SUA CARGA.
+Defend the CPU,Defend the CPU,Defenda a CPU
+DEFEND THE CPU,DEFEND THE CPU,DEFENDA A CPU
+Break into the CPU,Break into the CPU,Invada a CPU
+BREAK INTO THE CPU,BREAK INTO THE CPU,INVADA A CPU
+Next wave incoming,Next wave incoming,Próxima onda a caminho
+NEXT WAVE INCOMING,NEXT WAVE INCOMING,PRÓXIMA ONDA A CAMINHO
+YOU WIN,YOU WIN,VITÓRIA
+YOU LOSE,YOU LOSE,DERROTA
+The CPU survived the attack.,The CPU survived the attack.,A CPU sobreviveu ao ataque.
+THE CPU SURVIVED THE ATTACK.,THE CPU SURVIVED THE ATTACK.,A CPU SOBREVIVEU AO ATAQUE.
+The bugs broke into the CPU.,The bugs broke into the CPU.,Os bugs invadiram a CPU.
+THE BUGS BROKE INTO THE CPU.,THE BUGS BROKE INTO THE CPU.,OS BUGS INVADIRAM A CPU.
+Your opponent left the match.,Your opponent left the match.,Seu oponente saiu da partida.
+YOUR OPPONENT LEFT THE MATCH.,YOUR OPPONENT LEFT THE MATCH.,SEU OPONENTE SAIU DA PARTIDA.
+SYSTEM FAILURE,SYSTEM FAILURE,FALHA DO SISTEMA
+The bugs reached the CPU.,The bugs reached the CPU.,Os bugs chegaram à CPU.
+THE BUGS REACHED THE CPU.,THE BUGS REACHED THE CPU.,OS BUGS CHEGARAM À CPU.
+ALL CIRCUITS SECURED,ALL CIRCUITS SECURED,CIRCUITOS PROTEGIDOS
+CIRCUIT SECURED,CIRCUIT SECURED,CIRCUITO PROTEGIDO
+click to confirm,click to confirm,clique para confirmar
+CLICK TO CONFIRM,CLICK TO CONFIRM,CLIQUE PARA CONFIRMAR
+click to aim,click to aim,clique para mirar
+CLICK TO AIM,CLICK TO AIM,CLIQUE PARA MIRAR
+SECURED,SECURED,PROTEGIDO
+All circuits are safe. For now.,All circuits are safe. For now.,Todos os circuitos estão seguros. Por enquanto.
+ALL CIRCUITS ARE SAFE. FOR NOW.,ALL CIRCUITS ARE SAFE. FOR NOW.,TODOS OS CIRCUITOS ESTÃO SEGUROS. POR ENQUANTO.
+No custom levels yet. Make one in the Level Editor!,No custom levels yet. Make one in the Level Editor!,Ainda não há fases personalizadas. Crie uma no editor de fases!
+NO CUSTOM LEVELS YET. MAKE ONE IN THE LEVEL EDITOR!,NO CUSTOM LEVELS YET. MAKE ONE IN THE LEVEL EDITOR!,AINDA NÃO HÁ FASES PERSONALIZADAS. CRIE UMA NO EDITOR DE FASES!
+Play,Play,Jogar
+Edit,Edit,Editar
+EDIT,EDIT,EDITAR
+One player defends the CPU and hosts the match. The other spends energy to send bugs. The defender wins if the CPU survives for 5 minutes.,One player defends the CPU and hosts the match. The other spends energy to send bugs. The defender wins if the CPU survives for 5 minutes.,Um jogador hospeda a partida e defende a CPU. O outro gasta energia para enviar bugs. O defensor vence se a CPU resistir por 5 minutos.
+ONE PLAYER DEFENDS THE CPU AND HOSTS THE MATCH. THE OTHER SPENDS ENERGY TO SEND BUGS. THE DEFENDER WINS IF THE CPU SURVIVES FOR 5 MINUTES.,ONE PLAYER DEFENDS THE CPU AND HOSTS THE MATCH. THE OTHER SPENDS ENERGY TO SEND BUGS. THE DEFENDER WINS IF THE CPU SURVIVES FOR 5 MINUTES.,UM JOGADOR HOSPEDA A PARTIDA E DEFENDE A CPU. O OUTRO GASTA ENERGIA PARA ENVIAR BUGS. O DEFENSOR VENCE SE A CPU RESISTIR POR 5 MINUTOS.
+Board,Board,Placa
+Against the computer,Against the computer,Contra o computador
+AGAINST THE COMPUTER,AGAINST THE COMPUTER,CONTRA O COMPUTADOR
+"You defend, a bot attacks.","You defend, a bot attacks.","Você defende, um robô ataca."
+"YOU DEFEND, A BOT ATTACKS.","YOU DEFEND, A BOT ATTACKS.","VOCÊ DEFENDE, UM ROBÔ ATACA."
+Play vs AI,Play vs AI,Jogar contra o robô
+PLAY VS AI,PLAY VS AI,JOGAR CONTRA O ROBÔ
+Port,Port,Porta
+PORT,PORT,PORTA
+Host game,Host game,Hospedar
+HOST GAME,HOST GAME,HOSPEDAR
+Host (you defend),Host (you defend),Hospedar (você defende)
+HOST (YOU DEFEND),HOST (YOU DEFEND),HOSPEDAR (VOCÊ DEFENDE)
+Others join with your IP address.,Others join with your IP address.,Outros entram pelo seu endereço IP.
+OTHERS JOIN WITH YOUR IP ADDRESS.,OTHERS JOIN WITH YOUR IP ADDRESS.,OUTROS ENTRAM PELO SEU ENDEREÇO IP.
+your name,your name,seu nome
+YOUR NAME,YOUR NAME,SEU NOME
+host:7777,host:7777,servidor:7777
+HOST:7777,HOST:7777,SERVIDOR:7777
+Join,Join,Entrar
+JOIN,JOIN,ENTRAR
+Join (you attack),Join (you attack),Entrar (você ataca)
+JOIN (YOU ATTACK),JOIN (YOU ATTACK),ENTRAR (VOCÊ ATACA)
+Enter the host's address.,Enter the host's address.,Informe o endereço de quem hospeda.
+ENTER THE HOST'S ADDRESS.,ENTER THE HOST'S ADDRESS.,INFORME O ENDEREÇO DE QUEM HOSPEDA.
+EDITOR,EDITOR,EDITOR
+MAP,MAP,MAPA
+WAVES,WAVES,ONDAS
+TOOLS,TOOLS,FERRAMENTAS
+Route,Route,Rota
+ROUTE,ROUTE,ROTA
+Place,Place,Colocar
+PLACE,PLACE,COLOCAR
+Select,Select,Selecionar
+SELECT,SELECT,SELECIONAR
+Erase,Erase,Apagar
+ERASE,ERASE,APAGAR
+Grid,Grid,Grade
+GRID,GRID,GRADE
+Undo,Undo,Desfazer
+UNDO,UNDO,DESFAZER
+Redo,Redo,Refazer
+REDO,REDO,REFAZER
+New,New,Nova
+NEW,NEW,NOVA
+Open,Open,Abrir
+OPEN,OPEN,ABRIR
+Save,Save,Salvar
+SAVE,SAVE,SALVAR
+Save copy,Save copy,Salvar cópia
+SAVE COPY,SAVE COPY,SALVAR CÓPIA
+TEST,TEST,TESTAR
+LEVEL OK,LEVEL OK,FASE VÁLIDA
+Ready to play.,Ready to play.,Pronta para jogar.
+READY TO PLAY.,READY TO PLAY.,PRONTA PARA JOGAR.
+"Click cells to draw the bug route. Start on an edge so bugs come from outside. The last point is the CPU.
+
+Corners are added for you. Click an earlier point to cut the route there. Right click removes the last point.","Click cells to draw the bug route. Start on an edge so bugs come from outside. The last point is the CPU.
+
+Corners are added for you. Click an earlier point to cut the route there. Right click removes the last point.","Clique nas células para desenhar a rota. Comece em uma borda para os bugs entrarem por fora. O último ponto é a CPU.
+
+Os cantos são automáticos. Clique em um ponto anterior para cortar a rota ali. O botão direito remove o último ponto."
+"CLICK CELLS TO DRAW THE BUG ROUTE. START ON AN EDGE SO BUGS COME FROM OUTSIDE. THE LAST POINT IS THE CPU.
+
+CORNERS ARE ADDED FOR YOU. CLICK AN EARLIER POINT TO CUT THE ROUTE THERE. RIGHT CLICK REMOVES THE LAST POINT.","CLICK CELLS TO DRAW THE BUG ROUTE. START ON AN EDGE SO BUGS COME FROM OUTSIDE. THE LAST POINT IS THE CPU.
+
+CORNERS ARE ADDED FOR YOU. CLICK AN EARLIER POINT TO CUT THE ROUTE THERE. RIGHT CLICK REMOVES THE LAST POINT.","CLIQUE NAS CÉLULAS PARA DESENHAR A ROTA. COMECE EM UMA BORDA PARA OS BUGS ENTRAREM POR FORA. O ÚLTIMO PONTO É A CPU.
+
+OS CANTOS SÃO AUTOMÁTICOS. CLIQUE EM UM PONTO ANTERIOR PARA CORTAR A ROTA ALI. O BOTÃO DIREITO REMOVE O ÚLTIMO PONTO."
+Clear route,Clear route,Limpar rota
+CLEAR ROUTE,CLEAR ROUTE,LIMPAR ROTA
+COMPONENTS,COMPONENTS,COMPONENTES
+"Click to place, right click to remove, R rotates.","Click to place, right click to remove, R rotates.","Clique para colocar, botão direito para remover, R para girar."
+"CLICK TO PLACE, RIGHT CLICK TO REMOVE, R ROTATES.","CLICK TO PLACE, RIGHT CLICK TO REMOVE, R ROTATES.","CLIQUE PARA COLOCAR, BOTÃO DIREITO PARA REMOVER, R PARA GIRAR."
+"Click a component to edit it, drag to move it. Delete removes it, R rotates.","Click a component to edit it, drag to move it. Delete removes it, R rotates.","Clique em um componente para editar, arraste para mover. Delete remove, R gira."
+"CLICK A COMPONENT TO EDIT IT, DRAG TO MOVE IT. DELETE REMOVES IT, R ROTATES.","CLICK A COMPONENT TO EDIT IT, DRAG TO MOVE IT. DELETE REMOVES IT, R ROTATES.","CLIQUE EM UM COMPONENTE PARA EDITAR, ARRASTE PARA MOVER. DELETE REMOVE, R GIRA."
+Delete,Delete,Excluir
+DELETE,DELETE,EXCLUIR
+Click components to remove them.,Click components to remove them.,Clique nos componentes para removê-los.
+CLICK COMPONENTS TO REMOVE THEM.,CLICK COMPONENTS TO REMOVE THEM.,CLIQUE NOS COMPONENTES PARA REMOVÊ-LOS.
+Width,Width,Largura
+WIDTH,WIDTH,LARGURA
+Height,Height,Altura
+HEIGHT,HEIGHT,ALTURA
+label,label,legenda
+LABEL,LABEL,LEGENDA
+optional marking,optional marking,marcação opcional
+OPTIONAL MARKING,OPTIONAL MARKING,MARCAÇÃO OPCIONAL
++ wave,+ wave,+ onda
++ WAVE,+ WAVE,+ ONDA
+"Click a lane to add a bug at that time. Drag to move (or change type), right click to remove. Wheel scrolls, Ctrl+wheel zooms.","Click a lane to add a bug at that time. Drag to move (or change type), right click to remove. Wheel scrolls, Ctrl+wheel zooms.","Clique em uma faixa para adicionar um bug naquele instante. Arraste para mover ou trocar o tipo; botão direito remove. A roda rola, Ctrl+roda amplia."
+"CLICK A LANE TO ADD A BUG AT THAT TIME. DRAG TO MOVE (OR CHANGE TYPE), RIGHT CLICK TO REMOVE. WHEEL SCROLLS, CTRL+WHEEL ZOOMS.","CLICK A LANE TO ADD A BUG AT THAT TIME. DRAG TO MOVE (OR CHANGE TYPE), RIGHT CLICK TO REMOVE. WHEEL SCROLLS, CTRL+WHEEL ZOOMS.","CLIQUE EM UMA FAIXA PARA ADICIONAR UM BUG NAQUELE INSTANTE. ARRASTE PARA MOVER OU TROCAR O TIPO; BOTÃO DIREITO REMOVE. A RODA ROLA, CTRL+RODA AMPLIA."
+Duplicate wave,Duplicate wave,Duplicar onda
+DUPLICATE WAVE,DUPLICATE WAVE,DUPLICAR ONDA
+Clear wave,Clear wave,Limpar onda
+CLEAR WAVE,CLEAR WAVE,LIMPAR ONDA
+Delete wave,Delete wave,Excluir onda
+DELETE WAVE,DELETE WAVE,EXCLUIR ONDA
+FILL,FILL,PREENCHER
+Count,Count,Quantidade
+COUNT,COUNT,QUANTIDADE
+Every (s),Every (s),Intervalo (s)
+EVERY (S),EVERY (S),INTERVALO (S)
+Start (s),Start (s),Início (s)
+START (S),START (S),INÍCIO (S)
+Add bugs,Add bugs,Adicionar bugs
+ADD BUGS,ADD BUGS,ADICIONAR BUGS
+Could not save,Could not save,Não foi possível salvar
+COULD NOT SAVE,COULD NOT SAVE,NÃO FOI POSSÍVEL SALVAR
+New level,New level,Nova fase
+NEW LEVEL,NEW LEVEL,NOVA FASE
+Discard?,Discard?,Descartar?
+DISCARD?,DISCARD?,DESCARTAR?
+LEVEL SETTINGS,LEVEL SETTINGS,CONFIGURAR FASE
+Title,Title,Título
+TITLE,TITLE,TÍTULO
+Subtitle,Subtitle,Subtítulo
+SUBTITLE,SUBTITLE,SUBTÍTULO
+Core label,Core label,Legenda da CPU
+CORE LABEL,CORE LABEL,LEGENDA DA CPU
+Board colour,Board colour,Cor da placa
+BOARD COLOUR,BOARD COLOUR,COR DA PLACA
+Start money,Start money,Dinheiro inicial
+START MONEY,START MONEY,DINHEIRO INICIAL
+Cancel,Cancel,Cancelar
+Apply,Apply,Aplicar
+APPLY,APPLY,APLICAR
+OPEN LEVEL,OPEN LEVEL,ABRIR FASE
+built-in,built-in,incluída
+BUILT-IN,BUILT-IN,INCLUÍDA
+CAPACITOR,CAPACITOR,CAPACITOR
+EDGE CONN.,EDGE CONN.,CONECTOR
+TEXT,TEXT,TEXTO
+MOUNT HOLE,MOUNT HOLE,FURO
+Default,Default,Padrão
+DEFAULT,DEFAULT,PADRÃO
+Red,Red,Vermelho
+RED,RED,VERMELHO
+Green,Green,Verde
+GREEN,GREEN,VERDE
+Blue,Blue,Azul
+BLUE,BLUE,AZUL
+LED blue,LED blue,LED azul
+LED BLUE,LED BLUE,LED AZUL
+LED warm white,LED warm white,LED branco quente
+LED WARM WHITE,LED WARM WHITE,LED BRANCO QUENTE
+LED amber,LED amber,LED âmbar
+LED AMBER,LED AMBER,LED ÂMBAR
+Yellow,Yellow,Amarelo
+YELLOW,YELLOW,AMARELO
+Orange,Orange,Laranja
+ORANGE,ORANGE,LARANJA
+Purple,Purple,Roxo
+PURPLE,PURPLE,ROXO
+Cyan,Cyan,Ciano
+CYAN,CYAN,CIANO
+White,White,Branco
+WHITE,WHITE,BRANCO
+Black,Black,Preto
+BLACK,BLACK,PRETO
+Grey,Grey,Cinza
+GREY,GREY,CINZA
+"usb, rj45, hdmi or audio","usb, rj45, hdmi or audio","usb, rj45, hdmi ou audio"
+"USB, RJ45, HDMI OR AUDIO","USB, RJ45, HDMI OR AUDIO","USB, RJ45, HDMI OU AUDIO"
+text printed on the board,text printed on the board,texto impresso na placa
+TEXT PRINTED ON THE BOARD,TEXT PRINTED ON THE BOARD,TEXTO IMPRESSO NA PLACA
+"marking, e.g. U3","marking, e.g. U3","marcação, por exemplo U3"
+"MARKING, E.G. U3","MARKING, E.G. U3","MARCAÇÃO, POR EXEMPLO U3"
+"marking, e.g. GPU","marking, e.g. GPU","marcação, por exemplo GPU"
+"MARKING, E.G. GPU","MARKING, E.G. GPU","MARCAÇÃO, POR EXEMPLO GPU"
+"frequency, e.g. 25.000","frequency, e.g. 25.000","frequência, por exemplo 25.000"
+"FREQUENCY, E.G. 25.000","FREQUENCY, E.G. 25.000","FREQUÊNCIA, POR EXEMPLO 25.000"
+"marking, e.g. R47","marking, e.g. R47","marcação, por exemplo R47"
+"MARKING, E.G. R47","MARKING, E.G. R47","MARCAÇÃO, POR EXEMPLO R47"
+marking,marking,marcação
+MARKING,MARKING,MARCAÇÃO
+IC chip,IC chip,Circuito integrado
+IC CHIP,IC CHIP,CIRCUITO INTEGRADO
+BGA package,BGA package,Encapsulado BGA
+BGA PACKAGE,BGA PACKAGE,ENCAPSULADO BGA
+Pin header,Pin header,Barra de pinos
+PIN HEADER,PIN HEADER,BARRA DE PINOS
+Connector,Connector,Conector
+CONNECTOR,CONNECTOR,CONECTOR
+Electrolytic capacitor,Electrolytic capacitor,Capacitor eletrolítico
+ELECTROLYTIC CAPACITOR,ELECTROLYTIC CAPACITOR,CAPACITOR ELETROLÍTICO
+SMD passives,SMD passives,Passivos SMD
+SMD PASSIVES,SMD PASSIVES,PASSIVOS SMD
+Resistor,Resistor,Resistor
+RESISTOR,RESISTOR,RESISTOR
+SMD LED,SMD LED,LED SMD
+5 mm LED,5 mm LED,LED de 5 mm
+5 MM LED,5 MM LED,LED DE 5 MM
+Crystal,Crystal,Cristal
+CRYSTAL,CRYSTAL,CRISTAL
+Choke,Choke,Indutor
+CHOKE,CHOKE,INDUTOR
+MOSFET,MOSFET,MOSFET
+RAM slot,RAM slot,Slot de memória
+RAM SLOT,RAM SLOT,SLOT DE MEMÓRIA
+PCIe slot,PCIe slot,Slot PCIe
+PCIE SLOT,PCIE SLOT,SLOT PCIE
+SATA port,SATA port,Porta SATA
+SATA PORT,SATA PORT,PORTA SATA
+I/O port,I/O port,Porta de E/S
+I/O PORT,I/O PORT,PORTA DE E/S
+Coin battery,Coin battery,Bateria moeda
+COIN BATTERY,COIN BATTERY,BATERIA MOEDA
+Heatsink,Heatsink,Dissipador
+HEATSINK,HEATSINK,DISSIPADOR
+RF shield,RF shield,Blindagem RF
+RF SHIELD,RF SHIELD,BLINDAGEM RF
+Key switch,Key switch,Interruptor
+KEY SWITCH,KEY SWITCH,INTERRUPTOR
+Jumper,Jumper,Jumper
+JUMPER,JUMPER,JUMPER
+Edge connector,Edge connector,Conector de borda
+EDGE CONNECTOR,EDGE CONNECTOR,CONECTOR DE BORDA
+Mounting hole,Mounting hole,Furo de fixação
+MOUNTING HOLE,MOUNTING HOLE,FURO DE FIXAÇÃO
+Silkscreen text,Silkscreen text,Texto da placa
+SILKSCREEN TEXT,SILKSCREEN TEXT,TEXTO DA PLACA
+Not connected,Not connected,Sem conexão
+NOT CONNECTED,NOT CONNECTED,SEM CONEXÃO
+The match is over,The match is over,A partida terminou
+THE MATCH IS OVER,THE MATCH IS OVER,A PARTIDA TERMINOU
+Not enough energy,Not enough energy,Energia insuficiente
+NOT ENOUGH ENERGY,NOT ENOUGH ENERGY,ENERGIA INSUFICIENTE
+Only in versus mode,Only in versus mode,Apenas no modo confronto
+ONLY IN VERSUS MODE,ONLY IN VERSUS MODE,APENAS NO MODO CONFRONTO
+Unknown bug,Unknown bug,Bug desconhecido
+UNKNOWN BUG,UNKNOWN BUG,BUG DESCONHECIDO
+Not available in versus,Not available in versus,Indisponível no confronto
+NOT AVAILABLE IN VERSUS,NOT AVAILABLE IN VERSUS,INDISPONÍVEL NO CONFRONTO
+Too fast,Too fast,Rápido demais
+TOO FAST,TOO FAST,RÁPIDO DEMAIS
+Connected. Waiting for the match to start...,Connected. Waiting for the match to start...,Conectado. Aguardando o início da partida...
+CONNECTED. WAITING FOR THE MATCH TO START...,CONNECTED. WAITING FOR THE MATCH TO START...,CONECTADO. AGUARDANDO O INÍCIO DA PARTIDA...
+Connection lost.,Connection lost.,Conexão perdida.
+CONNECTION LOST.,CONNECTION LOST.,CONEXÃO PERDIDA.
+Invalid JSON,Invalid JSON,JSON inválido
+INVALID JSON,INVALID JSON,JSON INVÁLIDO
+Only the attacker can send bugs,Only the attacker can send bugs,Só o atacante pode enviar bugs
+ONLY THE ATTACKER CAN SEND BUGS,ONLY THE ATTACKER CAN SEND BUGS,SÓ O ATACANTE PODE ENVIAR BUGS
+Only the defender can build,Only the defender can build,Só o defensor pode construir
+ONLY THE DEFENDER CAN BUILD,ONLY THE DEFENDER CAN BUILD,SÓ O DEFENSOR PODE CONSTRUIR
+Can't build there,Can't build there,Não é possível construir ali
+CAN'T BUILD THERE,CAN'T BUILD THERE,NÃO É POSSÍVEL CONSTRUIR ALI
+attacker,attacker,atacante
+defender,defender,defensor
+DEFENDER,DEFENDER,DEFENSOR
+attacker and defender,attacker and defender,atacante e defensor
+ATTACKER AND DEFENDER,ATTACKER AND DEFENDER,ATACANTE E DEFENSOR
+The route needs at least two points.,The route needs at least two points.,A rota precisa de pelo menos dois pontos.
+THE ROUTE NEEDS AT LEAST TWO POINTS.,THE ROUTE NEEDS AT LEAST TWO POINTS.,A ROTA PRECISA DE PELO MENOS DOIS PONTOS.
+The CPU (last route point) must be inside the board.,The CPU (last route point) must be inside the board.,A CPU (último ponto da rota) deve ficar dentro da placa.
+THE CPU (LAST ROUTE POINT) MUST BE INSIDE THE BOARD.,THE CPU (LAST ROUTE POINT) MUST BE INSIDE THE BOARD.,A CPU (ÚLTIMO PONTO DA ROTA) DEVE FICAR DENTRO DA PLACA.
+The route must start inside the board or just outside an edge.,The route must start inside the board or just outside an edge.,A rota deve começar na placa ou logo após uma borda.
+THE ROUTE MUST START INSIDE THE BOARD OR JUST OUTSIDE AN EDGE.,THE ROUTE MUST START INSIDE THE BOARD OR JUST OUTSIDE AN EDGE.,A ROTA DEVE COMEÇAR NA PLACA OU LOGO APÓS UMA BORDA.
+There are no bugs in the waves.,There are no bugs in the waves.,Não há bugs nas ondas.
+THERE ARE NO BUGS IN THE WAVES.,THERE ARE NO BUGS IN THE WAVES.,NÃO HÁ BUGS NAS ONDAS.
+MAX,MAX,MÁX
+OK,OK,OK
+TURRET_BLASTER_NAME,Pulse Blaster,Canhão de pulsos
+Pulse Blaster,Pulse Blaster,Canhão de pulsos
+PULSE BLASTER,PULSE BLASTER,CANHÃO DE PULSOS
+TURRET_BLASTER_DESCRIPTION,Fires single shots at the bug closest to the CPU.,Dispara contra o bug mais próximo da CPU.
+Fires single shots at the bug closest to the CPU.,Fires single shots at the bug closest to the CPU.,Dispara contra o bug mais próximo da CPU.
+FIRES SINGLE SHOTS AT THE BUG CLOSEST TO THE CPU.,FIRES SINGLE SHOTS AT THE BUG CLOSEST TO THE CPU.,DISPARA CONTRA O BUG MAIS PRÓXIMO DA CPU.
+UPGRADE_BLASTER_DAMAGE_NAME,Damage,Dano
+Damage,Damage,Dano
+DAMAGE,DAMAGE,DANO
+UPGRADE_BLASTER_DAMAGE_DESCRIPTION,+1 damage per shot.,+1 de dano por tiro.
++1 damage per shot.,+1 damage per shot.,+1 de dano por tiro.
++1 DAMAGE PER SHOT.,+1 DAMAGE PER SHOT.,+1 DE DANO POR TIRO.
+UPGRADE_BLASTER_SPEED_NAME,Attack speed,Cadência
+Attack speed,Attack speed,Cadência
+ATTACK SPEED,ATTACK SPEED,CADÊNCIA
+UPGRADE_BLASTER_SPEED_DESCRIPTION,Shoots a little more often.,Atira com mais frequência.
+Shoots a little more often.,Shoots a little more often.,Atira com mais frequência.
+SHOOTS A LITTLE MORE OFTEN.,SHOOTS A LITTLE MORE OFTEN.,ATIRA COM MAIS FREQUÊNCIA.
+UPGRADE_BLASTER_RANGE_NAME,Range,Alcance
+Range,Range,Alcance
+RANGE,RANGE,ALCANCE
+UPGRADE_BLASTER_RANGE_DESCRIPTION,+5 range.,+5 de alcance.
++5 range.,+5 range.,+5 de alcance.
++5 RANGE.,+5 RANGE.,+5 DE ALCANCE.
+TURRET_MORTAR_NAME,Capacitor Mortar,Morteiro capacitivo
+Capacitor Mortar,Capacitor Mortar,Morteiro capacitivo
+CAPACITOR MORTAR,CAPACITOR MORTAR,MORTEIRO CAPACITIVO
+TURRET_MORTAR_DESCRIPTION,Lobs a slow bomb at the nearest bug. The explosion hits everything around it.,Lança uma bomba lenta no bug mais próximo. A explosão atinge tudo ao redor.
+Lobs a slow bomb at the nearest bug. The explosion hits everything around it.,Lobs a slow bomb at the nearest bug. The explosion hits everything around it.,Lança uma bomba lenta no bug mais próximo. A explosão atinge tudo ao redor.
+LOBS A SLOW BOMB AT THE NEAREST BUG. THE EXPLOSION HITS EVERYTHING AROUND IT.,LOBS A SLOW BOMB AT THE NEAREST BUG. THE EXPLOSION HITS EVERYTHING AROUND IT.,LANÇA UMA BOMBA LENTA NO BUG MAIS PRÓXIMO. A EXPLOSÃO ATINGE TUDO AO REDOR.
+UPGRADE_MORTAR_DAMAGE_NAME,Damage,Dano
+UPGRADE_MORTAR_DAMAGE_DESCRIPTION,+0.2 explosion damage.,"+0,2 de dano de explosão."
++0.2 explosion damage.,+0.2 explosion damage.,"+0,2 de dano de explosão."
++0.2 EXPLOSION DAMAGE.,+0.2 EXPLOSION DAMAGE.,"+0,2 DE DANO DE EXPLOSÃO."
+UPGRADE_MORTAR_SPEED_NAME,Attack speed,Cadência
+UPGRADE_MORTAR_SPEED_DESCRIPTION,Fires a little more often.,Atira com mais frequência.
+Fires a little more often.,Fires a little more often.,Atira com mais frequência.
+FIRES A LITTLE MORE OFTEN.,FIRES A LITTLE MORE OFTEN.,ATIRA COM MAIS FREQUÊNCIA.
+UPGRADE_MORTAR_RANGE_NAME,Range,Alcance
+UPGRADE_MORTAR_RANGE_DESCRIPTION,+4 range.,+4 de alcance.
++4 range.,+4 range.,+4 de alcance.
++4 RANGE.,+4 RANGE.,+4 DE ALCANCE.
+UPGRADE_MORTAR_BOMB_SPEED_NAME,Bomb speed,Velocidade da bomba
+Bomb speed,Bomb speed,Velocidade da bomba
+BOMB SPEED,BOMB SPEED,VELOCIDADE DA BOMBA
+UPGRADE_MORTAR_BOMB_SPEED_DESCRIPTION,Bombs fly faster.,As bombas voam mais rápido.
+Bombs fly faster.,Bombs fly faster.,As bombas voam mais rápido.
+BOMBS FLY FASTER.,BOMBS FLY FASTER.,AS BOMBAS VOAM MAIS RÁPIDO.
+UPGRADE_MORTAR_BOMB_AREA_NAME,Explosion area,Área de explosão
+Explosion area,Explosion area,Área de explosão
+EXPLOSION AREA,EXPLOSION AREA,ÁREA DE EXPLOSÃO
+UPGRADE_MORTAR_BOMB_AREA_DESCRIPTION,+2 explosion radius.,+2 no raio da explosão.
++2 explosion radius.,+2 explosion radius.,+2 no raio da explosão.
++2 EXPLOSION RADIUS.,+2 EXPLOSION RADIUS.,+2 NO RAIO DA EXPLOSÃO.
+TURRET_BURST_NAME,Fan-out Router,Roteador radial
+Fan-out Router,Fan-out Router,Roteador radial
+FAN-OUT ROUTER,FAN-OUT ROUTER,ROTEADOR RADIAL
+TURRET_BURST_DESCRIPTION,Sprays pellets in every direction when a bug is near.,Espalha projéteis em todas as direções quando há um bug por perto.
+Sprays pellets in every direction when a bug is near.,Sprays pellets in every direction when a bug is near.,Espalha projéteis em todas as direções quando há um bug por perto.
+SPRAYS PELLETS IN EVERY DIRECTION WHEN A BUG IS NEAR.,SPRAYS PELLETS IN EVERY DIRECTION WHEN A BUG IS NEAR.,ESPALHA PROJÉTEIS EM TODAS AS DIREÇÕES QUANDO HÁ UM BUG POR PERTO.
+UPGRADE_BURST_DAMAGE_NAME,Damage,Dano
+UPGRADE_BURST_DAMAGE_DESCRIPTION,+0.2 damage per pellet.,"+0,2 de dano por projétil."
++0.2 damage per pellet.,+0.2 damage per pellet.,"+0,2 de dano por projétil."
++0.2 DAMAGE PER PELLET.,+0.2 DAMAGE PER PELLET.,"+0,2 DE DANO POR PROJÉTIL."
+UPGRADE_BURST_SPEED_NAME,Attack speed,Cadência
+UPGRADE_BURST_SPEED_DESCRIPTION,Fires a little more often.,Atira com mais frequência.
+UPGRADE_BURST_RANGE_NAME,Range,Alcance
+UPGRADE_BURST_RANGE_DESCRIPTION,+5 range.,+5 de alcance.
+UPGRADE_BURST_DENSITY_NAME,Density,Densidade
+Density,Density,Densidade
+DENSITY,DENSITY,DENSIDADE
+UPGRADE_BURST_DENSITY_DESCRIPTION,More pellets per burst.,Mais projéteis por rajada.
+More pellets per burst.,More pellets per burst.,Mais projéteis por rajada.
+MORE PELLETS PER BURST.,MORE PELLETS PER BURST.,MAIS PROJÉTEIS POR RAJADA.
+TURRET_LASER_NAME,Laser Diode,Diodo laser
+Laser Diode,Laser Diode,Diodo laser
+LASER DIODE,LASER DIODE,DIODO LASER
+TURRET_LASER_DESCRIPTION,A continuous beam in a fixed direction. Choose where it points when you place it.,Feixe contínuo em direção fixa. Escolha a direção ao construir.
+A continuous beam in a fixed direction. Choose where it points when you place it.,A continuous beam in a fixed direction. Choose where it points when you place it.,Feixe contínuo em direção fixa. Escolha a direção ao construir.
+A CONTINUOUS BEAM IN A FIXED DIRECTION. CHOOSE WHERE IT POINTS WHEN YOU PLACE IT.,A CONTINUOUS BEAM IN A FIXED DIRECTION. CHOOSE WHERE IT POINTS WHEN YOU PLACE IT.,FEIXE CONTÍNUO EM DIREÇÃO FIXA. ESCOLHA A DIREÇÃO AO CONSTRUIR.
+UPGRADE_LASER_DAMAGE_NAME,Damage,Dano
+UPGRADE_LASER_DAMAGE_DESCRIPTION,Stronger beam.,Feixe mais forte.
+Stronger beam.,Stronger beam.,Feixe mais forte.
+STRONGER BEAM.,STRONGER BEAM.,FEIXE MAIS FORTE.
+UPGRADE_LASER_FIRE_DISTANCE_NAME,Fire distance,Distância do feixe
+Fire distance,Fire distance,Distância do feixe
+FIRE DISTANCE,FIRE DISTANCE,DISTÂNCIA DO FEIXE
+UPGRADE_LASER_FIRE_DISTANCE_DESCRIPTION,Longer beam.,Feixe mais longo.
+Longer beam.,Longer beam.,Feixe mais longo.
+LONGER BEAM.,LONGER BEAM.,FEIXE MAIS LONGO.
+TURRET_FREEZER_NAME,Cryo Cooler,Resfriador criogênico
+Cryo Cooler,Cryo Cooler,Resfriador criogênico
+CRYO COOLER,CRYO COOLER,RESFRIADOR CRIOGÊNICO
+TURRET_FREEZER_DESCRIPTION,Keeps frost orbs around it that chase bugs and slow them down.,Mantém orbes de gelo que perseguem bugs e os deixam mais lentos.
+Keeps frost orbs around it that chase bugs and slow them down.,Keeps frost orbs around it that chase bugs and slow them down.,Mantém orbes de gelo que perseguem bugs e os deixam mais lentos.
+KEEPS FROST ORBS AROUND IT THAT CHASE BUGS AND SLOW THEM DOWN.,KEEPS FROST ORBS AROUND IT THAT CHASE BUGS AND SLOW THEM DOWN.,MANTÉM ORBES DE GELO QUE PERSEGUEM BUGS E OS DEIXAM MAIS LENTOS.
+UPGRADE_FREEZER_FREEZE_NAME,Freeze,Congelamento
+Freeze,Freeze,Congelamento
+FREEZE,FREEZE,CONGELAMENTO
+UPGRADE_FREEZER_FREEZE_DESCRIPTION,Slows bugs down more.,Deixa os bugs ainda mais lentos.
+Slows bugs down more.,Slows bugs down more.,Deixa os bugs ainda mais lentos.
+SLOWS BUGS DOWN MORE.,SLOWS BUGS DOWN MORE.,DEIXA OS BUGS AINDA MAIS LENTOS.
+UPGRADE_FREEZER_SPEED_NAME,Attack speed,Cadência
+UPGRADE_FREEZER_SPEED_DESCRIPTION,Makes orbs a little faster.,Cria orbes com mais frequência.
+Makes orbs a little faster.,Makes orbs a little faster.,Cria orbes com mais frequência.
+MAKES ORBS A LITTLE FASTER.,MAKES ORBS A LITTLE FASTER.,CRIA ORBES COM MAIS FREQUÊNCIA.
+UPGRADE_FREEZER_RANGE_NAME,Range,Alcance
+UPGRADE_FREEZER_RANGE_DESCRIPTION,+5 orb search range.,+5 de alcance de busca dos orbes.
++5 orb search range.,+5 orb search range.,+5 de alcance de busca dos orbes.
++5 ORB SEARCH RANGE.,+5 ORB SEARCH RANGE.,+5 DE ALCANCE DE BUSCA DOS ORBES.
+UPGRADE_FREEZER_BULLET_SPEED_NAME,Orb speed,Velocidade do orbe
+Orb speed,Orb speed,Velocidade do orbe
+ORB SPEED,ORB SPEED,VELOCIDADE DO ORBE
+UPGRADE_FREEZER_BULLET_SPEED_DESCRIPTION,Orbs fly faster.,Os orbes voam mais rápido.
+Orbs fly faster.,Orbs fly faster.,Os orbes voam mais rápido.
+ORBS FLY FASTER.,ORBS FLY FASTER.,OS ORBES VOAM MAIS RÁPIDO.
+TURRET_ANTIVIRUS_NAME,Antivirus Scanner,Antivírus
+Antivirus Scanner,Antivirus Scanner,Antivírus
+ANTIVIRUS SCANNER,ANTIVIRUS SCANNER,ANTIVÍRUS
+TURRET_ANTIVIRUS_DESCRIPTION,Exposes cloaked Rootkits while in range and reveals disguised Trojans.,Expõe rootkits camuflados no alcance e revela cavalos de Troia disfarçados.
+Exposes cloaked Rootkits while in range and reveals disguised Trojans.,Exposes cloaked Rootkits while in range and reveals disguised Trojans.,Expõe rootkits camuflados no alcance e revela cavalos de Troia disfarçados.
+EXPOSES CLOAKED ROOTKITS WHILE IN RANGE AND REVEALS DISGUISED TROJANS.,EXPOSES CLOAKED ROOTKITS WHILE IN RANGE AND REVEALS DISGUISED TROJANS.,EXPÕE ROOTKITS CAMUFLADOS NO ALCANCE E REVELA CAVALOS DE TROIA DISFARÇADOS.
+UPGRADE_ANTIVIRUS_RANGE_NAME,Range,Alcance
+UPGRADE_ANTIVIRUS_RANGE_DESCRIPTION,+6 support range.,+6 de alcance de apoio.
++6 support range.,+6 support range.,+6 de alcance de apoio.
++6 SUPPORT RANGE.,+6 SUPPORT RANGE.,+6 DE ALCANCE DE APOIO.
+TURRET_FIREWALL_NAME,Firewall,Firewall
+Firewall,Firewall,Firewall
+FIREWALL,FIREWALL,FIREWALL
+TURRET_FIREWALL_DESCRIPTION,Protects shots fired in or crossing its range from interception; deletes junk packets.,Protege tiros disparados dentro ou através de seu alcance contra interceptação; elimina pacotes inúteis.
+Protects shots fired in or crossing its range from interception; deletes junk packets.,Protects shots fired in or crossing its range from interception; deletes junk packets.,Protege tiros disparados dentro ou através de seu alcance contra interceptação; elimina pacotes inúteis.
+PROTECTS SHOTS FIRED IN OR CROSSING ITS RANGE FROM INTERCEPTION; DELETES JUNK PACKETS.,PROTECTS SHOTS FIRED IN OR CROSSING ITS RANGE FROM INTERCEPTION; DELETES JUNK PACKETS.,PROTEGE TIROS DISPARADOS DENTRO OU ATRAVÉS DE SEU ALCANCE CONTRA INTERCEPTAÇÃO; ELIMINA PACOTES INÚTEIS.
+UPGRADE_FIREWALL_RANGE_NAME,Range,Alcance
+UPGRADE_FIREWALL_RANGE_DESCRIPTION,+6 support range.,+6 de alcance de apoio.
+UPGRADE_FIREWALL_SUPPORT_NAME,Filtering speed,Filtragem
+Filtering speed,Filtering speed,Filtragem
+FILTERING SPEED,FILTERING SPEED,FILTRAGEM
+UPGRADE_FIREWALL_SUPPORT_DESCRIPTION,Improves this support ability.,Melhora esta habilidade de apoio.
+Improves this support ability.,Improves this support ability.,Melhora esta habilidade de apoio.
+IMPROVES THIS SUPPORT ABILITY.,IMPROVES THIS SUPPORT ABILITY.,MELHORA ESTA HABILIDADE DE APOIO.
+TURRET_BACKUP_NAME,Backup Drive,Backup
+Backup Drive,Backup Drive,Backup
+BACKUP DRIVE,BACKUP DRIVE,BACKUP
+TURRET_BACKUP_DESCRIPTION,Speeds up nearby turret recovery and grants brief immunity after restoring them.,Acelera a recuperação de torretas próximas e concede imunidade breve após restaurá-las.
+Speeds up nearby turret recovery and grants brief immunity after restoring them.,Speeds up nearby turret recovery and grants brief immunity after restoring them.,Acelera a recuperação de torretas próximas e concede imunidade breve após restaurá-las.
+SPEEDS UP NEARBY TURRET RECOVERY AND GRANTS BRIEF IMMUNITY AFTER RESTORING THEM.,SPEEDS UP NEARBY TURRET RECOVERY AND GRANTS BRIEF IMMUNITY AFTER RESTORING THEM.,ACELERA A RECUPERAÇÃO DE TORRETAS PRÓXIMAS E CONCEDE IMUNIDADE BREVE APÓS RESTAURÁ-LAS.
+UPGRADE_BACKUP_RANGE_NAME,Range,Alcance
+UPGRADE_BACKUP_RANGE_DESCRIPTION,+6 support range.,+6 de alcance de apoio.
+UPGRADE_BACKUP_SUPPORT_NAME,Recovery,Recuperação
+Recovery,Recovery,Recuperação
+RECOVERY,RECOVERY,RECUPERAÇÃO
+UPGRADE_BACKUP_SUPPORT_DESCRIPTION,Improves this support ability.,Melhora esta habilidade de apoio.
+TURRET_TECHNICIAN_NAME,Repair Bot,Robô técnico
+Repair Bot,Repair Bot,Robô técnico
+REPAIR BOT,REPAIR BOT,ROBÔ TÉCNICO
+TURRET_TECHNICIAN_DESCRIPTION,Slowly repairs components and LEDs. Destroyed components return after a complete rebuild.,Conserta componentes e LEDs lentamente. Componentes destruídos voltam após a reconstrução completa.
+Slowly repairs components and LEDs. Destroyed components return after a complete rebuild.,Slowly repairs components and LEDs. Destroyed components return after a complete rebuild.,Conserta componentes e LEDs lentamente. Componentes destruídos voltam após a reconstrução completa.
+SLOWLY REPAIRS COMPONENTS AND LEDS. DESTROYED COMPONENTS RETURN AFTER A COMPLETE REBUILD.,SLOWLY REPAIRS COMPONENTS AND LEDS. DESTROYED COMPONENTS RETURN AFTER A COMPLETE REBUILD.,CONSERTA COMPONENTES E LEDS LENTAMENTE. COMPONENTES DESTRUÍDOS VOLTAM APÓS A RECONSTRUÇÃO COMPLETA.
+UPGRADE_TECHNICIAN_RANGE_NAME,Range,Alcance
+UPGRADE_TECHNICIAN_RANGE_DESCRIPTION,+6 support range.,+6 de alcance de apoio.
+UPGRADE_TECHNICIAN_SUPPORT_NAME,Repair speed,Reparo
+Repair speed,Repair speed,Reparo
+REPAIR SPEED,REPAIR SPEED,REPARO
+UPGRADE_TECHNICIAN_SUPPORT_DESCRIPTION,Improves this support ability.,Melhora esta habilidade de apoio.
+ENEMY_BUG_NAME,Glitch,Falha
+Glitch,Glitch,Falha
+GLITCH,GLITCH,FALHA
+ENEMY_BUG_DESCRIPTION,"A common glitch. Weak on its own, a nuisance in swarms; sometimes wanders off the route to nibble a part.","Uma falha comum. Fraca sozinha, irritante em bando; às vezes sai da rota para roer uma peça."
+ENEMY_SPIDER_NAME,Spider,Aranha
+Spider,Spider,Aranha
+SPIDER,SPIDER,ARANHA
+ENEMY_SPIDER_DESCRIPTION,"Fragile, but its bite hurts the board more than a glitch's. Leaves the route now and then.","Frágil, mas sua mordida estraga a placa mais que a de uma falha. De vez em quando sai da rota."
+ENEMY_TERMITE_NAME,Termite,Cupim
+Termite,Termite,Cupim
+TERMITE,TERMITE,CUPIM
+ENEMY_TERMITE_DESCRIPTION,Weak but always hungry: it leaves the route for almost every part it sees and chews through it fast.,"Fraco, mas sempre faminto: sai da rota por quase toda peça que vê e a rói rapidinho."
+ENEMY_BEETLE_NAME,Beetle,Besouro
+Beetle,Beetle,Besouro
+BEETLE,BEETLE,BESOURO
+ENEMY_BEETLE_DESCRIPTION,A quick beetle with a hard shell. Takes a few hits before it goes down.,Um besouro ágil de casca dura. Aguenta alguns tiros antes de cair.
+ENEMY_TANK_NAME,Armored Worm,Verme blindado
+Armored Worm,Armored Worm,Verme blindado
+ARMORED WORM,ARMORED WORM,VERME BLINDADO
+ENEMY_TANK_DESCRIPTION,"Very slow and heavily armoured. Given time, it gnaws through the biggest parts.","Bem lento e muito blindado. Com tempo, rói até as peças maiores."
+ENEMY_ROACH_NAME,Roach,Barata
+Roach,Roach,Barata
+ROACH,ROACH,BARATA
+ENEMY_ROACH_DESCRIPTION,The fastest thing on the board. It rarely stops to chew: it just runs for the CPU.,A coisa mais rápida da placa. Quase nunca para pra roer: corre direto para a CPU.
+ENEMY_RUNNER_NAME,Runner,Corredor
+Runner,Runner,Corredor
+RUNNER,RUNNER,CORREDOR
+ENEMY_RUNNER_DESCRIPTION,"Slim, quick and tough. Hardly ever leaves the route.","Fino, veloz e resistente. Quase nunca sai da rota."
+ENEMY_BRUTE_NAME,Brute,Brutamontes
+Brute,Brute,Brutamontes
+BRUTE,BRUTE,BRUTAMONTES
+ENEMY_BRUTE_DESCRIPTION,A huge rhinoceros beetle. Soaks up damage and wrecks the parts it reaches.,Um enorme besouro-rinoceronte. Aguenta muito dano e destrói as peças que alcança.
+ENEMY_TROJAN_NAME,Trojan Horse,Cavalo de Troia
+Trojan Horse,Trojan Horse,Cavalo de Troia
+TROJAN HORSE,TROJAN HORSE,CAVALO DE TROIA
+ENEMY_TROJAN_DESCRIPTION,Looks like a free download. Kill it and it drops its payload.,"Parece um download grátis. Ao morrer, solta sua carga de bugs."
+Looks like a free download. Kill it and it drops its payload.,Looks like a free download. Kill it and it drops its payload.,"Parece um download grátis. Ao morrer, solta sua carga de bugs."
+LOOKS LIKE A FREE DOWNLOAD. KILL IT AND IT DROPS ITS PAYLOAD.,LOOKS LIKE A FREE DOWNLOAD. KILL IT AND IT DROPS ITS PAYLOAD.,"PARECE UM DOWNLOAD GRÁTIS. AO MORRER, SOLTA SUA CARGA DE BUGS."
+ENEMY_KEYLOGGER_NAME,Keylogger,Keylogger
+Keylogger,Keylogger,Registrador de teclas
+KEYLOGGER,KEYLOGGER,REGISTRADOR DE TECLAS
+ENEMY_KEYLOGGER_DESCRIPTION,Records every keystroke and steals $1 a second while it lives.,Registra cada tecla e rouba $1 por segundo enquanto vive.
+Records every keystroke and steals $1 a second while it lives.,Records every keystroke and steals $1 a second while it lives.,Registra cada tecla e rouba $1 por segundo enquanto vive.
+RECORDS EVERY KEYSTROKE AND STEALS $1 A SECOND WHILE IT LIVES.,RECORDS EVERY KEYSTROKE AND STEALS $1 A SECOND WHILE IT LIVES.,REGISTRA CADA TECLA E ROUBA $1 POR SEGUNDO ENQUANTO VIVE.
+ENEMY_MITM_NAME,Man-in-the-Middle,Man-in-the-Middle
+Man-in-the-Middle,Man-in-the-Middle,Interceptador
+MAN-IN-THE-MIDDLE,MAN-IN-THE-MIDDLE,INTERCEPTADOR
+ENEMY_MITM_DESCRIPTION,Sits between your turrets and their targets: intercepts half the shots near it.,Fica entre as torretas e seus alvos: intercepta metade dos tiros próximos.
+Sits between your turrets and their targets: intercepts half the shots near it.,Sits between your turrets and their targets: intercepts half the shots near it.,Fica entre as torretas e seus alvos: intercepta metade dos tiros próximos.
+SITS BETWEEN YOUR TURRETS AND THEIR TARGETS: INTERCEPTS HALF THE SHOTS NEAR IT.,SITS BETWEEN YOUR TURRETS AND THEIR TARGETS: INTERCEPTS HALF THE SHOTS NEAR IT.,FICA ENTRE AS TORRETAS E SEUS ALVOS: INTERCEPTA METADE DOS TIROS PRÓXIMOS.
+ENEMY_DDOS_NAME,DDoS Botnet,Botnet DDoS
+DDoS Botnet,DDoS Botnet,Rede DDoS
+DDOS BOTNET,DDOS BOTNET,REDE DDOS
+ENEMY_DDOS_DESCRIPTION,Floods the route with junk packets.,Inunda a rota com pacotes inúteis.
+Floods the route with junk packets.,Floods the route with junk packets.,Inunda a rota com pacotes inúteis.
+FLOODS THE ROUTE WITH JUNK PACKETS.,FLOODS THE ROUTE WITH JUNK PACKETS.,INUNDA A ROTA COM PACOTES INÚTEIS.
+ENEMY_ROOTKIT_NAME,Rootkit,Rootkit
+Rootkit,Rootkit,Rootkit
+ROOTKIT,ROOTKIT,ROOTKIT
+ENEMY_ROOTKIT_DESCRIPTION,"Hides from your turrets every few seconds: no aim, no damage.","Esconde-se das torretas a cada poucos segundos: sem mira, sem dano."
+"Hides from your turrets every few seconds: no aim, no damage.","Hides from your turrets every few seconds: no aim, no damage.","Esconde-se das torretas a cada poucos segundos: sem mira, sem dano."
+"HIDES FROM YOUR TURRETS EVERY FEW SECONDS: NO AIM, NO DAMAGE.","HIDES FROM YOUR TURRETS EVERY FEW SECONDS: NO AIM, NO DAMAGE.","ESCONDE-SE DAS TORRETAS A CADA POUCOS SEGUNDOS: SEM MIRA, SEM DANO."
+ENEMY_RANSOMWARE_NAME,Ransomware,Ransomware
+Ransomware,Ransomware,Sequestrador
+RANSOMWARE,RANSOMWARE,SEQUESTRADOR
+ENEMY_RANSOMWARE_DESCRIPTION,Encrypts the turrets around it: they can't fire until it wears off.,Criptografa as torretas ao redor: elas param de atirar até o efeito passar.
+Encrypts the turrets around it: they can't fire until it wears off.,Encrypts the turrets around it: they can't fire until it wears off.,Criptografa as torretas ao redor: elas param de atirar até o efeito passar.
+ENCRYPTS THE TURRETS AROUND IT: THEY CAN'T FIRE UNTIL IT WEARS OFF.,ENCRYPTS THE TURRETS AROUND IT: THEY CAN'T FIRE UNTIL IT WEARS OFF.,CRIPTOGRAFA AS TORRETAS AO REDOR: ELAS PARAM DE ATIRAR ATÉ O EFEITO PASSAR.
+ENEMY_WORM_NAME,Worm,Worm
+Worm,Worm,Verme
+WORM,WORM,VERME
+ENEMY_WORM_DESCRIPTION,Copies itself as it gets hurt.,Cria cópias de si mesmo conforme perde vida.
+Copies itself as it gets hurt.,Copies itself as it gets hurt.,Cria cópias de si mesmo conforme perde vida.
+COPIES ITSELF AS IT GETS HURT.,COPIES ITSELF AS IT GETS HURT.,CRIA CÓPIAS DE SI MESMO CONFORME PERDE VIDA.
+ENEMY_BOSS_NAME,Kernel Panic,Kernel Panic
+Kernel Panic,Kernel Panic,Pânico do núcleo
+KERNEL PANIC,KERNEL PANIC,PÂNICO DO NÚCLEO
+ENEMY_BOSS_DESCRIPTION,Crashes the system: every turret freezes for a moment.,Derruba o sistema: todas as torretas travam por um instante.
+Crashes the system: every turret freezes for a moment.,Crashes the system: every turret freezes for a moment.,Derruba o sistema: todas as torretas travam por um instante.
+CRASHES THE SYSTEM: EVERY TURRET FREEZES FOR A MOMENT.,CRASHES THE SYSTEM: EVERY TURRET FREEZES FOR A MOMENT.,DERRUBA O SISTEMA: TODAS AS TORRETAS TRAVAM POR UM INSTANTE.
+ENEMY_PACKET_NAME,Packet,Pacote
+Packet,Packet,Pacote
+PACKET,PACKET,PACOTE
+ENEMY_PACKET_DESCRIPTION,"Junk data from a DDoS flood. Harmless to the CPU, but it soaks up your shots.","Lixo de dados de um ataque DDoS. Não fere a CPU, mas gasta seus tiros."
+ENEMY_WORM_COPY_NAME,Worm Copy,Cópia do Worm
+Worm Copy,Worm Copy,Cópia do verme
+WORM COPY,WORM COPY,CÓPIA DO VERME
+ENEMY_WORM_COPY_DESCRIPTION,"A copy forked by the Worm. Smaller, just as hungry.","Uma cópia criada pelo Worm. Menor, mas igualmente faminta."
+LEVEL_1_TITLE,Dev Board,Placa de testes
+Dev Board,Dev Board,Placa de testes
+DEV BOARD,DEV BOARD,PLACA DE TESTES
+LEVEL_1_SUBTITLE,A hobby board under attack,Uma placa de hobby sob ataque
+A hobby board under attack,A hobby board under attack,Uma placa de hobby sob ataque
+A HOBBY BOARD UNDER ATTACK,A HOBBY BOARD UNDER ATTACK,UMA PLACA DE HOBBY SOB ATAQUE
+LEVEL_2_TITLE,Keyboard,Teclado
+Keyboard,Keyboard,Teclado
+KEYBOARD,KEYBOARD,TECLADO
+LEVEL_2_SUBTITLE,Every key is a snack,Cada tecla é um petisco
+Every key is a snack,Every key is a snack,Cada tecla é um petisco
+EVERY KEY IS A SNACK,EVERY KEY IS A SNACK,CADA TECLA É UM PETISCO
+LEVEL_3_TITLE,Wi-Fi Router,Roteador Wi-Fi
+Wi-Fi Router,Wi-Fi Router,Roteador Wi-Fi
+WI-FI ROUTER,WI-FI ROUTER,ROTEADOR WI-FI
+LEVEL_3_SUBTITLE,"Packets, interrupted",Pacotes interrompidos
+"Packets, interrupted","Packets, interrupted",Pacotes interrompidos
+"PACKETS, INTERRUPTED","PACKETS, INTERRUPTED",PACOTES INTERROMPIDOS
+LEVEL_4_TITLE,Sound Card,Placa de som
+Sound Card,Sound Card,Placa de som
+SOUND CARD,SOUND CARD,PLACA DE SOM
+LEVEL_4_SUBTITLE,Bass-boosted bugs,Bugs com graves reforçados
+Bass-boosted bugs,Bass-boosted bugs,Bugs com graves reforçados
+BASS-BOOSTED BUGS,BASS-BOOSTED BUGS,BUGS COM GRAVES REFORÇADOS
+LEVEL_5_TITLE,Graphics Card,Placa de vídeo
+Graphics Card,Graphics Card,Placa de vídeo
+GRAPHICS CARD,GRAPHICS CARD,PLACA DE VÍDEO
+LEVEL_5_SUBTITLE,Overclocked infestation,Infestação turbinada
+Overclocked infestation,Overclocked infestation,Infestação turbinada
+OVERCLOCKED INFESTATION,OVERCLOCKED INFESTATION,INFESTAÇÃO TURBINADA
+LEVEL_6_TITLE,Laptop,Notebook
+Laptop,Laptop,Notebook
+LAPTOP,LAPTOP,NOTEBOOK
+LEVEL_6_SUBTITLE,"Thin, light and full of bugs","Fino, leve e cheio de bugs"
+"Thin, light and full of bugs","Thin, light and full of bugs","Fino, leve e cheio de bugs"
+"THIN, LIGHT AND FULL OF BUGS","THIN, LIGHT AND FULL OF BUGS","FINO, LEVE E CHEIO DE BUGS"
+LEVEL_7_TITLE,ATX Motherboard,Placa-mãe ATX
+ATX Motherboard,ATX Motherboard,Placa-mãe ATX
+ATX MOTHERBOARD,ATX MOTHERBOARD,PLACA-MÃE ATX
+LEVEL_7_SUBTITLE,"Full tower, full siege","Gabinete completo, cerco total"
+"Full tower, full siege","Full tower, full siege","Gabinete completo, cerco total"
+"FULL TOWER, FULL SIEGE","FULL TOWER, FULL SIEGE","GABINETE COMPLETO, CERCO TOTAL"
+LEVEL_8_TITLE,Server Board,Placa de servidor
+Server Board,Server Board,Placa de servidor
+SERVER BOARD,SERVER BOARD,PLACA DE SERVIDOR
+LEVEL_8_SUBTITLE,The last line of defence,A última linha de defesa
+The last line of defence,The last line of defence,A última linha de defesa
+THE LAST LINE OF DEFENCE,THE LAST LINE OF DEFENCE,A ÚLTIMA LINHA DE DEFESA
+next: {0}. {1},next: {0}. {1},próxima: {0}. {1}
+NEXT: {0}. {1},NEXT: {0}. {1},PRÓXIMA: {0}. {1}
+Start Level {0},Start Level {0},Iniciar fase {0}
+START LEVEL {0},START LEVEL {0},INICIAR FASE {0}
+Unlock ${0},Unlock ${0},Desbloquear ${0}
+UNLOCK ${0},UNLOCK ${0},DESBLOQUEAR ${0}
+Locked turret. Buy once for ${0}; upgrades are sold separately.,Locked turret. Buy once for ${0}; upgrades are sold separately.,Torreta bloqueada. Compre uma vez por ${0}; melhorias são vendidas à parte.
+LOCKED TURRET. BUY ONCE FOR ${0}; UPGRADES ARE SOLD SEPARATELY.,LOCKED TURRET. BUY ONCE FOR ${0}; UPGRADES ARE SOLD SEPARATELY.,TORRETA BLOQUEADA. COMPRE UMA VEZ POR ${0}; MELHORIAS SÃO VENDIDAS À PARTE.
+{0} - {1}: {2}  Now: {3},{0} - {1}: {2}  Now: {3},{0} - {1}: {2}  Atual: {3}
+{0} - {1}: {2}  NOW: {3},{0} - {1}: {2}  NOW: {3},{0} - {1}: {2}  ATUAL: {3}
+{0}s between shots,{0}s between shots,{0}s entre tiros
+{0}S BETWEEN SHOTS,{0}S BETWEEN SHOTS,{0}S ENTRE TIROS
+{0} damage/s,{0} damage/s,{0} de dano/s
+{0} DAMAGE/S,{0} DAMAGE/S,{0} DE DANO/S
+{0}% speed,{0}% speed,{0}% de velocidade
+{0}% SPEED,{0}% SPEED,{0}% DE VELOCIDADE
+{0} pellets,{0} pellets,{0} projéteis
+{0} PELLETS,{0} PELLETS,{0} PROJÉTEIS
+{0} waves  {1} bugs,{0} waves  {1} bugs,{0} ondas  {1} bugs
+{0} WAVES  {1} BUGS,{0} WAVES  {1} BUGS,{0} ONDAS  {1} BUGS
+{0} waves  -  {1},{0} waves  -  {1},{0} ondas  -  {1}
+{0} WAVES  -  {1},{0} WAVES  -  {1},{0} ONDAS  -  {1}
+{0} (custom),{0} (custom),{0} (personalizada)
+{0} (CUSTOM),{0} (CUSTOM),{0} (PERSONALIZADA)
+Your address: {0},Your address: {0},Seu endereço: {0}
+YOUR ADDRESS: {0},YOUR ADDRESS: {0},SEU ENDEREÇO: {0}
+HP: {0}   |   Speed: {1} px/s,HP: {0}   |   Speed: {1} px/s,Vida: {0}   |   Velocidade: {1} px/s
+HP: {0}   |   SPEED: {1} PX/S,HP: {0}   |   SPEED: {1} PX/S,VIDA: {0}   |   VELOCIDADE: {1} PX/S
+CPU damage: {0},CPU damage: {0},Dano à CPU: {0}
+CPU DAMAGE: {0},CPU DAMAGE: {0},DANO À CPU: {0}
+Detour chance: {0}%   |   Reach: {1} cells,Detour chance: {0}%   |   Reach: {1} cells,Chance de desvio: {0}%   |   Alcance: {1} células
+DETOUR CHANCE: {0}%   |   REACH: {1} CELLS,DETOUR CHANCE: {0}%   |   REACH: {1} CELLS,CHANCE DE DESVIO: {0}%   |   ALCANCE: {1} CÉLULAS
+Chewing: {0} s   |   Cooldown: {1} s,Chewing: {0} s   |   Cooldown: {1} s,Mastigação: {0} s   |   Intervalo: {1} s
+CHEWING: {0} S   |   COOLDOWN: {1} S,CHEWING: {0} S   |   COOLDOWN: {1} S,MASTIGAÇÃO: {0} S   |   INTERVALO: {1} S
+Build cost: ${0}   |   Base range: {1} px,Build cost: ${0}   |   Base range: {1} px,Construção: ${0}   |   Alcance básico: {1} px
+BUILD COST: ${0}   |   BASE RANGE: {1} PX,BUILD COST: ${0}   |   BASE RANGE: {1} PX,CONSTRUÇÃO: ${0}   |   ALCANCE BÁSICO: {1} PX
+Permanent unlock: ${0},Permanent unlock: ${0},Desbloqueio permanente: ${0}
+PERMANENT UNLOCK: ${0},PERMANENT UNLOCK: ${0},DESBLOQUEIO PERMANENTE: ${0}
+{0}  -  click a free cell to build  -  right click to cancel,{0}  -  click a free cell to build  -  right click to cancel,{0}  -  clique em uma célula livre para construir  -  botão direito cancela
+{0}  -  CLICK A FREE CELL TO BUILD  -  RIGHT CLICK TO CANCEL,{0}  -  CLICK A FREE CELL TO BUILD  -  RIGHT CLICK TO CANCEL,{0}  -  CLIQUE EM UMA CÉLULA LIVRE PARA CONSTRUIR  -  BOTÃO DIREITO CANCELA
+WAVE {0} CLEARED,WAVE {0} CLEARED,ONDA {0} CONCLUÍDA
+WAVE {0},WAVE {0},ONDA {0}
+{0} bugs,{0} bugs,{0} bugs
+{0} BUGS,{0} BUGS,{0} BUGS
+Board integrity: {0}%,Board integrity: {0}%,Integridade da placa: {0}%
+BOARD INTEGRITY: {0}%,BOARD INTEGRITY: {0}%,INTEGRIDADE DA PLACA: {0}%
+Remaining: ${0}  |  record: ${1},Remaining: ${0}  |  record: ${1},Restante: ${0}  |  recorde: ${1}
+REMAINING: ${0}  |  RECORD: ${1},REMAINING: ${0}  |  RECORD: ${1},RESTANTE: ${0}  |  RECORDE: ${1}
++${0} for upgrades  |  balance: ${1},+${0} for upgrades  |  balance: ${1},+${0} para melhorias  |  saldo: ${1}
++${0} FOR UPGRADES  |  BALANCE: ${1},+${0} FOR UPGRADES  |  BALANCE: ${1},+${0} PARA MELHORIAS  |  SALDO: ${1}
++{0} more,+{0} more,+{0} restantes
++{0} MORE,+{0} MORE,+{0} RESTANTES
+"NEXT
+{0}","NEXT
+{0}","PRÓXIMA
+{0}"
+HP {0}  speed {1}  chews {2}/s,HP {0}  speed {1}  chews {2}/s,PV {0}  velocidade {1}  mastiga {2}/s
+HP {0}  SPEED {1}  CHEWS {2}/S,HP {0}  SPEED {1}  CHEWS {2}/S,PV {0}  VELOCIDADE {1}  MASTIGA {2}/S
+{0} PROBLEM{1},{0} PROBLEM{1},{0} PROBLEMA{1}
+"{0} points, {1} cells","{0} points, {1} cells","{0} pontos, {1} células"
+"{0} POINTS, {1} CELLS","{0} POINTS, {1} CELLS","{0} PONTOS, {1} CÉLULAS"
+"{0} components
+{1} free cells for turrets","{0} components
+{1} free cells for turrets","{0} componentes
+{1} células livres para torretas"
+"{0} COMPONENTS
+{1} FREE CELLS FOR TURRETS","{0} COMPONENTS
+{1} FREE CELLS FOR TURRETS","{0} COMPONENTES
+{1} CÉLULAS LIVRES PARA TORRETAS"
+"This wave: {0} bugs, {1} HP, ${2} rewards, {3}s
+Level: {4} waves, {5} bugs","This wave: {0} bugs, {1} HP, ${2} rewards, {3}s
+Level: {4} waves, {5} bugs","Esta onda: {0} bugs, {1} PV, ${2} em recompensas, {3}s
+Fase: {4} ondas, {5} bugs"
+"THIS WAVE: {0} BUGS, {1} HP, ${2} REWARDS, {3}S
+LEVEL: {4} WAVES, {5} BUGS","THIS WAVE: {0} BUGS, {1} HP, ${2} REWARDS, {3}S
+LEVEL: {4} WAVES, {5} BUGS","ESTA ONDA: {0} BUGS, {1} PV, ${2} EM RECOMPENSAS, {3}S
+FASE: {4} ONDAS, {5} BUGS"
+Saved {0},Saved {0},Salvo: {0}
+SAVED {0},SAVED {0},SALVO: {0}
+Could not open {0},Could not open {0},Não foi possível abrir {0}
+COULD NOT OPEN {0},COULD NOT OPEN {0},NÃO FOI POSSÍVEL ABRIR {0}
+Opened {0},Opened {0},Aberto: {0}
+OPENED {0},OPENED {0},ABERTO: {0}
+x{0}  hp {1},x{0}  hp {1},x{0}  pv {1}
+X{0}  HP {1},X{0}  HP {1},X{0}  PV {1}
+Connecting to {0}...,Connecting to {0}...,Conectando a {0}...
+CONNECTING TO {0}...,CONNECTING TO {0}...,CONECTANDO A {0}...
+Could not connect to {0} ({1}),Could not connect to {0} ({1}),Não foi possível conectar a {0} ({1})
+COULD NOT CONNECT TO {0} ({1}),COULD NOT CONNECT TO {0} ({1}),NÃO FOI POSSÍVEL CONECTAR A {0} ({1})
+Could not reach {0}.,Could not reach {0}.,Não foi possível alcançar {0}.
+COULD NOT REACH {0}.,COULD NOT REACH {0}.,NÃO FOI POSSÍVEL ALCANÇAR {0}.
+Unlocks in {0}s,Unlocks in {0}s,Disponível em {0}s
+UNLOCKS IN {0}S,UNLOCKS IN {0}S,DISPONÍVEL EM {0}S
+"Waiting for the {0}...
+Ask them to join  {1}","Waiting for the {0}...
+Ask them to join  {1}","Aguardando {0}...
+Peça que entrem em  {1}"
+"WAITING FOR THE {0}...
+ASK THEM TO JOIN  {1}","WAITING FOR THE {0}...
+ASK THEM TO JOIN  {1}","AGUARDANDO {0}...
+PEÇA QUE ENTREM EM  {1}"
+port {0},port {0},porta {0}
+PORT {0},PORT {0},PORTA {0}
+Could not open port {0} ({1}),Could not open port {0} ({1}),Não foi possível abrir a porta {0} ({1})
+COULD NOT OPEN PORT {0} ({1}),COULD NOT OPEN PORT {0} ({1}),NÃO FOI POSSÍVEL ABRIR A PORTA {0} ({1})
+Protocol version {0} not supported (host uses {1}),Protocol version {0} not supported (host uses {1}),Versão {0} do protocolo não suportada (servidor usa {1})
+PROTOCOL VERSION {0} NOT SUPPORTED (HOST USES {1}),PROTOCOL VERSION {0} NOT SUPPORTED (HOST USES {1}),VERSÃO {0} DO PROTOCOLO NÃO SUPORTADA (SERVIDOR USA {1})
+The {0} role is not available,The {0} role is not available,O papel de {0} está indisponível
+THE {0} ROLE IS NOT AVAILABLE,THE {0} ROLE IS NOT AVAILABLE,O PAPEL DE {0} ESTÁ INDISPONÍVEL
+Unknown message type '{0}',Unknown message type '{0}',Tipo de mensagem desconhecido: '{0}'
+UNKNOWN MESSAGE TYPE '{0}',UNKNOWN MESSAGE TYPE '{0}',TIPO DE MENSAGEM DESCONHECIDO: '{0}'
+Route segment {0} is not horizontal or vertical.,Route segment {0} is not horizontal or vertical.,O trecho {0} da rota não é horizontal nem vertical.
+ROUTE SEGMENT {0} IS NOT HORIZONTAL OR VERTICAL.,ROUTE SEGMENT {0} IS NOT HORIZONTAL OR VERTICAL.,O TRECHO {0} DA ROTA NÃO É HORIZONTAL NEM VERTICAL.
+Route point {0} repeats the previous one.,Route point {0} repeats the previous one.,O ponto {0} da rota repete o anterior.
+ROUTE POINT {0} REPEATS THE PREVIOUS ONE.,ROUTE POINT {0} REPEATS THE PREVIOUS ONE.,O PONTO {0} DA ROTA REPETE O ANTERIOR.
+{0} #{1} is outside the board.,{0} #{1} is outside the board.,{0} nº {1} está fora da placa.
+{0} #{1} IS OUTSIDE THE BOARD.,{0} #{1} IS OUTSIDE THE BOARD.,{0} Nº {1} ESTÁ FORA DA PLACA.
+{0} #{1} is on the route.,{0} #{1} is on the route.,{0} nº {1} está na rota.
+{0} #{1} IS ON THE ROUTE.,{0} #{1} IS ON THE ROUTE.,{0} Nº {1} ESTÁ NA ROTA.
+{0} #{1} overlaps the CPU.,{0} #{1} overlaps the CPU.,{0} nº {1} sobrepõe a CPU.
+{0} #{1} OVERLAPS THE CPU.,{0} #{1} OVERLAPS THE CPU.,{0} Nº {1} SOBREPÕE A CPU.
+{0} #{1} overlaps component #{2}.,{0} #{1} overlaps component #{2}.,{0} nº {1} sobrepõe o componente nº {2}.
+{0} #{1} OVERLAPS COMPONENT #{2}.,{0} #{1} OVERLAPS COMPONENT #{2}.,{0} Nº {1} SOBREPÕE O COMPONENTE Nº {2}.
+Unknown bug type '{0}'.,Unknown bug type '{0}'.,Tipo de bug desconhecido: '{0}'.
+UNKNOWN BUG TYPE '{0}'.,UNKNOWN BUG TYPE '{0}'.,TIPO DE BUG DESCONHECIDO: '{0}'.
+TIP_FIRST_BUILD,"Pick a turret on the right, then click a free board cell to build. Protect the copper route!",Escolha uma torreta à direita e clique em uma célula livre para construir. Proteja a rota de cobre!
+"Pick a turret on the right, then click a free board cell to build. Protect the copper route!","Pick a turret on the right, then click a free board cell to build. Protect the copper route!",Escolha uma torreta à direita e clique em uma célula livre para construir. Proteja a rota de cobre!
+"PICK A TURRET ON THE RIGHT, THEN CLICK A FREE BOARD CELL TO BUILD. PROTECT THE COPPER ROUTE!","PICK A TURRET ON THE RIGHT, THEN CLICK A FREE BOARD CELL TO BUILD. PROTECT THE COPPER ROUTE!",ESCOLHA UMA TORRETA À DIREITA E CLIQUE EM UMA CÉLULA LIVRE PARA CONSTRUIR. PROTEJA A ROTA DE COBRE!
+TIP_FIRST_WAVE,The wave is starting. Bugs follow the copper route toward your CPU.,A onda está começando. Os bugs seguem a rota de cobre até a CPU.
+The wave is starting. Bugs follow the copper route toward your CPU.,The wave is starting. Bugs follow the copper route toward your CPU.,A onda está começando. Os bugs seguem a rota de cobre até a CPU.
+THE WAVE IS STARTING. BUGS FOLLOW THE COPPER ROUTE TOWARD YOUR CPU.,THE WAVE IS STARTING. BUGS FOLLOW THE COPPER ROUTE TOWARD YOUR CPU.,A ONDA ESTÁ COMEÇANDO. OS BUGS SEGUEM A ROTA DE COBRE ATÉ A CPU.
+TIP_FIRST_DETOUR,That bug left the route to chew a component. Your turrets can still hit it; cover the detour too.,Esse bug saiu da rota para mastigar um componente. Suas torretas ainda podem atingi-lo; proteja o desvio também.
+That bug left the route to chew a component. Your turrets can still hit it; cover the detour too.,That bug left the route to chew a component. Your turrets can still hit it; cover the detour too.,Esse bug saiu da rota para mastigar um componente. Suas torretas ainda podem atingi-lo; proteja o desvio também.
+THAT BUG LEFT THE ROUTE TO CHEW A COMPONENT. YOUR TURRETS CAN STILL HIT IT; COVER THE DETOUR TOO.,THAT BUG LEFT THE ROUTE TO CHEW A COMPONENT. YOUR TURRETS CAN STILL HIT IT; COVER THE DETOUR TOO.,ESSE BUG SAIU DA ROTA PARA MASTIGAR UM COMPONENTE. SUAS TORRETAS AINDA PODEM ATINGI-LO; PROTEJA O DESVIO TAMBÉM.
+TIP_FIRST_LED,An LED burnt out. Repair Bot can rebuild it and restore the light.,Um LED queimou. O Robô técnico pode reconstruí-lo e restaurar a luz.
+An LED burnt out. Repair Bot can rebuild it and restore the light.,An LED burnt out. Repair Bot can rebuild it and restore the light.,Um LED queimou. O Robô técnico pode reconstruí-lo e restaurar a luz.
+AN LED BURNT OUT. REPAIR BOT CAN REBUILD IT AND RESTORE THE LIGHT.,AN LED BURNT OUT. REPAIR BOT CAN REBUILD IT AND RESTORE THE LIGHT.,UM LED QUEIMOU. O ROBÔ TÉCNICO PODE RECONSTRUÍ-LO E RESTAURAR A LUZ.
+TIP_FIRST_VICTORY_BALANCE,Your remaining money becomes upgrade balance. A better replay credits only the improvement.,"O dinheiro restante vira saldo de melhorias. Ao repetir a fase, só a diferença acima do recorde é creditada."
+Your remaining money becomes upgrade balance. A better replay credits only the improvement.,Your remaining money becomes upgrade balance. A better replay credits only the improvement.,"O dinheiro restante vira saldo de melhorias. Ao repetir a fase, só a diferença acima do recorde é creditada."
+YOUR REMAINING MONEY BECOMES UPGRADE BALANCE. A BETTER REPLAY CREDITS ONLY THE IMPROVEMENT.,YOUR REMAINING MONEY BECOMES UPGRADE BALANCE. A BETTER REPLAY CREDITS ONLY THE IMPROVEMENT.,"O DINHEIRO RESTANTE VIRA SALDO DE MELHORIAS. AO REPETIR A FASE, SÓ A DIFERENÇA ACIMA DO RECORDE É CREDITADA."
+TIP_BOSS_TROJAN,Trojan incoming! Antivirus Scanner reveals its disguise. Keep damage ready for the bugs it drops.,Cavalo de Troia chegando! O Antivírus revela seu disfarce. Prepare dano para os bugs que ele solta.
+Trojan incoming! Antivirus Scanner reveals its disguise. Keep damage ready for the bugs it drops.,Trojan incoming! Antivirus Scanner reveals its disguise. Keep damage ready for the bugs it drops.,Cavalo de Troia chegando! O Antivírus revela seu disfarce. Prepare dano para os bugs que ele solta.
+TROJAN INCOMING! ANTIVIRUS SCANNER REVEALS ITS DISGUISE. KEEP DAMAGE READY FOR THE BUGS IT DROPS.,TROJAN INCOMING! ANTIVIRUS SCANNER REVEALS ITS DISGUISE. KEEP DAMAGE READY FOR THE BUGS IT DROPS.,CAVALO DE TROIA CHEGANDO! O ANTIVÍRUS REVELA SEU DISFARCE. PREPARE DANO PARA OS BUGS QUE ELE SOLTA.
+TIP_BOSS_KEYLOGGER,Keylogger steals money while alive. Focus your damage on it before your cash drains away.,O Registrador de teclas rouba dinheiro enquanto vive. Concentre o dano nele antes que seu dinheiro acabe.
+Keylogger steals money while alive. Focus your damage on it before your cash drains away.,Keylogger steals money while alive. Focus your damage on it before your cash drains away.,O Registrador de teclas rouba dinheiro enquanto vive. Concentre o dano nele antes que seu dinheiro acabe.
+KEYLOGGER STEALS MONEY WHILE ALIVE. FOCUS YOUR DAMAGE ON IT BEFORE YOUR CASH DRAINS AWAY.,KEYLOGGER STEALS MONEY WHILE ALIVE. FOCUS YOUR DAMAGE ON IT BEFORE YOUR CASH DRAINS AWAY.,O REGISTRADOR DE TECLAS ROUBA DINHEIRO ENQUANTO VIVE. CONCENTRE O DANO NELE ANTES QUE SEU DINHEIRO ACABE.
+TIP_BOSS_MITM,Man-in-the-Middle intercepts shots. Firewall protects fire from turrets inside or across its range.,O Interceptador desvia tiros. O Firewall protege disparos feitos dentro ou através de seu alcance.
+Man-in-the-Middle intercepts shots. Firewall protects fire from turrets inside or across its range.,Man-in-the-Middle intercepts shots. Firewall protects fire from turrets inside or across its range.,O Interceptador desvia tiros. O Firewall protege disparos feitos dentro ou através de seu alcance.
+MAN-IN-THE-MIDDLE INTERCEPTS SHOTS. FIREWALL PROTECTS FIRE FROM TURRETS INSIDE OR ACROSS ITS RANGE.,MAN-IN-THE-MIDDLE INTERCEPTS SHOTS. FIREWALL PROTECTS FIRE FROM TURRETS INSIDE OR ACROSS ITS RANGE.,O INTERCEPTADOR DESVIA TIROS. O FIREWALL PROTEGE DISPAROS FEITOS DENTRO OU ATRAVÉS DE SEU ALCANCE.
+TIP_BOSS_DDOS,DDoS floods the route with packets. Firewall deletes packets; area damage helps too.,DDoS enche a rota de pacotes. O Firewall elimina pacotes; dano em área também ajuda.
+DDoS floods the route with packets. Firewall deletes packets; area damage helps too.,DDoS floods the route with packets. Firewall deletes packets; area damage helps too.,DDoS enche a rota de pacotes. O Firewall elimina pacotes; dano em área também ajuda.
+DDOS FLOODS THE ROUTE WITH PACKETS. FIREWALL DELETES PACKETS; AREA DAMAGE HELPS TOO.,DDOS FLOODS THE ROUTE WITH PACKETS. FIREWALL DELETES PACKETS; AREA DAMAGE HELPS TOO.,DDOS ENCHE A ROTA DE PACOTES. O FIREWALL ELIMINA PACOTES; DANO EM ÁREA TAMBÉM AJUDA.
+TIP_BOSS_ROOTKIT,Rootkit hides from weapons. Antivirus Scanner exposes it while it stays inside scan range.,O Rootkit se esconde das armas. O Antivírus o expõe enquanto ele estiver no alcance de varredura.
+Rootkit hides from weapons. Antivirus Scanner exposes it while it stays inside scan range.,Rootkit hides from weapons. Antivirus Scanner exposes it while it stays inside scan range.,O Rootkit se esconde das armas. O Antivírus o expõe enquanto ele estiver no alcance de varredura.
+ROOTKIT HIDES FROM WEAPONS. ANTIVIRUS SCANNER EXPOSES IT WHILE IT STAYS INSIDE SCAN RANGE.,ROOTKIT HIDES FROM WEAPONS. ANTIVIRUS SCANNER EXPOSES IT WHILE IT STAYS INSIDE SCAN RANGE.,O ROOTKIT SE ESCONDE DAS ARMAS. O ANTIVÍRUS O EXPÕE ENQUANTO ELE ESTIVER NO ALCANCE DE VARREDURA.
+TIP_BOSS_RANSOMWARE,Ransomware locks nearby turrets. Backup Drive speeds their recovery; cover your weapons with it.,O Sequestrador trava torretas próximas. O Backup acelera a recuperação; mantenha suas armas no alcance dele.
+Ransomware locks nearby turrets. Backup Drive speeds their recovery; cover your weapons with it.,Ransomware locks nearby turrets. Backup Drive speeds their recovery; cover your weapons with it.,O Sequestrador trava torretas próximas. O Backup acelera a recuperação; mantenha suas armas no alcance dele.
+RANSOMWARE LOCKS NEARBY TURRETS. BACKUP DRIVE SPEEDS THEIR RECOVERY; COVER YOUR WEAPONS WITH IT.,RANSOMWARE LOCKS NEARBY TURRETS. BACKUP DRIVE SPEEDS THEIR RECOVERY; COVER YOUR WEAPONS WITH IT.,O SEQUESTRADOR TRAVA TORRETAS PRÓXIMAS. O BACKUP ACELERA A RECUPERAÇÃO; MANTENHA SUAS ARMAS NO ALCANCE DELE.
+TIP_BOSS_WORM,Worm forks into copies as health falls. Spread damage coverage and use area weapons for the copies.,O Verme cria cópias conforme perde vida. Distribua a cobertura e use armas de área contra as cópias.
+Worm forks into copies as health falls. Spread damage coverage and use area weapons for the copies.,Worm forks into copies as health falls. Spread damage coverage and use area weapons for the copies.,O Verme cria cópias conforme perde vida. Distribua a cobertura e use armas de área contra as cópias.
+WORM FORKS INTO COPIES AS HEALTH FALLS. SPREAD DAMAGE COVERAGE AND USE AREA WEAPONS FOR THE COPIES.,WORM FORKS INTO COPIES AS HEALTH FALLS. SPREAD DAMAGE COVERAGE AND USE AREA WEAPONS FOR THE COPIES.,O VERME CRIA CÓPIAS CONFORME PERDE VIDA. DISTRIBUA A COBERTURA E USE ARMAS DE ÁREA CONTRA AS CÓPIAS.
+TIP_BOSS_PANIC,"Kernel Panic freezes every turret. Backup Drive recovers itself faster, then helps nearby weapons reboot.",O Pânico do núcleo trava todas as torretas. O Backup se recupera mais rápido e ajuda as armas próximas a reiniciar.
+"Kernel Panic freezes every turret. Backup Drive recovers itself faster, then helps nearby weapons reboot.","Kernel Panic freezes every turret. Backup Drive recovers itself faster, then helps nearby weapons reboot.",O Pânico do núcleo trava todas as torretas. O Backup se recupera mais rápido e ajuda as armas próximas a reiniciar.
+"KERNEL PANIC FREEZES EVERY TURRET. BACKUP DRIVE RECOVERS ITSELF FASTER, THEN HELPS NEARBY WEAPONS REBOOT.","KERNEL PANIC FREEZES EVERY TURRET. BACKUP DRIVE RECOVERS ITSELF FASTER, THEN HELPS NEARBY WEAPONS REBOOT.",O PÂNICO DO NÚCLEO TRAVA TODAS AS TORRETAS. O BACKUP SE RECUPERA MAIS RÁPIDO E AJUDA AS ARMAS PRÓXIMAS A REINICIAR.
+ENDING_MESSAGE,"You're awesome!!
+There are no more levels; this is just a prototype.
+Want more? Send a tip :)","Você é Brabo!!
+Não fizemos mais fases, este é só um protótipo.
+Se quer mais, faz o pix :)"
+"Music: Juhani Junkala - Retro Game Music Pack (CC0)
+Fonts: Silkscreen, VT323 (SIL Open Font License)","Music: Juhani Junkala - Retro Game Music Pack (CC0)
+Fonts: Silkscreen, VT323 (SIL Open Font License)","Música: Juhani Junkala - Retro Game Music Pack (CC0)
+Fontes: Silkscreen, VT323 (SIL Open Font License)"
+"MUSIC: JUHANI JUNKALA - RETRO GAME MUSIC PACK (CC0)
+FONTS: SILKSCREEN, VT323 (SIL OPEN FONT LICENSE)","MUSIC: JUHANI JUNKALA - RETRO GAME MUSIC PACK (CC0)
+FONTS: SILKSCREEN, VT323 (SIL OPEN FONT LICENSE)","MÚSICA: JUHANI JUNKALA - RETRO GAME MUSIC PACK (CC0)
+FONTES: SILKSCREEN, VT323 (SIL OPEN FONT LICENSE)"
+{0}. {1},{0}. {1},{0}. {1}
+blue,blue,azul
+green,green,verde
+red,red,vermelha
+black,black,preta
+purple,purple,roxa
+white,white,branca
+music_level_1,music_level_1,Música da fase 1
+music_level_2,music_level_2,Música da fase 2
+music_level_3,music_level_3,Música da fase 3
+title,title,Menu
+ending,ending,Final
+unsaved,unsaved,não salvo
+unsaved *,unsaved *,não salvo *
+Options,Options,Opções
+OPTIONS,OPTIONS,OPÇÕES
+HOST_ADDRESS_OR,or,ou
+"A common glitch. Weak on its own, a nuisance in swarms; sometimes wanders off the route to nibble a part.","A common glitch. Weak on its own, a nuisance in swarms; sometimes wanders off the route to nibble a part.","Uma falha comum. Fraca sozinha, irritante em bando; às vezes sai da rota para roer uma peça."
+"Fragile, but its bite hurts the board more than a glitch's. Leaves the route now and then.","Fragile, but its bite hurts the board more than a glitch's. Leaves the route now and then.","Frágil, mas sua mordida estraga a placa mais que a de uma falha. De vez em quando sai da rota."
+Weak but always hungry: it leaves the route for almost every part it sees and chews through it fast.,Weak but always hungry: it leaves the route for almost every part it sees and chews through it fast.,"Fraco, mas sempre faminto: sai da rota por quase toda peça que vê e a rói rapidinho."
+A quick beetle with a hard shell. Takes a few hits before it goes down.,A quick beetle with a hard shell. Takes a few hits before it goes down.,Um besouro ágil de casca dura. Aguenta alguns tiros antes de cair.
+"Very slow and heavily armoured. Given time, it gnaws through the biggest parts.","Very slow and heavily armoured. Given time, it gnaws through the biggest parts.","Bem lento e muito blindado. Com tempo, rói até as peças maiores."
+The fastest thing on the board. It rarely stops to chew: it just runs for the CPU.,The fastest thing on the board. It rarely stops to chew: it just runs for the CPU.,A coisa mais rápida da placa. Quase nunca para pra roer: corre direto para a CPU.
+"Slim, quick and tough. Hardly ever leaves the route.","Slim, quick and tough. Hardly ever leaves the route.","Fino, veloz e resistente. Quase nunca sai da rota."
+A huge rhinoceros beetle. Soaks up damage and wrecks the parts it reaches.,A huge rhinoceros beetle. Soaks up damage and wrecks the parts it reaches.,Um enorme besouro-rinoceronte. Aguenta muito dano e destrói as peças que alcança.
+"Junk data from a DDoS flood. Harmless to the CPU, but it soaks up your shots.","Junk data from a DDoS flood. Harmless to the CPU, but it soaks up your shots.","Lixo de dados de um ataque DDoS. Não fere a CPU, mas gasta seus tiros."
+"A copy forked by the Worm. Smaller, just as hungry.","A copy forked by the Worm. Smaller, just as hungry.","Uma cópia criada pelo Worm. Menor, mas igualmente faminta."

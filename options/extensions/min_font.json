@@ -1,9 +1,0 @@
-{
-  "extensionId": {
-    "name": "min_font",
-    "path": "extensions/min_font/min_font.yy"
-  },
-  "resourceVersion": "1.0",
-  "resourceType": "GMExtensionConfigSet",
-  "configurables": null
-}

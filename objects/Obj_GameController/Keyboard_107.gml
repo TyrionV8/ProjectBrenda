@@ -1,2 +1,0 @@
-/// @description Dinheiros++
-global.Dinheiros++;

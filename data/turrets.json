@@ -1,0 +1,478 @@
+[
+ {
+  "id": "blaster",
+  "name": "Pulse Blaster",
+  "description": "Fires single shots at the bug closest to the CPU.",
+  "behavior": "blaster",
+  "cost": 10,
+  "color": "3ef0ff",
+  "needs_direction": false,
+  "stats": {
+   "damage": 1.0,
+   "cooldown": 2.0,
+   "range": 50.0,
+   "projectile_speed": 300.0
+  },
+  "limits": {
+   "cooldown": [
+    0.1,
+    99
+   ]
+  },
+  "upgrades": [
+   {
+    "id": "damage",
+    "label": "Damage",
+    "description": "+1 damage per shot.",
+    "stat": "damage",
+    "per_level": 1.0,
+    "max_level": 50,
+    "icon": "res://assets/sprites/icons/damage.png",
+    "price": 30,
+    "price_step": 15
+   },
+   {
+    "id": "speed",
+    "label": "Attack speed",
+    "description": "Shoots a little more often.",
+    "stat": "cooldown",
+    "per_level": -0.033333,
+    "max_level": 25,
+    "icon": "res://assets/sprites/icons/cooldown.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "range",
+    "label": "Range",
+    "description": "+5 range.",
+    "stat": "range",
+    "per_level": 5.0,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/range.png",
+    "price": 5,
+    "price_step": 10
+   }
+  ],
+  "icon": "res://assets/sprites/turrets/blaster_icon.png"
+ },
+ {
+  "id": "mortar",
+  "name": "Capacitor Mortar",
+  "description": "Lobs a slow bomb at the nearest bug. The explosion hits everything around it.",
+  "behavior": "mortar",
+  "cost": 15,
+  "color": "ff9a3c",
+  "needs_direction": false,
+  "stats": {
+   "damage": 4.0,
+   "cooldown": 4.0,
+   "range": 80.0,
+   "projectile_speed": 60.0,
+   "blast_radius": 100.0
+  },
+  "limits": {
+   "cooldown": [
+    0.1,
+    99
+   ]
+  },
+  "upgrades": [
+   {
+    "id": "damage",
+    "label": "Damage",
+    "description": "+0.2 explosion damage.",
+    "stat": "damage",
+    "per_level": 0.2,
+    "max_level": 50,
+    "icon": "res://assets/sprites/icons/damage.png",
+    "price": 30,
+    "price_step": 15
+   },
+   {
+    "id": "speed",
+    "label": "Attack speed",
+    "description": "Fires a little more often.",
+    "stat": "cooldown",
+    "per_level": -0.033333,
+    "max_level": 25,
+    "icon": "res://assets/sprites/icons/cooldown.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "range",
+    "label": "Range",
+    "description": "+4 range.",
+    "stat": "range",
+    "per_level": 4.0,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/range.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "bomb_speed",
+    "label": "Bomb speed",
+    "description": "Bombs fly faster.",
+    "stat": "projectile_speed",
+    "per_level": 1.2,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/projectile_speed.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "bomb_area",
+    "label": "Explosion area",
+    "description": "+2 explosion radius.",
+    "stat": "blast_radius",
+    "per_level": 2.0,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/area.png",
+    "price": 5,
+    "price_step": 10
+   }
+  ],
+  "icon": "res://assets/sprites/turrets/mortar_icon.png"
+ },
+ {
+  "id": "burst",
+  "name": "Fan-out Router",
+  "description": "Sprays pellets in every direction when a bug is near.",
+  "behavior": "burst",
+  "cost": 10,
+  "color": "ffe14a",
+  "needs_direction": false,
+  "stats": {
+   "damage": 2.0,
+   "cooldown": 1.0,
+   "range": 50.0,
+   "shots": 4.0,
+   "projectile_speed": 150.0
+  },
+  "limits": {
+   "cooldown": [
+    0.1,
+    99
+   ]
+  },
+  "upgrades": [
+   {
+    "id": "damage",
+    "label": "Damage",
+    "description": "+0.2 damage per pellet.",
+    "stat": "damage",
+    "per_level": 0.2,
+    "max_level": 50,
+    "icon": "res://assets/sprites/icons/damage.png",
+    "price": 30,
+    "price_step": 15
+   },
+   {
+    "id": "speed",
+    "label": "Attack speed",
+    "description": "Fires a little more often.",
+    "stat": "cooldown",
+    "per_level": -0.02,
+    "max_level": 25,
+    "icon": "res://assets/sprites/icons/cooldown.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "range",
+    "label": "Range",
+    "description": "+5 range.",
+    "stat": "range",
+    "per_level": 5.0,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/range.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "density",
+    "label": "Density",
+    "description": "More pellets per burst.",
+    "stat": "shots",
+    "per_level": 0.4,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/density.png",
+    "price": 30,
+    "price_step": 15
+   }
+  ],
+  "icon": "res://assets/sprites/turrets/burst_icon.png"
+ },
+ {
+  "id": "laser",
+  "name": "Laser Diode",
+  "description": "A continuous beam in a fixed direction. Choose where it points when you place it.",
+  "behavior": "laser",
+  "cost": 15,
+  "color": "ff3d6e",
+  "needs_direction": true,
+  "stats": {
+   "dps": 4.5,
+   "beam_length": 48.0
+  },
+  "limits": {},
+  "upgrades": [
+   {
+    "id": "damage",
+    "label": "Damage",
+    "description": "Stronger beam.",
+    "stat": "dps",
+    "per_level": 6.0,
+    "max_level": 50,
+    "icon": "res://assets/sprites/icons/damage.png",
+    "price": 30,
+    "price_step": 15
+   },
+   {
+    "id": "fire_distance",
+    "label": "Fire distance",
+    "description": "Longer beam.",
+    "stat": "beam_length",
+    "per_level": 9.6,
+    "max_level": 50,
+    "icon": "res://assets/sprites/icons/beam_length.png",
+    "price": 5,
+    "price_step": 10
+   }
+  ],
+  "icon": "res://assets/sprites/turrets/laser_icon.png"
+ },
+ {
+  "id": "freezer",
+  "name": "Cryo Cooler",
+  "description": "Keeps frost orbs around it that chase bugs and slow them down.",
+  "behavior": "freezer",
+  "cost": 10,
+  "color": "7ad7ff",
+  "needs_direction": false,
+  "stats": {
+   "slow_factor": 0.7,
+   "slow_duration": 3.3333,
+   "cooldown": 5.3333,
+   "range": 150.0,
+   "projectile_speed": 30.0
+  },
+  "limits": {
+   "slow_factor": [
+    0.1,
+    1.0
+   ],
+   "cooldown": [
+    0.1,
+    99
+   ]
+  },
+  "upgrades": [
+   {
+    "id": "freeze",
+    "label": "Freeze",
+    "description": "Slows bugs down more.",
+    "stat": "slow_factor",
+    "per_level": -0.02,
+    "max_level": 50,
+    "icon": "res://assets/sprites/icons/slow.png",
+    "price": 30,
+    "price_step": 15
+   },
+   {
+    "id": "speed",
+    "label": "Attack speed",
+    "description": "Makes orbs a little faster.",
+    "stat": "cooldown",
+    "per_level": -0.066667,
+    "max_level": 25,
+    "icon": "res://assets/sprites/icons/cooldown.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "range",
+    "label": "Range",
+    "description": "+5 orb search range.",
+    "stat": "range",
+    "per_level": 5.0,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/range.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "bullet_speed",
+    "label": "Orb speed",
+    "description": "Orbs fly faster.",
+    "stat": "projectile_speed",
+    "per_level": 3.0,
+    "max_level": 50,
+    "icon": "res://assets/sprites/icons/projectile_speed.png",
+    "price": 5,
+    "price_step": 10
+   }
+  ],
+  "icon": "res://assets/sprites/turrets/freezer_icon.png"
+ },
+ {
+  "id": "antivirus",
+  "name": "Antivirus Scanner",
+  "description": "Exposes cloaked Rootkits while in range and reveals disguised Trojans.",
+  "behavior": "antivirus",
+  "cost": 25,
+  "unlock_price": 60,
+  "color": "3dff6a",
+  "icon": "res://assets/sprites/turrets/antivirus_icon.png",
+  "stats": {
+   "range": 180,
+   "cooldown": 1
+  },
+  "limits": {
+   "cooldown": [
+    0.2,
+    99
+   ]
+  },
+  "upgrades": [
+   {
+    "id": "range",
+    "label": "Range",
+    "description": "+6 support range.",
+    "stat": "range",
+    "per_level": 6,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/range.png",
+    "price": 5,
+    "price_step": 10
+   }
+  ]
+ },
+ {
+  "id": "firewall",
+  "name": "Firewall",
+  "description": "Protects shots fired in or crossing its range from interception; deletes junk packets.",
+  "behavior": "firewall",
+  "cost": 25,
+  "unlock_price": 70,
+  "color": "ff8a3d",
+  "icon": "res://assets/sprites/turrets/firewall_icon.png",
+  "stats": {
+   "range": 155,
+   "cooldown": 1.8
+  },
+  "limits": {
+   "cooldown": [
+    0.2,
+    99
+   ]
+  },
+  "upgrades": [
+   {
+    "id": "range",
+    "label": "Range",
+    "description": "+6 support range.",
+    "stat": "range",
+    "per_level": 6,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/range.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "support",
+    "label": "Filtering speed",
+    "description": "Improves this support ability.",
+    "stat": "cooldown",
+    "per_level": -0.06,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/shield.png",
+    "price": 5,
+    "price_step": 10
+   }
+  ]
+ },
+ {
+  "id": "backup",
+  "name": "Backup Drive",
+  "description": "Speeds up nearby turret recovery and grants brief immunity after restoring them.",
+  "behavior": "backup",
+  "cost": 25,
+  "unlock_price": 80,
+  "color": "4da3ff",
+  "icon": "res://assets/sprites/turrets/backup_icon.png",
+  "stats": {
+   "range": 165,
+   "cooldown": 0.7,
+   "recovery_rate": 4,
+   "immunity": 1.5
+  },
+  "limits": {},
+  "upgrades": [
+   {
+    "id": "range",
+    "label": "Range",
+    "description": "+6 support range.",
+    "stat": "range",
+    "per_level": 6,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/range.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "support",
+    "label": "Recovery",
+    "description": "Improves this support ability.",
+    "stat": "recovery_rate",
+    "per_level": 0.3,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/restore.png",
+    "price": 5,
+    "price_step": 10
+   }
+  ]
+ },
+ {
+  "id": "technician",
+  "name": "Repair Bot",
+  "description": "Slowly repairs components and LEDs. Destroyed components return after a complete rebuild.",
+  "behavior": "technician",
+  "cost": 30,
+  "unlock_price": 90,
+  "color": "ffd9a0",
+  "icon": "res://assets/sprites/turrets/technician_icon.png",
+  "stats": {
+   "range": 165,
+   "cooldown": 0.25,
+   "repair_rate": 0.6
+  },
+  "limits": {},
+  "upgrades": [
+   {
+    "id": "range",
+    "label": "Range",
+    "description": "+6 support range.",
+    "stat": "range",
+    "per_level": 6,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/range.png",
+    "price": 5,
+    "price_step": 10
+   },
+   {
+    "id": "support",
+    "label": "Repair speed",
+    "description": "Improves this support ability.",
+    "stat": "repair_rate",
+    "per_level": 0.12,
+    "max_level": 15,
+    "icon": "res://assets/sprites/icons/repair.png",
+    "price": 5,
+    "price_step": 10
+   }
+  ]
+ }
+]

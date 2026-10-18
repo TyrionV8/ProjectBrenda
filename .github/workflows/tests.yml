@@ -1,0 +1,59 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GODOT_PACKAGE: Godot_v4.7.2-stable_mono_linux_x86_64
+      GODOT_RELEASE_URL: https://github.com/godotengine/godot/releases/download/4.7.2-stable
+      GODOT_BIN: ${{ runner.temp }}/godot/Godot_v4.7.2-stable_mono_linux_x86_64/Godot_v4.7.2-stable_mono_linux.x86_64
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out the project
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install .NET 8 SDK
+        id: dotnet
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '8.0.x'
+
+      # Hosted runners can also have newer SDKs. Select the installed .NET 8 SDK.
+      - name: Select .NET 8 SDK for this run
+        env:
+          DOTNET_SDK_VERSION: ${{ steps.dotnet.outputs.dotnet-version }}
+        run: dotnet new globaljson --sdk-version "$DOTNET_SDK_VERSION" --roll-forward latestPatch
+
+      - name: Restore cached Godot .NET
+        id: godot-cache
+        uses: actions/cache@v5
+        with:
+          path: ${{ runner.temp }}/godot/Godot_v4.7.2-stable_mono_linux_x86_64
+          key: godot-${{ runner.os }}-${{ runner.arch }}-4.7.2-stable-mono-v1
+
+      - name: Download and verify official Godot .NET
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        run: |
+          archive="$GODOT_PACKAGE.zip"
+          curl --fail --location --retry 3 \
+            --output "$RUNNER_TEMP/$archive" "$GODOT_RELEASE_URL/$archive"
+          curl --fail --location --retry 3 \
+            --output "$RUNNER_TEMP/SHA512-SUMS.txt" "$GODOT_RELEASE_URL/SHA512-SUMS.txt"
+          cd "$RUNNER_TEMP"
+          grep "  $archive$" SHA512-SUMS.txt | sha512sum --check --strict
+          unzip -q "$archive" -d "$RUNNER_TEMP/godot"
+
+      - name: Compile, import and run all tests
+        run: bash tools/ci/run-tests.sh
